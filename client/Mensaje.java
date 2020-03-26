@@ -3,13 +3,15 @@ package client;
 public class Mensaje {
 	private String asunto;
 	private String texto;
-	private String emisor;
+	private Emisor emisor;
+	private int tipo;
 	
-	public Mensaje(String asunto, String texto, String emisor) {
+	public Mensaje(String asunto, String texto, Emisor emisor, int tipo) {
 		super();
 		this.asunto = asunto;
 		this.texto = texto;
 		this.emisor = emisor;
+		this.tipo = tipo;
 	}
 	public String getAsunto() {
 		return asunto;
@@ -17,8 +19,12 @@ public class Mensaje {
 	public String getTexto() {
 		return texto;
 	}
-	public String getEmisor() {
+	public Emisor getEmisor() {
 		return emisor;
+	}
+	
+	public int getTipo() {
+		return tipo;
 	}
 	
 }
