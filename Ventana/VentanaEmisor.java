@@ -49,6 +49,7 @@ public class VentanaEmisor extends javax.swing.JFrame {
         jPanel39 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jOptionPane1 = new javax.swing.JOptionPane();
+        tipoMensaje = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -226,6 +227,7 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel16.setLayout(new java.awt.GridLayout(1, 0));
 
+        tipoMensaje.add(jRadioButton1);
         jRadioButton1.setText("Mensaje simple");
         jPanel16.add(jRadioButton1);
 
@@ -233,6 +235,7 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel17.setLayout(new java.awt.GridLayout(1, 0));
 
+        tipoMensaje.add(jRadioButton2);
         jRadioButton2.setText("Mensaje con alerta");
         jPanel17.add(jRadioButton2);
 
@@ -240,6 +243,7 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel18.setLayout(new java.awt.GridLayout(1, 0));
 
+        tipoMensaje.add(jRadioButton3);
         jRadioButton3.setText("Mensaje con aviso recepción");
         jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -451,6 +455,7 @@ public class VentanaEmisor extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextArea jTextArea4;
+    private javax.swing.ButtonGroup tipoMensaje;
     // End of variables declaration//GEN-END:variables
 
 }

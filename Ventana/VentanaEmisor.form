@@ -201,6 +201,8 @@
     </Container>
     <Component class="javax.swing.JOptionPane" name="jOptionPane1">
     </Component>
+    <Component class="javax.swing.ButtonGroup" name="tipoMensaje">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -415,6 +417,9 @@
                   <SubComponents>
                     <Component class="javax.swing.JRadioButton" name="jRadioButton1">
                       <Properties>
+                        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                          <ComponentRef name="tipoMensaje"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="Mensaje simple"/>
                       </Properties>
                     </Component>
@@ -429,6 +434,9 @@
                   <SubComponents>
                     <Component class="javax.swing.JRadioButton" name="jRadioButton2">
                       <Properties>
+                        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                          <ComponentRef name="tipoMensaje"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="Mensaje con alerta"/>
                       </Properties>
                     </Component>
@@ -443,6 +451,9 @@
                   <SubComponents>
                     <Component class="javax.swing.JRadioButton" name="jRadioButton3">
                       <Properties>
+                        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                          <ComponentRef name="tipoMensaje"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="Mensaje con aviso recepci&#xf3;n"/>
                       </Properties>
                       <Events>

@@ -25,34 +25,34 @@ public class VentanaReceptor extends javax.swing.JFrame {
         jPanel10 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         jPanel18 = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        labelDestinatario = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        cerrarMensaje = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        asuntoMsjRecibido = new javax.swing.JTextPane();
         jPanel11 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel15 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
+        textoMsjRecibido = new javax.swing.JTextPane();
         jOptionPane1 = new javax.swing.JOptionPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listaMensajesRecibidos = new javax.swing.JList<>();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        botonAbrir = new javax.swing.JButton();
 
         jPanel9.setLayout(new java.awt.BorderLayout());
 
@@ -60,14 +60,14 @@ public class VentanaReceptor extends javax.swing.JFrame {
 
         jPanel17.setLayout(new java.awt.GridLayout(1, 2));
 
-        jPanel18.setLayout(new java.awt.GridLayout());
+        jPanel18.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabel4.setText("De: Ivan Aprea");
-        jPanel18.add(jLabel4);
+        labelDestinatario.setText("De: Ivan Aprea");
+        jPanel18.add(labelDestinatario);
 
         jPanel17.add(jPanel18);
 
-        jPanel19.setLayout(new java.awt.GridLayout());
+        jPanel19.setLayout(new java.awt.GridLayout(1, 0));
         jPanel17.add(jPanel19);
 
         jPanel10.add(jPanel17);
@@ -77,8 +77,8 @@ public class VentanaReceptor extends javax.swing.JFrame {
         jLabel2.setText("Asunto");
         jPanel12.add(jLabel2);
 
-        jButton2.setText("Cerrar");
-        jPanel16.add(jButton2);
+        cerrarMensaje.setText("Cerrar");
+        jPanel16.add(cerrarMensaje);
 
         jPanel12.add(jPanel16);
 
@@ -86,8 +86,8 @@ public class VentanaReceptor extends javax.swing.JFrame {
 
         jPanel13.setLayout(new java.awt.BorderLayout());
 
-        jTextPane1.setText("Hola");
-        jScrollPane2.setViewportView(jTextPane1);
+        asuntoMsjRecibido.setText("Hola");
+        jScrollPane2.setViewportView(asuntoMsjRecibido);
 
         jPanel13.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
@@ -97,7 +97,7 @@ public class VentanaReceptor extends javax.swing.JFrame {
 
         jPanel11.setLayout(new java.awt.BorderLayout());
 
-        jPanel14.setLayout(new java.awt.GridLayout());
+        jPanel14.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel3.setText("Mensaje");
         jPanel14.add(jLabel3);
@@ -106,8 +106,8 @@ public class VentanaReceptor extends javax.swing.JFrame {
 
         jPanel15.setLayout(new java.awt.BorderLayout());
 
-        jTextPane2.setText("Hola, como va?");
-        jScrollPane3.setViewportView(jTextPane2);
+        textoMsjRecibido.setText("Hola, como va?");
+        jScrollPane3.setViewportView(textoMsjRecibido);
 
         jPanel15.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
@@ -123,7 +123,7 @@ public class VentanaReceptor extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Mensajes recibidos");
@@ -133,13 +133,13 @@ public class VentanaReceptor extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        listaMensajesRecibidos.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "De: Ivan Aprea  Asunto:Hola", "De: Martin Casas Asunto: Consulta" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(jList1);
+        listaMensajesRecibidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(listaMensajesRecibidos);
 
         jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -187,9 +187,9 @@ public class VentanaReceptor extends javax.swing.JFrame {
 
         jPanel8.setLayout(new java.awt.BorderLayout());
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Abrir");
-        jPanel8.add(jButton1, java.awt.BorderLayout.CENTER);
+        botonAbrir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        botonAbrir.setText("Abrir");
+        jPanel8.add(botonAbrir, java.awt.BorderLayout.CENTER);
 
         jPanel4.add(jPanel8);
 
@@ -272,14 +272,13 @@ public class VentanaReceptor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTextPane asuntoMsjRecibido;
+    private javax.swing.JButton botonAbrir;
+    private javax.swing.JButton cerrarMensaje;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -303,8 +302,9 @@ public class VentanaReceptor extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JLabel labelDestinatario;
+    private javax.swing.JList<String> listaMensajesRecibidos;
+    private javax.swing.JTextPane textoMsjRecibido;
     // End of variables declaration//GEN-END:variables
 
 }
