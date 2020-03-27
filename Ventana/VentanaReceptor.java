@@ -20,7 +20,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         this.listaRecibidos = new DefaultListModel<Mensaje>();
         initComponents();
         this.botonAbrir.setActionCommand("ABRIR MENSAJE");
-        this.botonCerrarMensaje.setActionCommand("CERRAR MENSAJE");
+        this.cerrarMensaje.setActionCommand("CERRAR MENSAJE");
         this.botonPararAlerta.setActionCommand("PARAR ALERTA"); //FALTA AGREGAR ACTION PERFORMED DE ESTO, CREAR POPUP ANTES
     }
 
@@ -42,8 +42,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel12 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
-        botonCerrarMensaje = new javax.swing.JButton();
-        botonPararAlerta = new javax.swing.JButton();
+        cerrarMensaje = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         asuntoMsjRecibido = new javax.swing.JTextPane();
@@ -54,6 +53,13 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jScrollPane3 = new javax.swing.JScrollPane();
         textoMsjRecibido = new javax.swing.JTextPane();
         jOptionPane1 = new javax.swing.JOptionPane();
+        jdiagAlertaSonora = new javax.swing.JDialog();
+        jPanel20 = new javax.swing.JPanel();
+        jPanel21 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jPanel22 = new javax.swing.JPanel();
+        botonPararAlerta = new javax.swing.JButton();
+        jPanel23 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -90,9 +96,8 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jLabel2.setText("Asunto");
         jPanel12.add(jLabel2);
 
-        botonCerrarMensaje.setText("Cerrar");
-        
-        jPanel16.add(botonCerrarMensaje);
+        cerrarMensaje.setText("Cerrar");
+        jPanel16.add(cerrarMensaje);
 
         jPanel12.add(jPanel16);
 
@@ -100,6 +105,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel13.setLayout(new java.awt.BorderLayout());
 
+        asuntoMsjRecibido.setText("Hola");
         jScrollPane2.setViewportView(asuntoMsjRecibido);
 
         jPanel13.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -119,6 +125,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel15.setLayout(new java.awt.BorderLayout());
 
+        textoMsjRecibido.setText("Hola, como va?");
         jScrollPane3.setViewportView(textoMsjRecibido);
 
         jPanel15.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -130,6 +137,34 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jDialog1.getContentPane().add(jPanel9, java.awt.BorderLayout.CENTER);
 
         jOptionPane1.setToolTipText("");
+
+        jPanel20.setLayout(new java.awt.BorderLayout());
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("Mensaje entrante");
+        jPanel21.add(jLabel4);
+
+        jPanel20.add(jPanel21, java.awt.BorderLayout.PAGE_START);
+
+        botonPararAlerta.setText("Parar");
+        jPanel22.add(botonPararAlerta);
+
+        jPanel20.add(jPanel22, java.awt.BorderLayout.PAGE_END);
+
+        javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
+        jPanel23.setLayout(jPanel23Layout);
+        jPanel23Layout.setHorizontalGroup(
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jPanel23Layout.setVerticalGroup(
+            jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 237, Short.MAX_VALUE)
+        );
+
+        jPanel20.add(jPanel23, java.awt.BorderLayout.CENTER);
+
+        jdiagAlertaSonora.getContentPane().add(jPanel20, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,7 +180,11 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        listaMensajesRecibidos.setModel(this.listaRecibidos);
+        listaMensajesRecibidos.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "De: Ivan Aprea  Asunto:Hola", "De: Martin Casas Asunto: Consulta" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
         listaMensajesRecibidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(listaMensajesRecibidos);
 
@@ -246,12 +285,13 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextPane asuntoMsjRecibido;
     private javax.swing.JButton botonAbrir;
-    private javax.swing.JButton botonCerrarMensaje;
     private javax.swing.JButton botonPararAlerta;
+    private javax.swing.JButton cerrarMensaje;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -265,6 +305,10 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel20;
+    private javax.swing.JPanel jPanel21;
+    private javax.swing.JPanel jPanel22;
+    private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -275,15 +319,16 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JDialog jdiagAlertaSonora;
     private javax.swing.JLabel labelDestinatario;
-    private javax.swing.JList<Mensaje> listaMensajesRecibidos;
+    private javax.swing.JList<String> listaMensajesRecibidos;
     private javax.swing.JTextPane textoMsjRecibido;
     // End of variables declaration//GEN-END:variables
 
 	@Override
 	public void addActionListener(ActionListener actionListener) {
 		this.botonAbrir.addActionListener(actionListener);
-		this.botonCerrarMensaje.addActionListener(actionListener);
+		this.cerrarMensaje.addActionListener(actionListener);
 		this.botonPararAlerta.addActionListener(actionListener);
 		
 	}

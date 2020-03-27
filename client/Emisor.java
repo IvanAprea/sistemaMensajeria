@@ -38,7 +38,7 @@ public class Emisor {
 
     public void setVista(IVistaEmisor vista) {
         this.vista = vista;
-        vista.actualizarListaAgenda(agenda.getPersonas());
+        vista.actualizarListaAgenda(Agenda.getInstance().getPersonas());
     }
 
     public IVistaEmisor getVista() {

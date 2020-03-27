@@ -4,8 +4,12 @@ public class Persona {
     
     private String IP,Puerto="80",Nombre = "default",Apellido = "default";
     
-    public Persona() {
+    public Persona(String nombre,String apellido,String ip,String puerto) {
         super();
+        this.Nombre=nombre;
+        this.Apellido=apellido;
+        this.IP=ip;
+        this.Puerto=puerto;
     }
 
     public String getIP() {
