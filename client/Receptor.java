@@ -57,15 +57,11 @@ public class Receptor extends Persona implements ActionListener{
         	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
         }
         else if(mensaje.getTipo() == 2) {
-        	this.informarMensajeRecibido();
+        	Comunicacion.getInstancia().informarMensajeRecibido(mensaje.getEmisor().getIP(),mensaje.getEmisor().getPuerto());
         }
         
     }
-    
-    public void informarMensajeRecibido(){
         
-    }
-    
 	public void setVentanaReceptor(IVentanaReceptor ventanaReceptor) {
         this.ventanaReceptor = ventanaReceptor;
         this.ventanaReceptor.addActionListener(this);

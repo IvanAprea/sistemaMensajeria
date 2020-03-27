@@ -53,7 +53,7 @@ public class Comunicacion {
     }
     
    
-    public void informarMensajeRecibido(){
+    public void informarMensajeRecibido(String ip, String puerto){
         
     }
 }
