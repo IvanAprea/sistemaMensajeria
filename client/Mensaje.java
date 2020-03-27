@@ -28,7 +28,7 @@ public class Mensaje {
 	}
 	@Override
 	public String toString() {
-		return "De: " + emisor.toString() + " Asunto: " + asunto;
+		return ((tipo == 1) ? " [!] " : "     ") + "De: " + emisor.toString() + " Asunto: " + asunto;
 	}
 	
 	

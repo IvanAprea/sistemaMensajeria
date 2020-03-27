@@ -2,9 +2,11 @@
 package Ventana;
 
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
+import javax.sound.sampled.Clip;
 import javax.swing.DefaultListModel;
+import javax.swing.WindowConstants;
+
 
 import client.Mensaje;
 import client.Persona;
@@ -13,10 +15,10 @@ import interfaz.IVentanaReceptor;
 public class VentanaReceptor extends javax.swing.JFrame implements IVentanaReceptor {
 	
 	private DefaultListModel<Mensaje> listaRecibidos;
+	private Clip clip;
 	
     /** Creates new form VentanaReceptor */
     public VentanaReceptor() {
-    	
         this.listaRecibidos = new DefaultListModel<Mensaje>();
         initComponents();
         this.botonAbrir.setActionCommand("ABRIR MENSAJE");
@@ -81,7 +83,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel18.setLayout(new java.awt.GridLayout(1, 0));
 
-        labelDestinatario.setText("De: Ivan Aprea");
         jPanel18.add(labelDestinatario);
 
         jPanel17.add(jPanel18);
@@ -105,7 +106,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel13.setLayout(new java.awt.BorderLayout());
 
-        asuntoMsjRecibido.setText("Hola");
         jScrollPane2.setViewportView(asuntoMsjRecibido);
 
         jPanel13.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -125,7 +125,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel15.setLayout(new java.awt.BorderLayout());
 
-        textoMsjRecibido.setText("Hola, como va?");
         jScrollPane3.setViewportView(textoMsjRecibido);
 
         jPanel15.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -141,7 +140,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel20.setLayout(new java.awt.BorderLayout());
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setText("Mensaje entrante");
         jPanel21.add(jLabel4);
 
         jPanel20.add(jPanel21, java.awt.BorderLayout.PAGE_START);
@@ -161,7 +159,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 237, Short.MAX_VALUE)
         );
-
+        
         jPanel20.add(jPanel23, java.awt.BorderLayout.CENTER);
 
         jdiagAlertaSonora.getContentPane().add(jPanel20, java.awt.BorderLayout.CENTER);
@@ -245,6 +243,15 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         pack();
     }//GEN-END:initComponents
     
+    
+    public Clip getClip() {
+		return this.clip;
+	}
+
+	public void setClip(Clip clip) {
+		this.clip = clip;
+	}
+
     public void abrirMensaje() {
     	if(listaMensajesRecibidos.getSelectedValue()!= null) {
             this.actualizaMensajeAbierto(
@@ -257,12 +264,22 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     	}
     }
     
+    public void lanzarAlerta(String emisor) {
+    	this.jLabel4.setText("Mensaje entrante de: "+emisor);
+        this.jdiagAlertaSonora.pack();
+        this.jdiagAlertaSonora.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.jdiagAlertaSonora.setVisible(true);
+        this.clip.start();
+        this.repaint();
+    }
+    
     public void cerrarMensaje() {
         this.jDialog1.setVisible(false);
     }
     
     public void pararAlerta() {
-
+    	this.clip.stop();
+    	this.jdiagAlertaSonora.setVisible(false);
     }
     
     public void actualizaListaMensajes(Mensaje mensaje)

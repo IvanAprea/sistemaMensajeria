@@ -27,7 +27,7 @@ public class inicioReceptor {
 		ventana.pack();
 		ventana.setVisible(true);
 		Persona p1 = new Persona("def","ault","101.144.230.0.2","4444");
-		Mensaje msj1 = new Mensaje("Nueva guia subida", "Estimados alumnos, he subido...", p1, 0);
+		Mensaje msj1 = new Mensaje("Nueva guia subida", "Estimados alumnos, he subido...", p1, 1);
 		setTimeout(() -> Receptor.getInstancia().recibirMensaje(msj1), 4000);
 	}
 

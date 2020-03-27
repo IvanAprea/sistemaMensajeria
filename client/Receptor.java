@@ -2,7 +2,15 @@ package client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
+import Ventana.VentanaReceptor;
 import client.Mensaje;
 import interfaz.IVentanaReceptor;
 
@@ -26,9 +34,31 @@ public class Receptor extends Persona implements ActionListener{
         return _instancia;
     }
     
+	private void setSound(String sound){
+        try {
+            URL url = this.getClass().getClassLoader().getResource(sound);
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            this.ventanaReceptor.setClip(AudioSystem.getClip());
+            this.ventanaReceptor.getClip().open(audioIn);
+         } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+         } catch (IOException e) {
+            e.printStackTrace();
+         } catch (LineUnavailableException e) {
+            e.printStackTrace();
+         }
+    }
+	
     public void recibirMensaje(Object obj){
         Mensaje mensaje = (Mensaje) obj;
         this.ventanaReceptor.actualizaListaMensajes(mensaje);
+        if(mensaje.getTipo() == 1) {
+        	this.setSound(IVentanaReceptor.ALERT_SOUND_URL);
+        	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
+        }
+        else if(mensaje.getTipo() == 2) {
+        	this.informarMensajeRecibido();
+        }
         
     }
     
