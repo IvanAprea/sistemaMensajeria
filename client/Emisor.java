@@ -5,16 +5,23 @@ import interfaz.IVistaEmisor;
 public class Emisor {
     
     private IVistaEmisor vista;
-    private Agenda agenda;
+    private static Emisor instancia = null;
     
-    public Emisor(IVistaEmisor vista,Agenda agenda) {
+    private Emisor() {
         
         super();
-        this.agenda=agenda;
-        this.vista = vista;
-        vista.actualizarListaAgenda(agenda.getPersonas());
-        
-        
+    }
+    
+    /**
+     * Thread-protected Singleton
+     * @return
+     */
+    
+    public synchronized static Emisor getInstance(){
+        if(instancia==null){
+            instancia = new Emisor();
+        }
+        return instancia;
     }
     
     public void enviarMensaje(){
@@ -28,4 +35,18 @@ public class Emisor {
     public void actualizarListaAgenda(){
         
     }
+
+    public void setVista(IVistaEmisor vista) {
+        this.vista = vista;
+        vista.actualizarListaAgenda(agenda.getPersonas());
+    }
+
+    public IVistaEmisor getVista() {
+        return vista;
+    }
+
+    public static void setInstancia(Emisor instancia) {
+        Emisor.instancia = instancia;
+    }
+
 }

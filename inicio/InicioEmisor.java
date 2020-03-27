@@ -16,6 +16,7 @@ public class InicioEmisor {
         VentanaEmisor vista = new VentanaEmisor();
         vista.setVisible(true);
         Agenda agenda = new Agenda();
+        agenda.cargarAgenda();
         Emisor emisor = new Emisor(vista,agenda);
     }
 }
