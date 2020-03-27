@@ -4,8 +4,9 @@ public class Persona {
     
     private String IP,Puerto,Nombre = "default",Apellido = "default";
     
-    public Persona() {
+    public Persona(String nombre) {
         super();
+        this.Nombre=nombre;
     }
 
     public String getIP() {
@@ -38,5 +39,11 @@ public class Persona {
 
     public void setApellido(String Apellido) {
         this.Apellido = Apellido;
+    }
+
+    @Override
+    public String toString() {
+        
+        return this.getNombre();
     }
 }

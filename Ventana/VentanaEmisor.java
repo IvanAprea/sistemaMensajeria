@@ -1,15 +1,31 @@
 
 package Ventana;
 
+import client.Persona;
+
+import interfaz.IVistaEmisor;
+
+import java.util.ArrayList;
+
+import java.util.Iterator;
+
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author ivan-
  */
-public class VentanaEmisor extends javax.swing.JFrame {
+public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
+    
+    private DefaultListModel<Persona> modAgenda;
 
     /** Creates new form VentanaEmisor */
     public VentanaEmisor() {
+        
+        this.modAgenda = new DefaultListModel<Persona>();
+            
         initComponents();
+        
     }
 
     /** This method is called from within the constructor to
@@ -32,7 +48,7 @@ public class VentanaEmisor extends javax.swing.JFrame {
         jPanel31 = new javax.swing.JPanel();
         jPanel32 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        textNombreConfig = new javax.swing.JTextArea();
         jPanel33 = new javax.swing.JPanel();
         jPanel23 = new javax.swing.JPanel();
         jPanel26 = new javax.swing.JPanel();
@@ -40,15 +56,15 @@ public class VentanaEmisor extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jPanel35 = new javax.swing.JPanel();
         jPanel36 = new javax.swing.JPanel();
-        jButton4 = new javax.swing.JButton();
+        btCancelarConfig = new javax.swing.JButton();
         jPanel27 = new javax.swing.JPanel();
         jPanel37 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
+        textApellidoConfig = new javax.swing.JTextArea();
         jPanel38 = new javax.swing.JPanel();
         jPanel39 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        jOptionPane1 = new javax.swing.JOptionPane();
+        btAceptarConfig = new javax.swing.JButton();
+        panelMsjRecibido = new javax.swing.JOptionPane();
         tipoMensaje = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -56,27 +72,27 @@ public class VentanaEmisor extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        listAgenda = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        botonEnviarEmisor = new javax.swing.JButton();
         jPanel20 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        botonConfigEmisor = new javax.swing.JButton();
         jPanel14 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jPanel16 = new javax.swing.JPanel();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        RBSimple = new javax.swing.JRadioButton();
         jPanel17 = new javax.swing.JPanel();
-        jRadioButton2 = new javax.swing.JRadioButton();
+        RBAlerta = new javax.swing.JRadioButton();
         jPanel18 = new javax.swing.JPanel();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        RBAvisoRecep = new javax.swing.JRadioButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel9 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textAsuntoEmisor = new javax.swing.JTextArea();
         jPanel8 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel10 = new javax.swing.JPanel();
@@ -84,7 +100,7 @@ public class VentanaEmisor extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        textMensajeEmisor = new javax.swing.JTextArea();
 
         jPanel21.setLayout(new java.awt.GridLayout(2, 0));
 
@@ -106,9 +122,9 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel32.setLayout(new java.awt.BorderLayout());
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane4.setViewportView(jTextArea3);
+        textNombreConfig.setColumns(20);
+        textNombreConfig.setRows(5);
+        jScrollPane4.setViewportView(textNombreConfig);
 
         jPanel32.add(jScrollPane4, java.awt.BorderLayout.CENTER);
 
@@ -129,8 +145,8 @@ public class VentanaEmisor extends javax.swing.JFrame {
         jPanel26.add(jPanel34);
         jPanel26.add(jPanel35);
 
-        jButton4.setText("Cancelar");
-        jPanel36.add(jButton4);
+        btCancelarConfig.setText("Cancelar");
+        jPanel36.add(btCancelarConfig);
 
         jPanel26.add(jPanel36);
 
@@ -140,22 +156,22 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel37.setLayout(new java.awt.BorderLayout());
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(5);
-        jScrollPane5.setViewportView(jTextArea4);
+        textApellidoConfig.setColumns(20);
+        textApellidoConfig.setRows(5);
+        jScrollPane5.setViewportView(textApellidoConfig);
 
         jPanel37.add(jScrollPane5, java.awt.BorderLayout.CENTER);
 
         jPanel27.add(jPanel37);
         jPanel27.add(jPanel38);
 
-        jButton3.setText("Aceptar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btAceptarConfig.setText("Aceptar");
+        btAceptarConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btAceptarConfigActionPerformed(evt);
             }
         });
-        jPanel39.add(jButton3);
+        jPanel39.add(btAceptarConfig);
 
         jPanel27.add(jPanel39);
 
@@ -181,13 +197,9 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(70, 138));
 
-        jList1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Ivan Aprea", "Martin Casas", "Juan Perez" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        listAgenda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        listAgenda.setModel(modAgenda);
+        jScrollPane1.setViewportView(listAgenda);
 
         jPanel6.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -202,13 +214,18 @@ public class VentanaEmisor extends javax.swing.JFrame {
         jPanel13.setPreferredSize(new java.awt.Dimension(140, 100));
         jPanel13.setLayout(new java.awt.GridLayout(2, 0));
 
-        jButton1.setText("Enviar");
-        jPanel19.add(jButton1);
+        botonEnviarEmisor.setText("Enviar");
+        jPanel19.add(botonEnviarEmisor);
 
         jPanel13.add(jPanel19);
 
-        jButton2.setText("Configuración");
-        jPanel20.add(jButton2);
+        botonConfigEmisor.setText("Configuración");
+        botonConfigEmisor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonConfigEmisorActionPerformed(evt);
+            }
+        });
+        jPanel20.add(botonConfigEmisor);
 
         jPanel13.add(jPanel20);
 
@@ -227,30 +244,30 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel16.setLayout(new java.awt.GridLayout(1, 0));
 
-        tipoMensaje.add(jRadioButton1);
-        jRadioButton1.setText("Mensaje simple");
-        jPanel16.add(jRadioButton1);
+        tipoMensaje.add(RBSimple);
+        RBSimple.setText("Mensaje simple");
+        jPanel16.add(RBSimple);
 
         jPanel14.add(jPanel16);
 
         jPanel17.setLayout(new java.awt.GridLayout(1, 0));
 
-        tipoMensaje.add(jRadioButton2);
-        jRadioButton2.setText("Mensaje con alerta");
-        jPanel17.add(jRadioButton2);
+        tipoMensaje.add(RBAlerta);
+        RBAlerta.setText("Mensaje con alerta");
+        jPanel17.add(RBAlerta);
 
         jPanel14.add(jPanel17);
 
         jPanel18.setLayout(new java.awt.GridLayout(1, 0));
 
-        tipoMensaje.add(jRadioButton3);
-        jRadioButton3.setText("Mensaje con aviso recepción");
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+        tipoMensaje.add(RBAvisoRecep);
+        RBAvisoRecep.setText("Mensaje con aviso recepción");
+        RBAvisoRecep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
+                RBAvisoRecepActionPerformed(evt);
             }
         });
-        jPanel18.add(jRadioButton3);
+        jPanel18.add(RBAvisoRecep);
 
         jPanel14.add(jPanel18);
 
@@ -265,10 +282,9 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel7.setLayout(new java.awt.BorderLayout());
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Asunto de prueba");
-        jScrollPane2.setViewportView(jTextArea1);
+        textAsuntoEmisor.setColumns(20);
+        textAsuntoEmisor.setRows(5);
+        jScrollPane2.setViewportView(textAsuntoEmisor);
 
         jPanel7.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
@@ -295,10 +311,9 @@ public class VentanaEmisor extends javax.swing.JFrame {
 
         jPanel12.setLayout(new java.awt.BorderLayout());
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jTextArea2.setText("Mensaje de prueba");
-        jScrollPane3.setViewportView(jTextArea2);
+        textMensajeEmisor.setColumns(20);
+        textMensajeEmisor.setRows(5);
+        jScrollPane3.setViewportView(textMensajeEmisor);
 
         jPanel12.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
@@ -313,24 +328,28 @@ public class VentanaEmisor extends javax.swing.JFrame {
         pack();
     }//GEN-END:initComponents
 
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+    private void RBAvisoRecepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RBAvisoRecepActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton3ActionPerformed
+    }//GEN-LAST:event_RBAvisoRecepActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btAceptarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarConfigActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btAceptarConfigActionPerformed
+
+    private void botonConfigEmisorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfigEmisorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonConfigEmisorActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    /*public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing
                                                                    .UIManager
                                                                    .getInstalledLookAndFeels()) {
@@ -381,20 +400,23 @@ public class VentanaEmisor extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt
+        /*java.awt
             .EventQueue
             .invokeLater(new Runnable() {
                 public void run() {
                     new VentanaEmisor().setVisible(true);
                 }
             });
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JRadioButton RBAlerta;
+    private javax.swing.JRadioButton RBAvisoRecep;
+    private javax.swing.JRadioButton RBSimple;
+    private javax.swing.JButton botonConfigEmisor;
+    private javax.swing.JButton botonEnviarEmisor;
+    private javax.swing.JButton btAceptarConfig;
+    private javax.swing.JButton btCancelarConfig;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -402,8 +424,6 @@ public class VentanaEmisor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -443,19 +463,71 @@ public class VentanaEmisor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
+    private javax.swing.JList<Persona> listAgenda;
+    private javax.swing.JOptionPane panelMsjRecibido;
+    private javax.swing.JTextArea textApellidoConfig;
+    private javax.swing.JTextArea textAsuntoEmisor;
+    private javax.swing.JTextArea textMensajeEmisor;
+    private javax.swing.JTextArea textNombreConfig;
     private javax.swing.ButtonGroup tipoMensaje;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public String getAsunto() {
+        
+        return this.textAsuntoEmisor.getText();
+    }
+
+    @Override
+    public String getMensaje() {
+        return this.textMensajeEmisor.getText();
+    }
+
+    @Override
+    public Persona[] getPersonas() {
+        return (Persona[])this.listAgenda.getSelectedValuesList().toArray();
+    }
+
+    @Override
+    public int getTipo() {
+        // 0=simplea   1= alerta  2=aviso de recepcion
+        int retorno = 0;
+        
+        if(this.RBAlerta.isSelected())
+            retorno = 1;
+        else
+            if(this.RBAvisoRecep.isSelected())
+                retorno = 2;
+        return retorno;
+    }
+
+    @Override
+    public String getNombreConfig() {
+        
+        return this.textNombreConfig.getText();
+    }
+
+    @Override
+    public String getApellidoConfig() {
+        
+        return this.textApellidoConfig.getText();
+    }
+
+    @Override
+    public void actualizarListaAgenda(ArrayList<Persona> personas) {
+        Iterator<Persona> it = personas.iterator();
+        
+        this.modAgenda.clear();
+        while(it.hasNext()){
+            this.modAgenda.addElement(it.next());
+        }
+        
+        this.repaint();
+    }
 
 }
