@@ -1,11 +1,19 @@
 package client;
 
+import client.Mensaje;
+import interfaz.IVentanaReceptor;
+
 public class Receptor {
-    public Receptor() {
-        super();
+	
+	private IVentanaReceptor ventanaReceptor;
+	
+    public Receptor(IVentanaReceptor ventana) {
+        this.ventanaReceptor = ventana;
     }
     
-    public void recibirMensaje(){
+    public void recibirMensaje(Object obj){
+        Mensaje mensaje = (Mensaje) obj;
+        this.ventanaReceptor.actualizaListaMensajes(mensaje);
         
     }
     

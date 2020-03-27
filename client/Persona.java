@@ -39,4 +39,11 @@ public class Persona {
     public void setApellido(String Apellido) {
         this.Apellido = Apellido;
     }
+
+	@Override
+	public String toString() {
+		return "Persona [IP=" + IP + ", Puerto=" + Puerto + ", Nombre=" + Nombre + ", Apellido=" + Apellido + "]";
+	}
+    
+    
 }

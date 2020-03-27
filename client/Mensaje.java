@@ -3,10 +3,10 @@ package client;
 public class Mensaje {
 	private String asunto;
 	private String texto;
-	private Emisor emisor;
+	private Persona emisor;
 	private int tipo;
 	
-	public Mensaje(String asunto, String texto, Emisor emisor, int tipo) {
+	public Mensaje(String asunto, String texto, Persona emisor, int tipo) {
 		super();
 		this.asunto = asunto;
 		this.texto = texto;
@@ -19,12 +19,17 @@ public class Mensaje {
 	public String getTexto() {
 		return texto;
 	}
-	public Emisor getEmisor() {
+	public Persona getEmisor() {
 		return emisor;
 	}
 	
 	public int getTipo() {
 		return tipo;
 	}
+	@Override
+	public String toString() {
+		return "De: " + emisor.toString() + " Asunto: " + asunto;
+	}
+	
 	
 }
