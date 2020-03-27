@@ -11,6 +11,10 @@ public class Persona {
         this.IP=ip;
         this.Puerto=puerto;
     }
+    
+    public Persona() {
+    	super();
+    }
 
     public String getIP() {
         return IP;

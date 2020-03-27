@@ -180,11 +180,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel3.setLayout(new java.awt.BorderLayout());
 
-        listaMensajesRecibidos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "De: Ivan Aprea  Asunto:Hola", "De: Martin Casas Asunto: Consulta" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        listaMensajesRecibidos.setModel(this.listaRecibidos);
         listaMensajesRecibidos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(listaMensajesRecibidos);
 
@@ -321,7 +317,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JDialog jdiagAlertaSonora;
     private javax.swing.JLabel labelDestinatario;
-    private javax.swing.JList<String> listaMensajesRecibidos;
+    private javax.swing.JList<Mensaje> listaMensajesRecibidos;
     private javax.swing.JTextPane textoMsjRecibido;
     // End of variables declaration//GEN-END:variables
 

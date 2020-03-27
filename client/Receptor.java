@@ -12,6 +12,7 @@ public class Receptor extends Persona implements ActionListener{
 	private IVentanaReceptor ventanaReceptor;
 	
     private Receptor() {
+    	super();
     }
     
     /**
