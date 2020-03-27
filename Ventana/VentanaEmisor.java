@@ -1,15 +1,21 @@
 
 package Ventana;
 
+import client.Emisor;
 import client.Persona;
 
 import interfaz.IVistaEmisor;
+
+import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 
 import java.util.Iterator;
 
+import java.util.List;
+
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,6 +31,10 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         this.modAgenda = new DefaultListModel<Persona>();
             
         initComponents();
+        this.botonEnviarEmisor.setActionCommand("ENVIAR MENSAJE");
+        this.botonConfigEmisor.setActionCommand("CONFIGURACION");
+        this.btCancelarConfig.setActionCommand("CANCELAR CAMBIO");
+        this.btAceptarConfig.setActionCommand("ACEPTAR CAMBIO");
         
     }
 
@@ -245,6 +255,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         jPanel16.setLayout(new java.awt.GridLayout(1, 0));
 
         tipoMensaje.add(RBSimple);
+        RBSimple.setSelected(true);
         RBSimple.setText("Mensaje simple");
         jPanel16.add(RBSimple);
 
@@ -489,8 +500,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     }
 
     @Override
-    public Persona[] getPersonas() {
-        return (Persona[])this.listAgenda.getSelectedValuesList().toArray();
+    public List<Persona> getPersonas() {
+        return this.listAgenda.getSelectedValuesList();
     }
 
     @Override
@@ -517,6 +528,20 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         
         return this.textApellidoConfig.getText();
     }
+    
+    public void abrirConfig() {
+        
+        this.jDialog1.setSize(400, 400);
+        this.jDialog1.setVisible(true);
+        this.textNombreConfig.setText(Emisor.getInstance().getNombre());
+        this.textApellidoConfig.setText(Emisor.getInstance().getApellido());
+        this.repaint();
+        
+    }
+    
+    public void cerrarConfig(){
+        this.jDialog1.setVisible(false);
+    }
 
     @Override
     public void actualizarListaAgenda(ArrayList<Persona> personas) {
@@ -530,4 +555,17 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         this.repaint();
     }
 
+
+    @Override
+    public void addActionListener(ActionListener actionListener) {
+        this.botonConfigEmisor.addActionListener(actionListener);
+        this.botonEnviarEmisor.addActionListener(actionListener);
+        this.btAceptarConfig.addActionListener(actionListener);
+        this.btCancelarConfig.addActionListener(actionListener);
+    }
+
+    @Override
+    public void mostrarPanelMsjRecibido() {
+        JOptionPane.showMessageDialog(null, "El mensaje se recibio correctamente.");
+    }
 }

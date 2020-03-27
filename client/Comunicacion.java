@@ -48,7 +48,7 @@ public class Comunicacion {
         }.start();	
     }
     
-    public void enviarMensaje(){
+    public void enviarMensaje(Mensaje mensaje){
         
     }
     

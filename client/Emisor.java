@@ -2,13 +2,18 @@ package client;
 
 import interfaz.IVistaEmisor;
 
-public class Emisor {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import java.util.Iterator;
+import java.util.List;
+
+public class Emisor extends Persona implements ActionListener{
     
     private IVistaEmisor vista;
     private static Emisor instancia = null;
     
     private Emisor() {
-        
         super();
     }
     
@@ -25,19 +30,37 @@ public class Emisor {
     }
     
     public void enviarMensaje(){
+        String asunto,texto;
+        int tipo;
+        List<Persona> personas;
+        Mensaje mensaje;
         
+        personas = vista.getPersonas();
+        Iterator<Persona> it = personas.iterator();
+        asunto=vista.getAsunto();
+        texto=vista.getMensaje();
+        tipo=vista.getTipo();
+        
+        while(it.hasNext()){
+            mensaje = new Mensaje(asunto,texto,it.next(),tipo);
+            Comunicacion.getInstancia().enviarMensaje(mensaje);
+        }
     }
     
     public void recibirConfirmacion(){
         
     }
     
-    public void actualizarListaAgenda(){
-        
+    public void editarDatosPersona(){
+        this.setApellido(vista.getApellidoConfig());
+        this.setNombre(vista.getNombreConfig());
+        this.vista.cerrarConfig();
     }
+
 
     public void setVista(IVistaEmisor vista) {
         this.vista = vista;
+        this.vista.addActionListener(this);
         vista.actualizarListaAgenda(Agenda.getInstance().getPersonas());
     }
 
@@ -45,8 +68,22 @@ public class Emisor {
         return vista;
     }
 
-    public static void setInstancia(Emisor instancia) {
-        Emisor.instancia = instancia;
-    }
 
+    @Override
+    public void actionPerformed(ActionEvent arg) {
+        String comando = arg.getActionCommand();
+        if(comando.equalsIgnoreCase("ENVIAR MENSAJE")){
+            //this.enviarMensaje();
+            this.vista.mostrarPanelMsjRecibido();
+        }else
+        if(comando.equalsIgnoreCase("CONFIGURACION")){
+            this.vista.abrirConfig();
+        }else
+        if(comando.equalsIgnoreCase("ACEPTAR CAMBIO")){
+            this.editarDatosPersona();
+        }else
+        if(comando.equalsIgnoreCase("CANCELAR CAMBIO")){
+            this.vista.cerrarConfig();
+        }
+    }
 }
