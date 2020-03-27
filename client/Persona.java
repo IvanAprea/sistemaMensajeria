@@ -2,11 +2,10 @@ package client;
 
 public class Persona {
     
-    private String IP,Puerto,Nombre = "default",Apellido = "default";
+    private String IP,Puerto="80",Nombre = "default",Apellido = "default";
     
-    public Persona(String nombre) {
+    public Persona() {
         super();
-        this.Nombre=nombre;
     }
 
     public String getIP() {

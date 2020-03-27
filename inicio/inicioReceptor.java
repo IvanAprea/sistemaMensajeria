@@ -2,6 +2,7 @@ package inicio;
 
 import Ventana.VentanaReceptor;
 import client.Receptor;
+import client.Comunicacion;
 import client.Mensaje;
 import client.Persona;
 
@@ -21,14 +22,15 @@ public class inicioReceptor {
     
 	public static void main(String[] args) {
 		VentanaReceptor ventana = new VentanaReceptor();
-		Receptor rec = new Receptor(ventana);
+		Receptor.getInstancia().setVentanaReceptor(ventana);
+		Comunicacion.getInstancia().escucharPuerto(Receptor.getInstancia().getPuerto());
 		ventana.pack();
 		ventana.setVisible(true);
 		Persona p1 = new Persona();
 		p1.setIP("101.144.230.0.2");
 		p1.setPuerto("4444");
 		Mensaje msj1 = new Mensaje("Nueva guia subida", "Estimados alumnos, he subido...", p1, 0);
-		setTimeout(() -> rec.recibirMensaje(msj1), 4000);
+		setTimeout(() -> Receptor.getInstancia().recibirMensaje(msj1), 4000);
 	}
 
 }

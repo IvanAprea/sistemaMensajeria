@@ -91,13 +91,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel12.add(jLabel2);
 
         botonCerrarMensaje.setText("Cerrar");
-        botonCerrarMensaje.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                botonCerrarMensajeActionPerformed(evt);
-            }
-        });
+        
         jPanel16.add(botonCerrarMensaje);
 
         jPanel12.add(jPanel16);
@@ -203,13 +197,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         botonAbrir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         botonAbrir.setText("Abrir");
-        botonAbrir.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-            	botonAbrirMensajeActionPerformed(evt);
-            }
-        });
         jPanel8.add(botonAbrir, java.awt.BorderLayout.CENTER);
 
         jPanel4.add(jPanel8);
@@ -223,15 +210,23 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         pack();
     }//GEN-END:initComponents
     
-    private void botonAbrirMensajeActionPerformed(java.awt.event.ActionEvent evt) {
-        
+    public void abrirMensaje() {
+    	if(listaMensajesRecibidos.getSelectedValue()!= null) {
+            this.actualizaMensajeAbierto(
+            		listaMensajesRecibidos.getSelectedValue().getEmisor(),
+            		listaMensajesRecibidos.getSelectedValue().getAsunto(), 
+            		listaMensajesRecibidos.getSelectedValue().getTexto());
+            this.jDialog1.setSize(400, 400);
+            this.jDialog1.setVisible(true);
+            this.repaint();
+    	}
     }
     
-    private void botonCerrarMensajeActionPerformed(java.awt.event.ActionEvent evt) {
-        
+    public void cerrarMensaje() {
+        this.jDialog1.setVisible(false);
     }
     
-    private void botonPararAlertaActionPerformed(java.awt.event.ActionEvent evt) {
+    public void pararAlerta() {
 
     }
     
@@ -245,9 +240,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     {
         this.textoMsjRecibido.setText(textoAct);
         this.asuntoMsjRecibido.setText(asuntoAct);
-        this.labelDestinatario.setText(emisorAct.getNombre());
-        this.jDialog1.setVisible(true);
-        this.repaint();
+        this.labelDestinatario.setText("De: "+emisorAct.getNombre());
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -289,7 +282,9 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
 	@Override
 	public void addActionListener(ActionListener actionListener) {
-		// TODO Auto-generated method stub
+		this.botonAbrir.addActionListener(actionListener);
+		this.botonCerrarMensaje.addActionListener(actionListener);
+		this.botonPararAlerta.addActionListener(actionListener);
 		
 	}
 

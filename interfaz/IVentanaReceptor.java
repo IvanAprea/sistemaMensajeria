@@ -8,5 +8,8 @@ import client.Mensaje;
 public interface IVentanaReceptor 
 {
 	void actualizaListaMensajes(Mensaje mensaje);
+	void abrirMensaje();
+	void cerrarMensaje();
+	void pararAlerta();
 	void addActionListener(ActionListener actionListener);
 }
