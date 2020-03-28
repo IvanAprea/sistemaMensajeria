@@ -2,11 +2,20 @@ package client;
 
 import interfaz.IVistaEmisor;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.io.StringWriter;
+
 import java.util.Iterator;
 import java.util.List;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class Emisor extends Persona implements ActionListener{
     
@@ -34,16 +43,31 @@ public class Emisor extends Persona implements ActionListener{
         int tipo;
         List<Persona> personas;
         Mensaje mensaje;
+        Persona aux;
         
         personas = vista.getPersonas();
         Iterator<Persona> it = personas.iterator();
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
         tipo=vista.getTipo();
+        mensaje = new Mensaje(asunto,texto,it.next(),tipo);
         
-        while(it.hasNext()){
-            mensaje = new Mensaje(asunto,texto,it.next(),tipo);
-            Comunicacion.getInstancia().enviarMensaje(mensaje);
+        try{
+            JAXBContext context = JAXBContext.newInstance(Mensaje.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter sw = new StringWriter();
+            marshaller.marshal(mensaje, sw);
+            while(it.hasNext()){
+                aux = it.next();
+                Comunicacion.getInstancia().enviarMensaje(sw,InetAddress.getByName(aux.getIP()),Integer.parseInt(aux.getPuerto()));
+            }
+        }
+        catch (UnknownHostException e){
+            e.printStackTrace();
+        }
+        catch (JAXBException e) {
+            e.printStackTrace();
         }
     }
     

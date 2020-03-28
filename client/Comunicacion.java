@@ -12,6 +12,10 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.PropertyException;
 
+import java.io.IOException;
+
+import java.net.InetAddress;
+
 public class Comunicacion {
     
 	private static Comunicacion _instancia = null;
@@ -53,27 +57,21 @@ public class Comunicacion {
         }.start();	
     }
     
-    public void enviarMensaje(Mensaje mensaje){
-    	//TODO ESTO DEBERIA SER PROCESADO EN EMISOR Y ACA MANDAR SOLO EL STRING A ENVIAR
-    	//HABRIA QUE VER COMO PASARLE LA IP Y PUERTO DEL RECEPTOR
-    	/*
+    public void enviarMensaje(StringWriter mensaje,InetAddress ip,int puerto){
+    	
     	try {
-    	    JAXBContext context = JAXBContext.newInstance(Mensaje.class);
-    	    Marshaller marshaller = context.createMarshaller();
-    	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    	    StringWriter sw = new StringWriter();
-    	    marshaller.marshal(mensaje, sw);
     	    
-            Socket socket = new Socket("IP","PUERTO");
+            Socket socket = new Socket(ip,puerto);
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out.println(sw.toString());
+            out.println(mensaje.toString());
             out.close();
             socket.close();
-    	} catch (JAXBException ex) {
-    	    ex.printStackTrace();
-    	}
-    	*/
+            
+    	} catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
     
    
