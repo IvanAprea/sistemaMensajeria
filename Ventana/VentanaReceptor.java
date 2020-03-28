@@ -14,12 +14,13 @@ import interfaz.IVentanaReceptor;
 
 public class VentanaReceptor extends javax.swing.JFrame implements IVentanaReceptor {
 	
-	private DefaultListModel<Mensaje> listaRecibidos;
+        private DefaultListModel<Mensaje> listaRecibidos;
 	private Clip clip;
 	
     /** Creates new form VentanaReceptor */
     public VentanaReceptor() {
         this.listaRecibidos = new DefaultListModel<Mensaje>();
+        
         initComponents();
         this.botonAbrir.setActionCommand("ABRIR MENSAJE");
         this.cerrarMensaje.setActionCommand("CERRAR MENSAJE");
@@ -62,6 +63,36 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel22 = new javax.swing.JPanel();
         botonPararAlerta = new javax.swing.JButton();
         jPanel23 = new javax.swing.JPanel();
+        jDiagConfigRecep = new javax.swing.JDialog();
+        jPanel24 = new javax.swing.JPanel();
+        jPanel25 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel26 = new javax.swing.JPanel();
+        jPanel37 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        nombreEmisor = new javax.swing.JTextArea();
+        jPanel27 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel28 = new javax.swing.JPanel();
+        jPanel38 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        apellidoEmisor = new javax.swing.JTextArea();
+        jPanel29 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel30 = new javax.swing.JPanel();
+        jPanel39 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        ipEmisor = new javax.swing.JTextArea();
+        jPanel31 = new javax.swing.JPanel();
+        jPanel35 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jPanel36 = new javax.swing.JPanel();
+        jPanel32 = new javax.swing.JPanel();
+        jPanel33 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        puertoEmisor = new javax.swing.JTextArea();
+        jPanel34 = new javax.swing.JPanel();
+        btConfirmarReceptor = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -83,6 +114,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel18.setLayout(new java.awt.GridLayout(1, 0));
 
+        labelDestinatario.setText("De: Ivan Aprea");
         jPanel18.add(labelDestinatario);
 
         jPanel17.add(jPanel18);
@@ -106,6 +138,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel13.setLayout(new java.awt.BorderLayout());
 
+        asuntoMsjRecibido.setText("Hola");
         jScrollPane2.setViewportView(asuntoMsjRecibido);
 
         jPanel13.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -125,6 +158,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel15.setLayout(new java.awt.BorderLayout());
 
+        textoMsjRecibido.setText("Hola, como va?");
         jScrollPane3.setViewportView(textoMsjRecibido);
 
         jPanel15.add(jScrollPane3, java.awt.BorderLayout.CENTER);
@@ -140,6 +174,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel20.setLayout(new java.awt.BorderLayout());
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("Mensaje entrante");
         jPanel21.add(jLabel4);
 
         jPanel20.add(jPanel21, java.awt.BorderLayout.PAGE_START);
@@ -159,10 +194,122 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 237, Short.MAX_VALUE)
         );
-        
+
         jPanel20.add(jPanel23, java.awt.BorderLayout.CENTER);
 
         jdiagAlertaSonora.getContentPane().add(jPanel20, java.awt.BorderLayout.CENTER);
+
+        jPanel24.setLayout(new java.awt.GridLayout(4, 2));
+
+        jPanel25.setLayout(new java.awt.GridBagLayout());
+
+        jLabel5.setText("Nombre");
+        jPanel25.add(jLabel5, new java.awt.GridBagConstraints());
+
+        jPanel24.add(jPanel25);
+
+        jPanel26.setLayout(new java.awt.GridLayout(2, 0));
+
+        jPanel37.setLayout(new java.awt.BorderLayout());
+
+        nombreEmisor.setColumns(20);
+        nombreEmisor.setRows(5);
+        nombreEmisor.setText("default");
+        jScrollPane4.setViewportView(nombreEmisor);
+
+        jPanel37.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
+        jPanel26.add(jPanel37);
+
+        jPanel24.add(jPanel26);
+
+        jPanel27.setLayout(new java.awt.GridBagLayout());
+
+        jLabel6.setText("Apellido");
+        jPanel27.add(jLabel6, new java.awt.GridBagConstraints());
+
+        jPanel24.add(jPanel27);
+
+        jPanel28.setLayout(new java.awt.GridLayout(2, 0));
+
+        jPanel38.setLayout(new java.awt.BorderLayout());
+
+        apellidoEmisor.setColumns(20);
+        apellidoEmisor.setRows(5);
+        apellidoEmisor.setText("default");
+        jScrollPane5.setViewportView(apellidoEmisor);
+
+        jPanel38.add(jScrollPane5, java.awt.BorderLayout.CENTER);
+
+        jPanel28.add(jPanel38);
+
+        jPanel24.add(jPanel28);
+
+        jPanel29.setLayout(new java.awt.GridBagLayout());
+
+        jLabel7.setText("IP");
+        jPanel29.add(jLabel7, new java.awt.GridBagConstraints());
+
+        jPanel24.add(jPanel29);
+
+        jPanel30.setLayout(new java.awt.GridLayout(2, 0));
+
+        jPanel39.setLayout(new java.awt.BorderLayout());
+
+        ipEmisor.setColumns(20);
+        ipEmisor.setRows(5);
+        jScrollPane6.setViewportView(ipEmisor);
+
+        jPanel39.add(jScrollPane6, java.awt.BorderLayout.CENTER);
+
+        jPanel30.add(jPanel39);
+
+        jPanel24.add(jPanel30);
+
+        jPanel31.setLayout(new java.awt.GridLayout(2, 0));
+
+        jPanel35.setLayout(new java.awt.GridBagLayout());
+
+        jLabel8.setText("Puerto");
+        jPanel35.add(jLabel8, new java.awt.GridBagConstraints());
+
+        jPanel31.add(jPanel35);
+
+        javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
+        jPanel36.setLayout(jPanel36Layout);
+        jPanel36Layout.setHorizontalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 200, Short.MAX_VALUE)
+        );
+        jPanel36Layout.setVerticalGroup(
+            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 37, Short.MAX_VALUE)
+        );
+
+        jPanel31.add(jPanel36);
+
+        jPanel24.add(jPanel31);
+
+        jPanel32.setLayout(new java.awt.GridLayout(2, 0));
+
+        jPanel33.setLayout(new java.awt.BorderLayout());
+
+        puertoEmisor.setColumns(20);
+        puertoEmisor.setRows(5);
+        jScrollPane7.setViewportView(puertoEmisor);
+
+        jPanel33.add(jScrollPane7, java.awt.BorderLayout.CENTER);
+
+        jPanel32.add(jPanel33);
+
+        btConfirmarReceptor.setText("Confirmar");
+        jPanel34.add(btConfirmarReceptor);
+
+        jPanel32.add(jPanel34);
+
+        jPanel24.add(jPanel32);
+
+        jDiagConfigRecep.getContentPane().add(jPanel24, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -256,7 +403,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     	if(listaMensajesRecibidos.getSelectedValue()!= null) {
             this.actualizaMensajeAbierto(
             		listaMensajesRecibidos.getSelectedValue().getEmisor(),
-            		listaMensajesRecibidos.getSelectedValue().getAsunto(), 
+            		listaMensajesRecibidos.getSelectedValue().getAsunto(),
             		listaMensajesRecibidos.getSelectedValue().getTexto());
             this.jDialog1.setSize(400, 400);
             this.jDialog1.setVisible(true);
@@ -296,15 +443,23 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea apellidoEmisor;
     private javax.swing.JTextPane asuntoMsjRecibido;
     private javax.swing.JButton botonAbrir;
     private javax.swing.JButton botonPararAlerta;
+    private javax.swing.JButton btConfirmarReceptor;
     private javax.swing.JButton cerrarMensaje;
+    private javax.swing.JTextArea ipEmisor;
+    private javax.swing.JDialog jDiagConfigRecep;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -322,7 +477,23 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
+    private javax.swing.JPanel jPanel24;
+    private javax.swing.JPanel jPanel25;
+    private javax.swing.JPanel jPanel26;
+    private javax.swing.JPanel jPanel27;
+    private javax.swing.JPanel jPanel28;
+    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel30;
+    private javax.swing.JPanel jPanel31;
+    private javax.swing.JPanel jPanel32;
+    private javax.swing.JPanel jPanel33;
+    private javax.swing.JPanel jPanel34;
+    private javax.swing.JPanel jPanel35;
+    private javax.swing.JPanel jPanel36;
+    private javax.swing.JPanel jPanel37;
+    private javax.swing.JPanel jPanel38;
+    private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -332,9 +503,15 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JDialog jdiagAlertaSonora;
     private javax.swing.JLabel labelDestinatario;
     private javax.swing.JList<Mensaje> listaMensajesRecibidos;
+    private javax.swing.JTextArea nombreEmisor;
+    private javax.swing.JTextArea puertoEmisor;
     private javax.swing.JTextPane textoMsjRecibido;
     // End of variables declaration//GEN-END:variables
 
