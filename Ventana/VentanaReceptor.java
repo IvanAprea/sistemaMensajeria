@@ -103,6 +103,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
+        btConfigReceptor = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         botonAbrir = new javax.swing.JButton();
 
@@ -283,7 +284,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         );
         jPanel36Layout.setVerticalGroup(
             jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 37, Short.MAX_VALUE)
+            .addGap(0, 78, Short.MAX_VALUE)
         );
 
         jPanel31.add(jPanel36);
@@ -360,24 +361,18 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel4.add(jPanel6);
 
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 148, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 75, Short.MAX_VALUE)
-        );
+        jPanel7.setLayout(new java.awt.GridBagLayout());
+
+        btConfigReceptor.setText("Configuración");
+        jPanel7.add(btConfigReceptor, new java.awt.GridBagConstraints());
 
         jPanel4.add(jPanel7);
 
-        jPanel8.setLayout(new java.awt.BorderLayout());
+        jPanel8.setLayout(new java.awt.GridBagLayout());
 
         botonAbrir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         botonAbrir.setText("Abrir");
-        jPanel8.add(botonAbrir, java.awt.BorderLayout.CENTER);
+        jPanel8.add(botonAbrir, new java.awt.GridBagConstraints());
 
         jPanel4.add(jPanel8);
 
@@ -447,6 +442,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JTextPane asuntoMsjRecibido;
     private javax.swing.JButton botonAbrir;
     private javax.swing.JButton botonPararAlerta;
+    private javax.swing.JButton btConfigReceptor;
     private javax.swing.JButton btConfirmarReceptor;
     private javax.swing.JButton cerrarMensaje;
     private javax.swing.JTextArea ipEmisor;
