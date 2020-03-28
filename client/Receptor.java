@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -65,18 +67,37 @@ public class Receptor extends Persona implements ActionListener{
             	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
             }
             else if(mensaje.getTipo() == 2) {
-            	Comunicacion.getInstancia().informarMensajeRecibido(mensaje.getEmisor().getIP(),mensaje.getEmisor().getPuerto());
+            	try {
+					Comunicacion.getInstancia().informarMensajeRecibido(
+							InetAddress.getByName("IP PROPIA"),
+							InetAddress.getByName(mensaje.getEmisor().getIP()),
+							mensaje.getEmisor().getPuerto());
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
             }
     	} catch (JAXBException ex) {
     	    ex.printStackTrace();
     	}
     }
-        
+    
+    public void lanzarCartelError(String err) {
+    	this.ventanaReceptor.lanzarCartelError(err);
+    }
+    
 	public void setVentanaReceptor(IVentanaReceptor ventanaReceptor) {
         this.ventanaReceptor = ventanaReceptor;
         this.ventanaReceptor.addActionListener(this);
 	}
-
+	
+	public void configAtributos(String ip, String puerto, String nombre, String apellido) {
+        this.setIP(ip);
+        this.setPuerto(puerto);
+        this.setNombre(nombre);
+        this.setApellido(apellido);
+        Comunicacion.getInstancia().escucharPuerto(this.getPuerto());
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg) {
         String comando = arg.getActionCommand();
@@ -86,5 +107,9 @@ public class Receptor extends Persona implements ActionListener{
         	this.ventanaReceptor.cerrarMensaje();
         else if (comando.equalsIgnoreCase("PARAR ALERTA"))
         	this.ventanaReceptor.pararAlerta();
+        else if (comando.equalsIgnoreCase("ABRIR CONFIGURACION"))
+        	this.ventanaReceptor.abrirConfiguracion();
+        else if (comando.equalsIgnoreCase("ACEPTAR CONFIGURACION"))
+        	this.ventanaReceptor.confirmarConfiguracion();
 	}
 }

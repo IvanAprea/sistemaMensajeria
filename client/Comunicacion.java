@@ -2,18 +2,13 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.PropertyException;
 
 import java.io.IOException;
-
+import java.net.BindException;
 import java.net.InetAddress;
 
 public class Comunicacion {
@@ -49,6 +44,11 @@ public class Comunicacion {
                     }
 
                 } 
+                catch (BindException e) 
+                {
+                	
+                    e.printStackTrace();
+                }
                 catch (Exception e) 
                 {
                     e.printStackTrace();
@@ -75,7 +75,7 @@ public class Comunicacion {
     }
     
    
-    public void informarMensajeRecibido(String ip, String puerto){
+    public void informarMensajeRecibido(InetAddress ipPropia, InetAddress ipAInformar, String puerto){
         
     }
 }

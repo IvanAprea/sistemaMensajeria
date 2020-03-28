@@ -11,7 +11,6 @@ public class inicioReceptor {
 	public static void main(String[] args) {
 		VentanaReceptor ventana = new VentanaReceptor();
 		Receptor.getInstancia().setVentanaReceptor(ventana);
-		Comunicacion.getInstancia().escucharPuerto(Receptor.getInstancia().getPuerto());
 		ventana.pack();
 		ventana.setVisible(true);
 	}

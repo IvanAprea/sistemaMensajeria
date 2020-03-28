@@ -17,6 +17,9 @@ public interface IVentanaReceptor
 	void cerrarMensaje();
 	void lanzarAlerta(String emisor);
 	void pararAlerta();
+	void confirmarConfiguracion();
+	void abrirConfiguracion();
+	void lanzarCartelError(String err);
 	void addActionListener(ActionListener actionListener);
 	Clip getClip();
 	void setClip(Clip clip);

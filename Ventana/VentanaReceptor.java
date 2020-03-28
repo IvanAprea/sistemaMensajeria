@@ -5,11 +5,13 @@ import java.awt.event.ActionListener;
 
 import javax.sound.sampled.Clip;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 
 import client.Mensaje;
 import client.Persona;
+import client.Receptor;
 import interfaz.IVentanaReceptor;
 
 public class VentanaReceptor extends javax.swing.JFrame implements IVentanaReceptor {
@@ -24,7 +26,9 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         initComponents();
         this.botonAbrir.setActionCommand("ABRIR MENSAJE");
         this.cerrarMensaje.setActionCommand("CERRAR MENSAJE");
-        this.botonPararAlerta.setActionCommand("PARAR ALERTA"); //FALTA AGREGAR ACTION PERFORMED DE ESTO, CREAR POPUP ANTES
+        this.botonPararAlerta.setActionCommand("PARAR ALERTA");
+        this.botonConfigReceptor.setActionCommand("ABRIR CONFIGURACION");
+        this.botonConfirmarConfig.setActionCommand("ACEPTAR CONFIGURACION");
     }
 
     /** This method is called from within the constructor to
@@ -92,7 +96,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jScrollPane7 = new javax.swing.JScrollPane();
         puertoEmisor = new javax.swing.JTextArea();
         jPanel34 = new javax.swing.JPanel();
-        btConfirmarReceptor = new javax.swing.JButton();
+        botonConfirmarConfig = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -103,7 +107,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        btConfigReceptor = new javax.swing.JButton();
+        botonConfigReceptor = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         botonAbrir = new javax.swing.JButton();
 
@@ -303,8 +307,8 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel32.add(jPanel33);
 
-        btConfirmarReceptor.setText("Confirmar");
-        jPanel34.add(btConfirmarReceptor);
+        botonConfirmarConfig.setText("Confirmar");
+        jPanel34.add(botonConfirmarConfig);
 
         jPanel32.add(jPanel34);
 
@@ -363,8 +367,8 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jPanel7.setLayout(new java.awt.GridBagLayout());
 
-        btConfigReceptor.setText("Configuración");
-        jPanel7.add(btConfigReceptor, new java.awt.GridBagConstraints());
+        botonConfigReceptor.setText("Configuración");
+        jPanel7.add(botonConfigReceptor, new java.awt.GridBagConstraints());
 
         jPanel4.add(jPanel7);
 
@@ -406,6 +410,31 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     	}
     }
     
+    public void abrirConfiguracion() {
+        this.jDiagConfigRecep.setSize(200, 400);
+        this.jDiagConfigRecep.setVisible(true);
+        this.repaint();
+    }
+    
+    public void confirmarConfiguracion() {
+    	String ip = this.ipEmisor.getText().trim();
+    	String puerto = this.puertoEmisor.getText().trim();
+    	String nombre = this.nombreEmisor.getText().trim();
+    	String apellido = this.apellidoEmisor.getText().trim();
+    	if(!ip.equals("") &&
+		   !puerto.equals("") &&
+		   !nombre.equals("") &&
+		   !apellido.equals("") )
+		{
+    		Receptor.getInstancia().configAtributos(ip, puerto, nombre, apellido);
+    		this.jDiagConfigRecep.setVisible(false);
+    		this.repaint();
+		}
+		else {
+			this.lanzarCartelError("ERROR: debe completar todos los campos");
+		}
+    }
+    
     public void lanzarAlerta(String emisor) {
     	this.jLabel4.setText("Mensaje entrante de: "+emisor);
         this.jdiagAlertaSonora.pack();
@@ -430,6 +459,10 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         this.repaint();
     }
     
+    public void lanzarCartelError(String err) {
+    	JOptionPane.showMessageDialog(null, err);
+    }
+   
     public void actualizaMensajeAbierto(Persona emisorAct, String asuntoAct, String textoAct)
     {
         this.textoMsjRecibido.setText(textoAct);
@@ -442,8 +475,8 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JTextPane asuntoMsjRecibido;
     private javax.swing.JButton botonAbrir;
     private javax.swing.JButton botonPararAlerta;
-    private javax.swing.JButton btConfigReceptor;
-    private javax.swing.JButton btConfirmarReceptor;
+    private javax.swing.JButton botonConfigReceptor;
+    private javax.swing.JButton botonConfirmarConfig;
     private javax.swing.JButton cerrarMensaje;
     private javax.swing.JTextArea ipEmisor;
     private javax.swing.JDialog jDiagConfigRecep;
@@ -516,6 +549,8 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 		this.botonAbrir.addActionListener(actionListener);
 		this.cerrarMensaje.addActionListener(actionListener);
 		this.botonPararAlerta.addActionListener(actionListener);
+		this.botonConfigReceptor.addActionListener(actionListener);
+		this.botonConfirmarConfig.addActionListener(actionListener);
 		
 	}
 
