@@ -3,6 +3,7 @@ package client;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URL;
 
 import javax.sound.sampled.AudioInputStream;
@@ -13,6 +14,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import Ventana.VentanaReceptor;
 import client.Mensaje;
 import interfaz.IVentanaReceptor;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 
 public class Receptor extends Persona implements ActionListener{
 	
@@ -49,17 +53,23 @@ public class Receptor extends Persona implements ActionListener{
          }
     }
 	
-    public void recibirMensaje(Object obj){
-        Mensaje mensaje = (Mensaje) obj;
-        this.ventanaReceptor.actualizaListaMensajes(mensaje);
-        if(mensaje.getTipo() == 1) {
-        	this.setSound(IVentanaReceptor.ALERT_SOUND_URL);
-        	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
-        }
-        else if(mensaje.getTipo() == 2) {
-        	Comunicacion.getInstancia().informarMensajeRecibido(mensaje.getEmisor().getIP(),mensaje.getEmisor().getPuerto());
-        }
-        
+    public void recibirMensaje(String str){
+    	try {
+    	    JAXBContext context = JAXBContext.newInstance(Mensaje.class);
+    	    Unmarshaller unmarshaller = context.createUnmarshaller();
+    	    StringReader reader = new StringReader(str);
+    	    Mensaje mensaje = (Mensaje) unmarshaller.unmarshal(reader);
+            this.ventanaReceptor.actualizaListaMensajes(mensaje);
+            if(mensaje.getTipo() == 1) {
+            	this.setSound(IVentanaReceptor.ALERT_SOUND_URL);
+            	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
+            }
+            else if(mensaje.getTipo() == 2) {
+            	Comunicacion.getInstancia().informarMensajeRecibido(mensaje.getEmisor().getIP(),mensaje.getEmisor().getPuerto());
+            }
+    	} catch (JAXBException ex) {
+    	    ex.printStackTrace();
+    	}
     }
         
 	public void setVentanaReceptor(IVentanaReceptor ventanaReceptor) {
