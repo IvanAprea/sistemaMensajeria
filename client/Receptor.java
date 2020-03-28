@@ -57,8 +57,8 @@ public class Receptor extends Persona implements ActionListener{
 	
     public void recibirMensaje(String str){
     	try {
-    	    JAXBContext context = JAXBContext.newInstance(Mensaje.class);
-    	    Unmarshaller unmarshaller = context.createUnmarshaller();
+    	    javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
+    	    javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
     	    StringReader reader = new StringReader(str);
     	    Mensaje mensaje = (Mensaje) unmarshaller.unmarshal(reader);
             this.ventanaReceptor.actualizaListaMensajes(mensaje);
@@ -77,9 +77,9 @@ public class Receptor extends Persona implements ActionListener{
 					e.printStackTrace();
 				}
             }
-    	} catch (JAXBException ex) {
-    	    ex.printStackTrace();
-    	}
+            }catch (Exception e){
+                e.printStackTrace();
+            }
     }
     
     public void lanzarCartelError(String err) {

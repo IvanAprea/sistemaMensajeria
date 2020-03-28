@@ -20,38 +20,41 @@ public class Mensaje {
 		this.emisor = emisor;
 		this.tipo = tipo;
 	}
-	public String getAsunto() {
-		return asunto;
-	}
-	public String getTexto() {
-		return texto;
-	}
-	public Persona getEmisor() {
-		return emisor;
-	}
-	
-	public int getTipo() {
-		return tipo;
-	}
-	@Override
-	public String toString() {
-		return ((tipo == 1) ? " [!] " : "     ") + "De: " + emisor.toString() + " Asunto: " + asunto;
-	}
+
+    @Override
+        public String toString() {
+            return ((tipo == 1) ? " [!] " : "     ") + "De: " + emisor.toString() + " Asunto: " + asunto;
+        }
 
     public void setAsunto(String asunto) {
         this.asunto = asunto;
+    }
+
+    public String getAsunto() {
+        return asunto;
     }
 
     public void setTexto(String texto) {
         this.texto = texto;
     }
 
+    public String getTexto() {
+        return texto;
+    }
+
     public void setEmisor(Persona emisor) {
         this.emisor = emisor;
+    }
+
+    public Persona getEmisor() {
+        return emisor;
     }
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
     }
 
+    public int getTipo() {
+        return tipo;
+    }
 }

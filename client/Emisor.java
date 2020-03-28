@@ -43,30 +43,23 @@ public class Emisor extends Persona implements ActionListener{
         int tipo;
         List<Persona> personas;
         Mensaje mensaje;
-        Persona receptorAux;
+        Persona personaAux,receptorAux;
         
         personas = vista.getPersonas();
         Iterator<Persona> it = personas.iterator();
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
         tipo=vista.getTipo();
-        mensaje = new Mensaje(asunto,texto,it.next(),tipo);
-        
+        personaAux=it.next();
+        mensaje = new Mensaje(asunto,texto,personaAux,tipo);
         try{
-            JAXBContext context = JAXBContext.newInstance(Mensaje.class);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
+            javax.xml.bind.Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
             marshaller.marshal(mensaje, sw);
-            while(it.hasNext()){
-                receptorAux = it.next();
-                Comunicacion.getInstancia().enviarMensaje(sw,InetAddress.getByName(receptorAux.getIP()),Integer.parseInt(receptorAux.getPuerto()));
-            }
-        }
-        catch (UnknownHostException e){
-            e.printStackTrace();
-        }
-        catch (JAXBException e) {
+            Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -109,5 +102,9 @@ public class Emisor extends Persona implements ActionListener{
         if(comando.equalsIgnoreCase("CANCELAR CAMBIO")){
             this.vista.cerrarConfig();
         }
+    }
+
+    public static void setInstancia(Emisor instancia) {
+        Emisor.instancia = instancia;
     }
 }
