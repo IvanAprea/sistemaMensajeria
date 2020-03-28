@@ -62,6 +62,7 @@ public class Receptor extends Persona implements ActionListener{
     	    StringReader reader = new StringReader(str);
     	    Mensaje mensaje = (Mensaje) unmarshaller.unmarshal(reader);
             this.ventanaReceptor.actualizaListaMensajes(mensaje);
+            
             if(mensaje.getTipo() == 1) {
             	this.setSound(IVentanaReceptor.ALERT_SOUND_URL);
             	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());

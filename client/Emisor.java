@@ -43,7 +43,7 @@ public class Emisor extends Persona implements ActionListener{
         int tipo;
         List<Persona> personas;
         Mensaje mensaje;
-        Persona aux;
+        Persona receptorAux;
         
         personas = vista.getPersonas();
         Iterator<Persona> it = personas.iterator();
@@ -59,8 +59,8 @@ public class Emisor extends Persona implements ActionListener{
             StringWriter sw = new StringWriter();
             marshaller.marshal(mensaje, sw);
             while(it.hasNext()){
-                aux = it.next();
-                Comunicacion.getInstancia().enviarMensaje(sw,InetAddress.getByName(aux.getIP()),Integer.parseInt(aux.getPuerto()));
+                receptorAux = it.next();
+                Comunicacion.getInstancia().enviarMensaje(sw,InetAddress.getByName(receptorAux.getIP()),Integer.parseInt(receptorAux.getPuerto()));
             }
         }
         catch (UnknownHostException e){
