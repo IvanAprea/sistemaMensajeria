@@ -52,9 +52,7 @@ public class Comunicacion {
                     ServerSocket s = new ServerSocket(Integer.parseInt(puerto));
                     while (true) 
                     {
-                        Socket soc;
-                        s.setSoTimeout(2000);
-                        soc = s.accept();            
+                        Socket soc = s.accept();
                         PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
                         DataInputStream dIn = new DataInputStream(soc.getInputStream());
                         Receptor.getInstancia().recibirMensaje(dIn.readUTF());

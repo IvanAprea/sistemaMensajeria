@@ -77,7 +77,15 @@ public class Emisor extends Persona implements ActionListener{
     }
     
     public void recibirConfirmacion(String confirmacion){
-        
+        Persona per = Agenda.getInstance().getPersona(confirmacion);
+        String nombre;
+        if(per==null){
+            nombre = confirmacion;
+        }
+        else{
+            nombre = per.toString();
+        }
+        this.vista.lanzarCartelError(nombre + " ha recibido correctamente el mensaje.");
     }
     
     public void configAtributos(String ip, String puerto, String nombre, String apellido) {
