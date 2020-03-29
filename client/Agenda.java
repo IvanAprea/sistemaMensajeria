@@ -11,16 +11,19 @@ import java.io.ObjectInputStream;
 import java.io.UnsupportedEncodingException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Agenda {
     
     
     private static Agenda instancia=null;
     private ArrayList<Persona> personas;
+    private HashMap<String,Persona> personass;
 			
     private Agenda() {
         super();
         personas = new ArrayList<Persona>();
+        personass = new HashMap<String,Persona>();
     }
     
     /**
@@ -64,7 +67,7 @@ public class Agenda {
         }
     }
     
-    public ArrayList<Persona> getPersonas(){
-        return this.personas;
+    public HashMap<String,Persona> getPersonas(){
+        return this.personass;
     }
 }

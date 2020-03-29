@@ -10,8 +10,11 @@ import interfaz.IVistaEmisor;
 
 import java.awt.event.ActionListener;
 
+import java.awt.event.KeyListener;
+
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import java.util.List;
@@ -631,8 +634,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     }
 
     @Override
-    public void actualizarListaAgenda(ArrayList<Persona> personas) {
-        Iterator<Persona> it = personas.iterator();
+    public void actualizarListaAgenda(HashMap<String,Persona> personas) {
+        Iterator<Persona> it = personas.values().iterator();
         
         this.modAgenda.clear();
         while(it.hasNext()){
@@ -649,6 +652,11 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         this.botonEnviarEmisor.addActionListener(actionListener);
         this.btAceptarConfig.addActionListener(actionListener);
         this.btCancelarConfig.addActionListener(actionListener);
+    }
+    
+    public void addKeyListener(KeyListener kl1,KeyListener kl2){
+        this.textAsuntoEmisor.addKeyListener(kl1);
+        this.textMensajeEmisor.addKeyListener(kl2);
     }
 
 

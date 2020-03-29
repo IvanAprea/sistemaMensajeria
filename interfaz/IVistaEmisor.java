@@ -4,7 +4,10 @@ import client.Persona;
 
 import java.awt.event.ActionListener;
 
+import java.awt.event.KeyListener;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface IVistaEmisor {
@@ -15,7 +18,7 @@ public interface IVistaEmisor {
     String getNombreConfig();
     String getApellidoConfig();
     void enviarMensaje();
-    void actualizarListaAgenda(ArrayList<Persona> personas);
+    void actualizarListaAgenda(HashMap<String,Persona> personas);
     void addActionListener(ActionListener actionListener);
     void abrirConfig();
     void confirmarConfiguracion();
@@ -23,4 +26,5 @@ public interface IVistaEmisor {
     void lanzarCartelError(String err);
     String getIPConfig();
     String getPuertoConfig();
+    void addKeyListener(KeyListener kl1,KeyListener kl2);
 }
