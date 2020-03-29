@@ -19,4 +19,6 @@ public interface IVistaEmisor {
     void abrirConfig();
     void cerrarConfig();
     void mostrarPanelMsjRecibido();
+    String getIPConfig();
+    String getPuertoConfig();
 }

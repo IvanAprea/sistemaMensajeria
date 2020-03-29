@@ -43,7 +43,7 @@ public class Emisor extends Persona implements ActionListener{
         int tipo;
         List<Persona> personas;
         Mensaje mensaje;
-        Persona personaAux,receptorAux;
+        Persona personaAux;
         
         personas = vista.getPersonas();
         Iterator<Persona> it = personas.iterator();
@@ -51,7 +51,8 @@ public class Emisor extends Persona implements ActionListener{
         texto=vista.getMensaje();
         tipo=vista.getTipo();
         personaAux=it.next();
-        mensaje = new Mensaje(asunto,texto,personaAux,tipo);
+        System.out.println(personaAux.getIP());
+        mensaje = new Mensaje(asunto,texto,this,tipo);
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
@@ -71,6 +72,8 @@ public class Emisor extends Persona implements ActionListener{
     public void editarDatosPersona(){
         this.setApellido(vista.getApellidoConfig());
         this.setNombre(vista.getNombreConfig());
+        this.setIP(vista.getIPConfig());
+        this.setPuerto(vista.getPuertoConfig());
         this.vista.cerrarConfig();
     }
 

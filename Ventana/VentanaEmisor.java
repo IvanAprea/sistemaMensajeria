@@ -51,26 +51,32 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         jPanel22 = new javax.swing.JPanel();
         jPanel24 = new javax.swing.JPanel();
         jPanel28 = new javax.swing.JPanel();
-        jPanel29 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+        jPanel29 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
         jPanel30 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
         jPanel25 = new javax.swing.JPanel();
         jPanel31 = new javax.swing.JPanel();
-        jPanel32 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         textNombreConfig = new javax.swing.JTextArea();
+        jPanel32 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        textApellidoConfig = new javax.swing.JTextArea();
         jPanel33 = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        textIPConfig = new javax.swing.JTextArea();
         jPanel23 = new javax.swing.JPanel();
         jPanel26 = new javax.swing.JPanel();
         jPanel34 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jPanel35 = new javax.swing.JPanel();
         jPanel36 = new javax.swing.JPanel();
         btCancelarConfig = new javax.swing.JButton();
         jPanel27 = new javax.swing.JPanel();
         jPanel37 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        textApellidoConfig = new javax.swing.JTextArea();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        textPuertoConfig = new javax.swing.JTextArea();
         jPanel38 = new javax.swing.JPanel();
         jPanel39 = new javax.swing.JPanel();
         btAceptarConfig = new javax.swing.JButton();
@@ -117,28 +123,54 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         jPanel22.setLayout(new java.awt.GridLayout(1, 2));
 
         jPanel24.setLayout(new java.awt.GridLayout(3, 0));
-        jPanel24.add(jPanel28);
 
         jLabel5.setText("Nombre");
-        jPanel29.add(jLabel5);
+        jPanel28.add(jLabel5);
+
+        jPanel24.add(jPanel28);
+
+        jLabel6.setText("Apellido");
+        jPanel29.add(jLabel6);
 
         jPanel24.add(jPanel29);
+
+        jLabel7.setText("IP");
+        jPanel30.add(jLabel7);
+
         jPanel24.add(jPanel30);
 
         jPanel22.add(jPanel24);
 
         jPanel25.setLayout(new java.awt.GridLayout(3, 0));
-        jPanel25.add(jPanel31);
 
-        jPanel32.setLayout(new java.awt.BorderLayout());
+        jPanel31.setLayout(new java.awt.BorderLayout());
 
         textNombreConfig.setColumns(20);
         textNombreConfig.setRows(5);
         jScrollPane4.setViewportView(textNombreConfig);
 
-        jPanel32.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+        jPanel31.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
+        jPanel25.add(jPanel31);
+
+        jPanel32.setLayout(new java.awt.BorderLayout());
+
+        textApellidoConfig.setColumns(20);
+        textApellidoConfig.setRows(5);
+        jScrollPane5.setViewportView(textApellidoConfig);
+
+        jPanel32.add(jScrollPane5, java.awt.BorderLayout.CENTER);
 
         jPanel25.add(jPanel32);
+
+        jPanel33.setLayout(new java.awt.BorderLayout());
+
+        textIPConfig.setColumns(20);
+        textIPConfig.setRows(5);
+        jScrollPane8.setViewportView(textIPConfig);
+
+        jPanel33.add(jScrollPane8, java.awt.BorderLayout.CENTER);
+
         jPanel25.add(jPanel33);
 
         jPanel22.add(jPanel25);
@@ -149,8 +181,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
 
         jPanel26.setLayout(new java.awt.GridLayout(3, 0));
 
-        jLabel6.setText("Apellido");
-        jPanel34.add(jLabel6);
+        jLabel8.setText("Puerto");
+        jPanel34.add(jLabel8);
 
         jPanel26.add(jPanel34);
         jPanel26.add(jPanel35);
@@ -166,11 +198,11 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
 
         jPanel37.setLayout(new java.awt.BorderLayout());
 
-        textApellidoConfig.setColumns(20);
-        textApellidoConfig.setRows(5);
-        jScrollPane5.setViewportView(textApellidoConfig);
+        textPuertoConfig.setColumns(20);
+        textPuertoConfig.setRows(5);
+        jScrollPane7.setViewportView(textPuertoConfig);
 
-        jPanel37.add(jScrollPane5, java.awt.BorderLayout.CENTER);
+        jPanel37.add(jScrollPane7, java.awt.BorderLayout.CENTER);
 
         jPanel27.add(jPanel37);
         jPanel27.add(jPanel38);
@@ -435,6 +467,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -479,12 +513,16 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JList<Persona> listAgenda;
     private javax.swing.JOptionPane panelMsjRecibido;
     private javax.swing.JTextArea textApellidoConfig;
     private javax.swing.JTextArea textAsuntoEmisor;
+    private javax.swing.JTextArea textIPConfig;
     private javax.swing.JTextArea textMensajeEmisor;
     private javax.swing.JTextArea textNombreConfig;
+    private javax.swing.JTextArea textPuertoConfig;
     private javax.swing.ButtonGroup tipoMensaje;
     // End of variables declaration//GEN-END:variables
 
@@ -529,12 +567,24 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         return this.textApellidoConfig.getText();
     }
     
+    @Override
+    public String getIPConfig() {
+        return this.textIPConfig.getText();
+    }
+
+    @Override
+    public String getPuertoConfig() {
+        return this.textPuertoConfig.getText();
+    }
+    
     public void abrirConfig() {
         
         this.jDialog1.setSize(400, 400);
         this.jDialog1.setVisible(true);
         this.textNombreConfig.setText(Emisor.getInstance().getNombre());
         this.textApellidoConfig.setText(Emisor.getInstance().getApellido());
+        this.textIPConfig.setText(Emisor.getInstance().getIP());
+        this.textPuertoConfig.setText(Emisor.getInstance().getPuerto());
         this.repaint();
         
     }
@@ -568,4 +618,6 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     public void mostrarPanelMsjRecibido() {
         JOptionPane.showMessageDialog(null, "El mensaje se recibio correctamente.");
     }
+
+
 }

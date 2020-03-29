@@ -1,5 +1,11 @@
 package client;
 
+import java.io.BufferedReader;
+
+import java.io.InputStreamReader;
+
+import java.net.URL;
+
 public class Persona {
     
     private String IP,Puerto="80",Nombre = "default",Apellido = "default";
@@ -8,8 +14,18 @@ public class Persona {
         super();
         this.Nombre=nombre;
         this.Apellido=apellido;
-        this.IP=ip;
         this.Puerto=puerto;
+    }
+    
+    public void setearIp(){
+        try {
+                URL whatismyip = new URL("http://checkip.amazonaws.com");
+                BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+         
+                this.IP = in.readLine();
+        } 
+        catch(Exception e) { 
+            e.printStackTrace(); }
     }
     
     public Persona() {
