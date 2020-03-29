@@ -94,7 +94,11 @@ public class Emisor extends Persona implements ActionListener{
         this.setNombre(nombre);
         this.setApellido(apellido);
     }
-
+    
+    public void lanzarCartelError(String err) {
+        this.vista.lanzarCartelError(err);
+    }
+    
     public void setVista(IVistaEmisor vista) {
         
         this.vista = vista;
