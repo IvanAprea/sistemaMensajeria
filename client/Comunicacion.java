@@ -89,12 +89,16 @@ public class Comunicacion {
                         Socket soc = s.accept();
                         PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
                         DataInputStream dIn = new DataInputStream(soc.getInputStream());
-                        Emisor.getInstance().recibirConfirmacion(dIn.readUTF());
+                        String str = dIn.readUTF();
+                        str = str.substring(1);
+                        System.out.println(str);
+                        InetAddress adr = InetAddress.getByName(str);
+                        Emisor.getInstance().recibirConfirmacion(str);
                     }
-
                 } 
                 catch (BindException e) 
                 {
+                    Emisor.getInstance().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");   
                     e.printStackTrace();
                 }
                 catch (Exception e) 
@@ -107,7 +111,6 @@ public class Comunicacion {
     
     public void enviarMensaje(StringWriter mensaje,InetAddress ip,int puerto){
     	try {
-    	    
             Socket socket = new Socket(ip,puerto);
     	    DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
     	    dOut.writeUTF(mensaje.toString());
