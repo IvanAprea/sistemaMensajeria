@@ -91,7 +91,6 @@ public class Emisor extends Persona implements ActionListener{
         String comando = arg.getActionCommand();
         if(comando.equalsIgnoreCase("ENVIAR MENSAJE")){
             this.enviarMensaje();
-            this.vista.mostrarPanelMsjRecibido();
         }else
         if(comando.equalsIgnoreCase("CONFIGURACION")){
             this.vista.abrirConfig();

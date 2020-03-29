@@ -20,6 +20,8 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
+import java.io.File;
+
 public class Receptor extends Persona implements ActionListener{
 	
 	private static Receptor _instancia = null;
@@ -42,8 +44,8 @@ public class Receptor extends Persona implements ActionListener{
     
 	private void setSound(String sound){
         try {
-            URL url = this.getClass().getClassLoader().getResource(sound);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            //URL url = this.getClass().getClassLoader().getResource("incomingsound.wav");
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("incomingsound.wav").getAbsoluteFile());
             this.ventanaReceptor.setClip(AudioSystem.getClip());
             this.ventanaReceptor.getClip().open(audioIn);
          } catch (UnsupportedAudioFileException e) {
