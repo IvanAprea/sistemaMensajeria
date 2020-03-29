@@ -50,8 +50,6 @@ public class Emisor extends Persona implements ActionListener{
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
         tipo=vista.getTipo();
-        personaAux=it.next();
-        System.out.println(personaAux.getIP());
         mensaje = new Mensaje(asunto,texto,this,tipo);
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
@@ -59,7 +57,10 @@ public class Emisor extends Persona implements ActionListener{
             marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
             marshaller.marshal(mensaje, sw);
-            Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+            while(it.hasNext()){
+                personaAux=it.next();
+                Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
