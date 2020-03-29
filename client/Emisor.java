@@ -58,6 +58,9 @@ public class Emisor extends Persona implements ActionListener{
         texto=vista.getMensaje();
         tipo=vista.getTipo();
         mensaje = new Mensaje(asunto,texto,this,tipo);
+        if(tipo == 2){
+            Comunicacion.getInstancia().escucharPuertoEmisor(this.getPuerto());
+        }
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
@@ -73,7 +76,7 @@ public class Emisor extends Persona implements ActionListener{
         }
     }
     
-    public void recibirConfirmacion(){
+    public void recibirConfirmacion(String confirmacion){
         
     }
     

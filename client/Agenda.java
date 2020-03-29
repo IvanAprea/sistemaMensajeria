@@ -17,13 +17,11 @@ public class Agenda {
     
     
     private static Agenda instancia=null;
-    private ArrayList<Persona> personas;
-    private HashMap<String,Persona> personass;
+    private HashMap<String, Persona> personas;
 			
     private Agenda() {
         super();
-        personas = new ArrayList<Persona>();
-        personass = new HashMap<String,Persona>();
+        personas = new HashMap<String, Persona>();
     }
     
     /**
@@ -53,7 +51,7 @@ public class Agenda {
             while(linea!=null){
                 datos=linea.split(regex);
                 if(datos.length == 4){
-                    this.personas.add(new Persona(datos[0],datos[1],datos[2],datos[3]));
+                    this.personas.put(datos[2], new Persona(datos[0],datos[1],datos[2],datos[3]));
                 }
                 linea=br.readLine();
             }
@@ -67,7 +65,11 @@ public class Agenda {
         }
     }
     
-    public HashMap<String,Persona> getPersonas(){
-        return this.personass;
+    public HashMap<String, Persona> getPersonas(){
+        return this.personas;
+    }
+    
+    public Persona getPersona(String ip){
+        return getPersonas().get(ip);
     }
 }

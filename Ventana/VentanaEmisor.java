@@ -266,7 +266,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
 
         jPanel13.add(jPanel19);
 
-        botonConfigEmisor.setText("Configuración");
+        botonConfigEmisor.setText("ConfiguraciÃ³n");
         botonConfigEmisor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonConfigEmisorActionPerformed(evt);
@@ -309,7 +309,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         jPanel18.setLayout(new java.awt.GridLayout(1, 0));
 
         tipoMensaje.add(RBAvisoRecep);
-        RBAvisoRecep.setText("Mensaje con aviso recepción");
+        RBAvisoRecep.setText("Mensaje con aviso recepciÃ³n");
         RBAvisoRecep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RBAvisoRecepActionPerformed(evt);
@@ -632,6 +632,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     public void cerrarConfig(){
         this.jDialog1.setVisible(false);
     }
+
 
     @Override
     public void actualizarListaAgenda(HashMap<String,Persona> personas) {
