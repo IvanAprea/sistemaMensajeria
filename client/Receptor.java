@@ -71,13 +71,13 @@ public class Receptor extends Persona implements ActionListener{
             }
             else if(mensaje.getTipo() == 2) {
             	try {
-					Comunicacion.getInstancia().informarMensajeRecibido(
-							InetAddress.getByName("IP PROPIA"),
-							InetAddress.getByName(mensaje.getEmisor().getIP()),
-							mensaje.getEmisor().getPuerto());
-				} catch (UnknownHostException e) {
-					e.printStackTrace();
-				}
+                    Comunicacion.getInstancia().informarMensajeRecibido(
+                                    InetAddress.getByName(this.getIP()),
+                                    InetAddress.getByName(mensaje.getEmisor().getIP()),
+                                    mensaje.getEmisor().getPuerto());
+                } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                }
             }
             }catch (Exception e){
                 e.printStackTrace();

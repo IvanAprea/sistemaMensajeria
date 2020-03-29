@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import java.util.List;
@@ -630,9 +631,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         this.jDialog1.setVisible(false);
     }
 
-    @Override
-    public void actualizarListaAgenda(ArrayList<Persona> personas) {
-        Iterator<Persona> it = personas.iterator();
+    public void actualizarListaAgenda(HashMap<String,Persona> personas) {
+        Iterator<Persona> it = personas.values().iterator();
         
         this.modAgenda.clear();
         while(it.hasNext()){
