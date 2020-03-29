@@ -45,7 +45,7 @@ public class Receptor extends Persona implements ActionListener{
 	private void setSound(String sound){
         try {
             //URL url = this.getClass().getClassLoader().getResource("incomingsound.wav");
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("incomingsound.wav").getAbsoluteFile());
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("resource/incomingsound.wav").getAbsoluteFile());
             this.ventanaReceptor.setClip(AudioSystem.getClip());
             this.ventanaReceptor.getClip().open(audioIn);
          } catch (UnsupportedAudioFileException e) {
