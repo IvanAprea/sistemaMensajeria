@@ -10,6 +10,8 @@ import interfaz.IVistaEmisor;
 
 import java.awt.event.ActionListener;
 
+import java.awt.event.KeyListener;
+
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -264,7 +266,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
 
         jPanel13.add(jPanel19);
 
-        botonConfigEmisor.setText("Configuración");
+        botonConfigEmisor.setText("ConfiguraciÃ³n");
         botonConfigEmisor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 botonConfigEmisorActionPerformed(evt);
@@ -307,7 +309,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         jPanel18.setLayout(new java.awt.GridLayout(1, 0));
 
         tipoMensaje.add(RBAvisoRecep);
-        RBAvisoRecep.setText("Mensaje con aviso recepción");
+        RBAvisoRecep.setText("Mensaje con aviso recepciÃ³n");
         RBAvisoRecep.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 RBAvisoRecepActionPerformed(evt);
@@ -631,6 +633,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         this.jDialog1.setVisible(false);
     }
 
+
+    @Override
     public void actualizarListaAgenda(HashMap<String,Persona> personas) {
         Iterator<Persona> it = personas.values().iterator();
         
@@ -649,6 +653,11 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         this.botonEnviarEmisor.addActionListener(actionListener);
         this.btAceptarConfig.addActionListener(actionListener);
         this.btCancelarConfig.addActionListener(actionListener);
+    }
+    
+    public void addKeyListener(KeyListener kl1,KeyListener kl2){
+        this.textAsuntoEmisor.addKeyListener(kl1);
+        this.textMensajeEmisor.addKeyListener(kl2);
     }
 
 
