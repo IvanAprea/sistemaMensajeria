@@ -88,31 +88,31 @@ public class Receptor extends Persona implements ActionListener{
     	this.ventanaReceptor.lanzarCartelError(err);
     }
     
-	public void setVentanaReceptor(IVentanaReceptor ventanaReceptor) {
+    public void setVentanaReceptor(IVentanaReceptor ventanaReceptor) {
         this.ventanaReceptor = ventanaReceptor;
         this.ventanaReceptor.addActionListener(this);
-	}
+    }
 	
-	public void configAtributos(String ip, String puerto, String nombre, String apellido) {
+    public void configAtributos(String ip, String puerto, String nombre, String apellido) {
         this.setIP(ip);
         this.setPuerto(puerto);
         this.setNombre(nombre);
         this.setApellido(apellido);
         Comunicacion.getInstancia().escucharPuerto(this.getPuerto());
-	}
+    }
 	
-	@Override
-	public void actionPerformed(ActionEvent arg) {
+    @Override
+    public void actionPerformed(ActionEvent arg) {
         String comando = arg.getActionCommand();
         if (comando.equalsIgnoreCase("ABRIR MENSAJE"))
             this.ventanaReceptor.abrirMensaje();
         else if (comando.equalsIgnoreCase("CERRAR MENSAJE"))
-        	this.ventanaReceptor.cerrarMensaje();
+                this.ventanaReceptor.cerrarMensaje();
         else if (comando.equalsIgnoreCase("PARAR ALERTA"))
-        	this.ventanaReceptor.pararAlerta();
+                this.ventanaReceptor.pararAlerta();
         else if (comando.equalsIgnoreCase("ABRIR CONFIGURACION"))
-        	this.ventanaReceptor.abrirConfiguracion();
+                this.ventanaReceptor.abrirConfiguracion();
         else if (comando.equalsIgnoreCase("ACEPTAR CONFIGURACION"))
-        	this.ventanaReceptor.confirmarConfiguracion();
-	}
+                this.ventanaReceptor.confirmarConfiguracion();
+    }
 }

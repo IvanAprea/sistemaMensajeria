@@ -4,6 +4,8 @@ package Ventana;
 import client.Emisor;
 import client.Persona;
 
+import client.Receptor;
+
 import interfaz.IVistaEmisor;
 
 import java.awt.event.ActionListener;
@@ -536,12 +538,47 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     public String getMensaje() {
         return this.textMensajeEmisor.getText();
     }
-
+    
+    public void enviarMensaje(){
+        List<Persona> personas = this.getPersonas();
+        if(personas.size() > 0){
+            Emisor.getInstance().enviarMensaje(personas);
+        }
+        else{
+            this.lanzarCartelError("ERROR: debe seleccionar al menos un elemento de la agenda");
+        }
+        
+    }
+    
     @Override
     public List<Persona> getPersonas() {
         return this.listAgenda.getSelectedValuesList();
     }
-
+    
+    public void confirmarConfiguracion() {
+        String ip = this.getIPConfig().trim();
+        String puerto = this.getPuertoConfig().trim();
+        String nombre = this.getNombreConfig().trim();
+        String apellido = this.getApellidoConfig().trim();
+        if(!ip.equals("") &&
+                   !puerto.equals("") &&
+                   !nombre.equals("") &&
+                   !apellido.equals("") )
+        {
+            Emisor.getInstance().configAtributos(ip, puerto, nombre, apellido);
+            this.cerrarConfig();
+        }
+        else 
+        {
+                this.lanzarCartelError("ERROR: debe completar todos los campos");
+        }
+    }
+    
+    public void lanzarCartelError(String err) {
+        JOptionPane.showMessageDialog(null, err);
+    }
+    
+    
     @Override
     public int getTipo() {
         // 0=simplea   1= alerta  2=aviso de recepcion
@@ -612,11 +649,6 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         this.botonEnviarEmisor.addActionListener(actionListener);
         this.btAceptarConfig.addActionListener(actionListener);
         this.btCancelarConfig.addActionListener(actionListener);
-    }
-
-    @Override
-    public void mostrarPanelMsjRecibido() {
-        JOptionPane.showMessageDialog(null, "El mensaje se recibio correctamente.");
     }
 
 

@@ -14,11 +14,13 @@ public interface IVistaEmisor {
     int getTipo();
     String getNombreConfig();
     String getApellidoConfig();
+    void enviarMensaje();
     void actualizarListaAgenda(ArrayList<Persona> personas);
     void addActionListener(ActionListener actionListener);
     void abrirConfig();
+    void confirmarConfiguracion();
     void cerrarConfig();
-    void mostrarPanelMsjRecibido();
+    void lanzarCartelError(String err);
     String getIPConfig();
     String getPuertoConfig();
 }

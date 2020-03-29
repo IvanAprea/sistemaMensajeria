@@ -38,14 +38,14 @@ public class Emisor extends Persona implements ActionListener{
         return instancia;
     }
     
-    public void enviarMensaje(){
+    public void enviarMensaje(List<Persona> listaPersonas){
         String asunto,texto;
         int tipo;
         List<Persona> personas;
         Mensaje mensaje;
         Persona personaAux;
         
-        personas = vista.getPersonas();
+        personas = listaPersonas;
         Iterator<Persona> it = personas.iterator();
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
@@ -69,14 +69,12 @@ public class Emisor extends Persona implements ActionListener{
         
     }
     
-    public void editarDatosPersona(){
-        this.setApellido(vista.getApellidoConfig());
-        this.setNombre(vista.getNombreConfig());
-        this.setIP(vista.getIPConfig());
-        this.setPuerto(vista.getPuertoConfig());
-        this.vista.cerrarConfig();
+    public void configAtributos(String ip, String puerto, String nombre, String apellido) {
+        this.setIP(ip);
+        this.setPuerto(puerto);
+        this.setNombre(nombre);
+        this.setApellido(apellido);
     }
-
 
     public void setVista(IVistaEmisor vista) {
         this.vista = vista;
@@ -93,13 +91,13 @@ public class Emisor extends Persona implements ActionListener{
     public void actionPerformed(ActionEvent arg) {
         String comando = arg.getActionCommand();
         if(comando.equalsIgnoreCase("ENVIAR MENSAJE")){
-            this.enviarMensaje();
+            this.vista.enviarMensaje();
         }else
         if(comando.equalsIgnoreCase("CONFIGURACION")){
             this.vista.abrirConfig();
         }else
         if(comando.equalsIgnoreCase("ACEPTAR CAMBIO")){
-            this.editarDatosPersona();
+            this.vista.confirmarConfiguracion();
         }else
         if(comando.equalsIgnoreCase("CANCELAR CAMBIO")){
             this.vista.cerrarConfig();
