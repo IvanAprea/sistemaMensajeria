@@ -87,13 +87,13 @@ public class Comunicacion {
                         str = str.substring(1);
                         String aux = str;
                         InetAddress adr = InetAddress.getByName(str.split(":")[0]);
-                        Emisor.getInstance().recibirConfirmacion(aux);
+                        Emisor.getInstancia().recibirConfirmacion(aux);
                         soc.close();
                     }
                 }
                 catch (BindException e) 
                 {
-                    Emisor.getInstance().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
+                    Emisor.getInstancia().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
                 }
                 catch (UnknownHostException e) 
                 {

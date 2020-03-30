@@ -1,6 +1,6 @@
 package client;
 
-import interfaz.IVistaEmisor;
+import interfaz.IVentanaEmisor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,7 +22,7 @@ public class Emisor extends Persona implements ActionListener{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     
-    private IVistaEmisor vista;
+    private IVentanaEmisor vista;
     private boolean RCocupado=false;
     private static Emisor instancia = null;
     
@@ -35,7 +35,7 @@ public class Emisor extends Persona implements ActionListener{
      * @return
      */
     
-    public synchronized static Emisor getInstance(){
+    public synchronized static Emisor getInstancia(){
         if(instancia==null){
             instancia = new Emisor();
         }
@@ -117,14 +117,14 @@ public class Emisor extends Persona implements ActionListener{
         this.vista.lanzarCartelError(err);
     }
     
-    public void setVista(IVistaEmisor vista) {
+    public void setVista(IVentanaEmisor vista) {
         
         this.vista = vista;
         KeyListener kl1 = new KeyListener(){
         
             public void keyTyped(KeyEvent e){
                 if (vista.getAsunto().length()== cantCarAsunto){
-                    JOptionPane.showMessageDialog(null, "No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
+                    Emisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
                     e.consume();
                 }
             }
@@ -136,8 +136,8 @@ public class Emisor extends Persona implements ActionListener{
         KeyListener kl2 = new KeyListener(){
         
             public void keyTyped(KeyEvent e){
-            if (vista.getAsunto().length()== cantCarMensaje){
-                    JOptionPane.showMessageDialog(null, "No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
+                if (vista.getAsunto().length()== cantCarMensaje){
+                    Emisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
                     e.consume();
                 }
             }
@@ -151,7 +151,7 @@ public class Emisor extends Persona implements ActionListener{
         vista.actualizarListaAgenda(Agenda.getInstance().getPersonas());
     }
 
-    public IVistaEmisor getVista() {
+    public IVentanaEmisor getVista() {
         return vista;
     }
 

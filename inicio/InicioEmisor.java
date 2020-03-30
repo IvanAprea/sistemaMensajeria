@@ -5,7 +5,7 @@ import Ventana.VentanaEmisor;
 import client.Agenda;
 import client.Emisor;
 
-import interfaz.IVistaEmisor;
+import interfaz.IVentanaEmisor;
 
 public class InicioEmisor {
     public InicioEmisor() {
@@ -16,7 +16,7 @@ public class InicioEmisor {
         VentanaEmisor vista = new VentanaEmisor();
         vista.setVisible(true);
         Agenda.getInstance().cargarAgenda();
-        Emisor.getInstance().setearIp();
-        Emisor.getInstance().setVista(vista);
+        Emisor.getInstancia().setearIp();
+        Emisor.getInstancia().setVista(vista);
     }
 }
