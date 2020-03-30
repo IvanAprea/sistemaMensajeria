@@ -1,10 +1,10 @@
 package inicio;
 
-import Ventana.VentanaReceptor;
-import client.Receptor;
-import client.Comunicacion;
-import client.Mensaje;
-import client.Persona;
+import presentación.VentanaReceptor;
+import negocio.Receptor;
+import base.Comunicacion;
+import negocio.Mensaje;
+import negocio.Persona;
 
 public class inicioReceptor {
     

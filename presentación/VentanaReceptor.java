@@ -1,5 +1,5 @@
 
-package Ventana;
+package presentación;
 
 import java.awt.event.ActionListener;
 
@@ -9,10 +9,9 @@ import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 
-import client.Mensaje;
-import client.Persona;
-import client.Receptor;
-import interfaz.IVentanaReceptor;
+import negocio.Mensaje;
+import negocio.Persona;
+import negocio.Receptor;
 
 public class VentanaReceptor extends javax.swing.JFrame implements IVentanaReceptor {
 	
@@ -430,7 +429,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 		   !nombre.equals("") &&
 		   !apellido.equals("") )
 		{
-    		Receptor.getInstancia().configAtributos(ip, puerto, nombre, apellido);
+            Receptor.getInstancia().configAtributos(ip, puerto, nombre, apellido);
     		this.jDiagConfigRecep.setVisible(false);
     		this.repaint();
 		}

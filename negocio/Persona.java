@@ -1,4 +1,4 @@
-package client;
+package negocio;
 
 import java.io.BufferedReader;
 

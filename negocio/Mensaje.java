@@ -1,4 +1,4 @@
-package client;
+package negocio;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

@@ -1,12 +1,11 @@
 
-package Ventana;
+package presentación;
 
-import client.Emisor;
-import client.Persona;
+import negocio.Emisor;
+import negocio.Persona;
 
-import client.Receptor;
+import negocio.Receptor;
 
-import interfaz.IVentanaEmisor;
 
 import java.awt.event.ActionListener;
 
@@ -546,10 +545,20 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     public void enviarMensaje(){
         List<Persona> personas = this.getPersonas();
         if(personas.size() > 0){
-            Emisor.getInstancia().enviarMensaje(personas);
+            if(!this.getAsunto().trim().equals("")){
+                if(!this.getMensaje().trim().equals("")){
+                    Emisor.getInstancia().enviarMensaje(personas);
+                }
+                else{
+                    this.lanzarCartelError("ERROR: debe añadir un mensaje.");
+                }
+            }
+            else{
+                this.lanzarCartelError("ERROR: debe añadir un asunto.");
+            }
         }
         else{
-            this.lanzarCartelError("ERROR: debe seleccionar al menos un elemento de la agenda");
+            this.lanzarCartelError("ERROR: debe seleccionar al menos un elemento de la agenda.");
         }
         
     }

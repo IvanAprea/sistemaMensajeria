@@ -1,11 +1,11 @@
-package interfaz;
+package presentación;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.sound.sampled.Clip;
 
-import client.Mensaje;
+import negocio.Mensaje;
 
 public interface IVentanaReceptor 
 {

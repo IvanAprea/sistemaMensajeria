@@ -1,4 +1,6 @@
-package client;
+package negocio;
+
+import base.Comunicacion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +15,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import Ventana.VentanaReceptor;
-import client.Mensaje;
-import interfaz.IVentanaReceptor;
+import presentación.VentanaReceptor;
+import presentación.IVentanaReceptor;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;

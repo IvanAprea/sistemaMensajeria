@@ -1,6 +1,6 @@
-package interfaz;
+package presentación;
 
-import client.Persona;
+import negocio.Persona;
 
 import java.awt.event.ActionListener;
 

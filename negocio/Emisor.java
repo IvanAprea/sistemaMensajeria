@@ -1,6 +1,10 @@
-package client;
+package negocio;
 
-import interfaz.IVentanaEmisor;
+import base.Agenda;
+
+import base.Comunicacion;
+
+import presentación.IVentanaEmisor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

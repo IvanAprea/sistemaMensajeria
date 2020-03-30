@@ -1,11 +1,11 @@
 package inicio;
 
-import Ventana.VentanaEmisor;
+import presentación.VentanaEmisor;
 
-import client.Agenda;
-import client.Emisor;
+import base.Agenda;
+import negocio.Emisor;
 
-import interfaz.IVentanaEmisor;
+import presentación.IVentanaEmisor;
 
 public class InicioEmisor {
     public InicioEmisor() {
