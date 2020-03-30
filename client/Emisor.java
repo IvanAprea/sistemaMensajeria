@@ -74,7 +74,10 @@ public class Emisor extends Persona implements ActionListener{
                     Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
                 } catch (UnknownHostException e) {
                     JOptionPane.showMessageDialog(null, "No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
-                }
+                    } catch (Exception e){
+                        JOptionPane.showMessageDialog(null, "No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
+                        Comunicacion.getInstancia().escucharPuertoEmisor(this.getPuerto());
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();
