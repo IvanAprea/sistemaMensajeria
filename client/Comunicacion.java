@@ -11,6 +11,7 @@ import java.net.Socket;
 
 import java.io.IOException;
 import java.net.BindException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -19,6 +20,7 @@ public class Comunicacion {
     
     private static Comunicacion _instancia = null;
     int i=1;
+    ServerSocket ss;
     
     private Comunicacion() {
     	super();
@@ -74,9 +76,9 @@ public class Comunicacion {
         new Thread() {
             public void run() {
                 try {
-                    ServerSocket s = new ServerSocket(Integer.parseInt(puerto));
-                    //s.setSoTimeout(1000); SACAR COMENTARIO
-                    Socket soc = s.accept();
+                    ss = new ServerSocket(Integer.parseInt(puerto));
+                    ss.setSoTimeout(1000);// SACAR COMENTARIO
+                    Socket soc = ss.accept();
                     PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
                     DataInputStream dIn = new DataInputStream(soc.getInputStream());
                     String str = dIn.readUTF();
@@ -84,10 +86,11 @@ public class Comunicacion {
                     String aux = str;
                     InetAddress adr = InetAddress.getByName(str.split(":")[0]);
                     Emisor.getInstance().recibirConfirmacion(aux);
-                    s.close();
+                    ss.close();
                 }
                 catch (BindException e) 
                 {
+                    
                     Emisor.getInstance().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
                 }
                 catch (UnknownHostException e) 
@@ -97,6 +100,11 @@ public class Comunicacion {
                 }
                 catch (Exception e) 
                 {
+                    try {
+                        ss.close();
+                    } catch (IOException f) {
+                        e.printStackTrace();
+                    }
                     e.printStackTrace();
                 }
             }
