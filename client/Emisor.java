@@ -27,6 +27,7 @@ public class Emisor extends Persona implements ActionListener{
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     
     private IVistaEmisor vista;
+    private boolean RCocupado=false;
     private static Emisor instancia = null;
     
     private Emisor() {
@@ -45,7 +46,7 @@ public class Emisor extends Persona implements ActionListener{
         return instancia;
     }
     
-    public void enviarMensaje(List<Persona> listaPersonas){
+    public synchronized void enviarMensaje(List<Persona> listaPersonas){
         String asunto,texto;
         int tipo;
         List<Persona> personas;
@@ -82,6 +83,15 @@ public class Emisor extends Persona implements ActionListener{
         }
     
     public synchronized void recibirConfirmacion(String confirmacion){
+        while(RCocupado==true){
+            try{
+                wait();
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        RCocupado=true;
         Persona per = Agenda.getInstance().getPersona(confirmacion);
         String nombre;
         if(per==null){
@@ -91,6 +101,8 @@ public class Emisor extends Persona implements ActionListener{
             nombre = per.toString();
         }
         this.vista.lanzarCartelError(nombre + " ha recibido correctamente el mensaje.");
+        RCocupado=false;
+        notifyAll();
     }
     
     public void configAtributos(String ip, String puerto, String nombre, String apellido) {

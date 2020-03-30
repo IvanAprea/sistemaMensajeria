@@ -26,6 +26,7 @@ public class Receptor extends Persona implements ActionListener{
 	
 	private static Receptor _instancia = null;
 	private IVentanaReceptor ventanaReceptor;
+        private boolean RMocupado=false;
 	
     private Receptor() {
     	super();
@@ -57,7 +58,15 @@ public class Receptor extends Persona implements ActionListener{
          }
     }
 	
-    public void recibirMensaje(String str){
+    public synchronized void recibirMensaje(String str){
+        while(RMocupado==true){
+            try{
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        RMocupado=true;
     	try {
     	    javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
     	    javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -83,6 +92,8 @@ public class Receptor extends Persona implements ActionListener{
             }catch (Exception e){
                 e.printStackTrace();
             }
+        RMocupado=false;
+        notifyAll();
     }
     
     public void lanzarCartelError(String err) {

@@ -39,7 +39,7 @@ public class Comunicacion {
     }
     
     
-    public void escucharPuerto(String puerto) {
+    public synchronized void escucharPuerto(String puerto) {
         Thread tr = new Thread() {
             public void run() {
                 try {
@@ -79,16 +79,17 @@ public class Comunicacion {
                 try {
                     sepe = new ServerSocket(Integer.parseInt(puerto));
                     sepe.setSoTimeout(1000);// SACAR COMENTARIO
-                    Socket soc = sepe.accept();
-                    PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-                    DataInputStream dIn = new DataInputStream(soc.getInputStream());
-                    String str = dIn.readUTF();
-                    str = str.substring(1);
-                    String aux = str;
-                    InetAddress adr = InetAddress.getByName(str.split(":")[0]);
-                    Emisor.getInstance().recibirConfirmacion(aux);
-                    sepe.close();
-                    soc.close();
+                    while(true){
+                        Socket soc = sepe.accept();
+                        PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+                        DataInputStream dIn = new DataInputStream(soc.getInputStream());
+                        String str = dIn.readUTF();
+                        str = str.substring(1);
+                        String aux = str;
+                        InetAddress adr = InetAddress.getByName(str.split(":")[0]);
+                        Emisor.getInstance().recibirConfirmacion(aux);
+                        soc.close();
+                    }
                 }
                 catch (BindException e) 
                 {

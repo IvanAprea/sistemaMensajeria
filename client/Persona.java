@@ -20,10 +20,10 @@ public class Persona {
     
     public void setearIp(){
         try {
-                URL whatismyip = new URL("http://checkip.amazonaws.com");
-                BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));
+                /*URL whatismyip = new URL("http://checkip.amazonaws.com");
+                BufferedReader in = new BufferedReader(new InputStreamReader(whatismyip.openStream()));*/
          
-                this.IP = in.readLine();
+                this.IP = "25.4.197.31";//in.readLine();
         } 
         catch(Exception e) { 
             e.printStackTrace(); }
