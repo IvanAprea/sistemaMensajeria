@@ -13,14 +13,15 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 public class Comunicacion {
     
     private static Comunicacion _instancia = null;
-    int i=1;
-    ServerSocket ss;
+    private ServerSocket sepe; //sepe=socketEscucharPuertoEmisor 
+    private Socket sem; //sem=socketEnviarMensaje
     
     private Comunicacion() {
     	super();
@@ -72,13 +73,13 @@ public class Comunicacion {
         tr.start();
     }
     
-    public void escucharPuertoEmisor(String puerto) {
+    public synchronized void escucharPuertoEmisor(String puerto) {
         new Thread() {
             public void run() {
                 try {
-                    ss = new ServerSocket(Integer.parseInt(puerto));
-                    ss.setSoTimeout(1000);// SACAR COMENTARIO
-                    Socket soc = ss.accept();
+                    sepe = new ServerSocket(Integer.parseInt(puerto));
+                    sepe.setSoTimeout(1000);// SACAR COMENTARIO
+                    Socket soc = sepe.accept();
                     PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
                     DataInputStream dIn = new DataInputStream(soc.getInputStream());
                     String str = dIn.readUTF();
@@ -86,26 +87,25 @@ public class Comunicacion {
                     String aux = str;
                     InetAddress adr = InetAddress.getByName(str.split(":")[0]);
                     Emisor.getInstance().recibirConfirmacion(aux);
-                    ss.close();
+                    sepe.close();
+                    soc.close();
                 }
                 catch (BindException e) 
                 {
-                    
                     Emisor.getInstance().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
                 }
                 catch (UnknownHostException e) 
                 {
                     e.printStackTrace();
                     //Este error se da cuando envio un mensaje a un puerto que es igual al que abro para recibir la confirmacion
-                }
-                catch (Exception e) 
-                {
-                    try {
-                        ss.close();
-                    } catch (IOException f) {
-                        e.printStackTrace();
-                    }
+                } catch (SocketException e) {
                     e.printStackTrace();
+                } catch (IOException e) {
+                    try {
+                        sepe.close();
+                    } catch (IOException f) {
+                        f.printStackTrace();
+                    }
                 }
             }
         }.start();
@@ -113,19 +113,24 @@ public class Comunicacion {
     
     public void enviarMensaje(StringWriter mensaje,InetAddress ip,int puerto){
     	try {
-            Socket socket = new Socket(ip,puerto);
-    	    DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+            sem = new Socket(ip,puerto);
+    	    DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
     	    dOut.writeUTF(mensaje.toString());
     	    dOut.flush();
-            socket.close();
+            sem.close();
             
     	} catch (IOException e) {
-            e.printStackTrace();
+            try {
+                sem.close();
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
+            
         }
     }
     
    
-    public void informarMensajeRecibido(InetAddress ipPropia,String puertoPropio, InetAddress ipAInformar, String puertoAInformar){
+    public synchronized void informarMensajeRecibido(InetAddress ipPropia,String puertoPropio, InetAddress ipAInformar, String puertoAInformar){
         try {
             Socket socket = new Socket(ipAInformar,Integer.parseInt(puertoAInformar));
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());

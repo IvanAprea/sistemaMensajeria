@@ -69,14 +69,19 @@ public class Emisor extends Persona implements ActionListener{
             marshaller.marshal(mensaje, sw);
             while(it.hasNext()){
                 personaAux=it.next();
-                Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+                try{
+                    Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+                } catch (UnknownHostException e) {
+                    JOptionPane.showMessageDialog(null, "No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+
+        }
     
-    public void recibirConfirmacion(String confirmacion){
+    public synchronized void recibirConfirmacion(String confirmacion){
         Persona per = Agenda.getInstance().getPersona(confirmacion);
         String nombre;
         if(per==null){
