@@ -2,10 +2,6 @@ package client;
 
 import interfaz.IVistaEmisor;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -73,11 +69,13 @@ public class Emisor extends Persona implements ActionListener{
                 try{
                     Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
                 } catch (UnknownHostException e) {
-                    JOptionPane.showMessageDialog(null, "No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
-                    } catch (Exception e){
-                        JOptionPane.showMessageDialog(null, "No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
+                    this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
+                } catch (Exception e){
+                    this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" "+personaAux.getApellido()+" no puede recibir el mensaje");
+                    if(tipo == 2){
                         Comunicacion.getInstancia().escucharPuertoEmisor(this.getPuerto());
                     }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
