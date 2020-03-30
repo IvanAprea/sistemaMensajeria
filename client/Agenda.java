@@ -51,7 +51,7 @@ public class Agenda {
             while(linea!=null){
                 datos=linea.split(regex);
                 if(datos.length == 4){
-                    this.personas.put(datos[2], new Persona(datos[0],datos[1],datos[2],datos[3]));
+                    this.personas.put(datos[2]+":"+datos[3], new Persona(datos[0],datos[1],datos[2],datos[3]));
                 }
                 linea=br.readLine();
             }
@@ -69,7 +69,7 @@ public class Agenda {
         return this.personas;
     }
     
-    public Persona getPersona(String ip){
-        return getPersonas().get(ip);
+    public Persona getPersona(String ipPuerto){
+        return getPersonas().get(ipPuerto);
     }
 }

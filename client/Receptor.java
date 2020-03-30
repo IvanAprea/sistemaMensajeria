@@ -73,6 +73,7 @@ public class Receptor extends Persona implements ActionListener{
             	try {
                     Comunicacion.getInstancia().informarMensajeRecibido(
                                     InetAddress.getByName(this.getIP()),
+                                    this.getPuerto(),
                                     InetAddress.getByName(mensaje.getEmisor().getIP()),
                                     mensaje.getEmisor().getPuerto());
                 } catch (UnknownHostException e) {

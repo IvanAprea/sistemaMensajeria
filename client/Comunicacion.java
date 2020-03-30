@@ -13,10 +13,12 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 public class Comunicacion {
     
     private static Comunicacion _instancia = null;
+    int i=1;
     
     private Comunicacion() {
     	super();
@@ -33,17 +35,6 @@ public class Comunicacion {
         return _instancia;
     }
     
-    public static void setTimeout(Runnable runnable, int delay){
-        new Thread(() -> {
-            try {
-                Thread.sleep(delay);
-                runnable.run();
-            }
-            catch (Exception e){
-                System.err.println(e);
-            }
-        }).start();
-    }
     
     public void escucharPuerto(String puerto) {
         Thread tr = new Thread() {
@@ -84,22 +75,25 @@ public class Comunicacion {
             public void run() {
                 try {
                     ServerSocket s = new ServerSocket(Integer.parseInt(puerto));
-                    while (true) 
-                    {
-                        Socket soc = s.accept();
-                        PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-                        DataInputStream dIn = new DataInputStream(soc.getInputStream());
-                        String str = dIn.readUTF();
-                        str = str.substring(1);
-                        System.out.println(str);
-                        InetAddress adr = InetAddress.getByName(str);
-                        Emisor.getInstance().recibirConfirmacion(str);
-                    }
-                } 
+                    //s.setSoTimeout(1000); SACAR COMENTARIO
+                    Socket soc = s.accept();
+                    PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+                    DataInputStream dIn = new DataInputStream(soc.getInputStream());
+                    String str = dIn.readUTF();
+                    str = str.substring(1);
+                    String aux = str;
+                    InetAddress adr = InetAddress.getByName(str.split(":")[0]);
+                    Emisor.getInstance().recibirConfirmacion(aux);
+                    s.close();
+                }
                 catch (BindException e) 
                 {
-                    Emisor.getInstance().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");   
+                    Emisor.getInstance().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
+                }
+                catch (UnknownHostException e) 
+                {
                     e.printStackTrace();
+                    //Este error se da cuando envio un mensaje a un puerto que es igual al que abro para recibir la confirmacion
                 }
                 catch (Exception e) 
                 {
@@ -123,11 +117,12 @@ public class Comunicacion {
     }
     
    
-    public void informarMensajeRecibido(InetAddress ipPropia, InetAddress ipAInformar, String puertoAInformar){
+    public void informarMensajeRecibido(InetAddress ipPropia,String puertoPropio, InetAddress ipAInformar, String puertoAInformar){
         try {
             Socket socket = new Socket(ipAInformar,Integer.parseInt(puertoAInformar));
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
-            dOut.writeUTF(ipPropia.toString());
+            String s = ipPropia.toString()+":"+puertoPropio;
+            dOut.writeUTF(s);
             dOut.flush();
             socket.close();
             

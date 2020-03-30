@@ -14,6 +14,7 @@ public class Persona {
         super();
         this.Nombre=nombre;
         this.Apellido=apellido;
+        this.IP=ip;
         this.Puerto=puerto;
     }
     

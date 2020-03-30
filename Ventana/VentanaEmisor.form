@@ -420,6 +420,7 @@
                     <Component class="javax.swing.JButton" name="botonConfigEmisor">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Configuraci&#xf3;n"/>
+                        <Property name="actionCommand" type="java.lang.String" value="Configuracion"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonConfigEmisorActionPerformed"/>
@@ -512,7 +513,7 @@
                         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                           <ComponentRef name="tipoMensaje"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Mensaje con aviso recepci&#xf3;n"/>
+                        <Property name="text" type="java.lang.String" value="Mensaje con aviso recepcion"/>
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="RBAvisoRecepActionPerformed"/>
