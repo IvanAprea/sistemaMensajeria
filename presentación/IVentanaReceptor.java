@@ -9,7 +9,6 @@ import negocio.Mensaje;
 
 public interface IVentanaReceptor 
 {
-	static final String SPEAKER_IMAGE_URL = "./resource/speakericon.png";
 	static final String ALERT_SOUND_URL = "./resource/incomingsound.wav";
 	
 	void actualizaListaMensajes(Mensaje mensaje);
