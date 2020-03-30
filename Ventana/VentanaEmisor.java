@@ -6,7 +6,7 @@ import client.Persona;
 
 import client.Receptor;
 
-import interfaz.IVistaEmisor;
+import interfaz.IVentanaEmisor;
 
 import java.awt.event.ActionListener;
 
@@ -26,7 +26,7 @@ import javax.swing.JOptionPane;
  *
  * @author ivan-
  */
-public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
+public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     
     private DefaultListModel<Persona> modAgenda;
 
@@ -546,7 +546,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
     public void enviarMensaje(){
         List<Persona> personas = this.getPersonas();
         if(personas.size() > 0){
-            Emisor.getInstance().enviarMensaje(personas);
+            Emisor.getInstancia().enviarMensaje(personas);
         }
         else{
             this.lanzarCartelError("ERROR: debe seleccionar al menos un elemento de la agenda");
@@ -569,7 +569,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
                    !nombre.equals("") &&
                    !apellido.equals("") )
         {
-            Emisor.getInstance().configAtributos(ip, puerto, nombre, apellido);
+            Emisor.getInstancia().configAtributos(ip, puerto, nombre, apellido);
             this.cerrarConfig();
         }
         else 
@@ -622,10 +622,10 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVistaEmisor{
         
         this.jDialog1.setSize(400, 400);
         this.jDialog1.setVisible(true);
-        this.textNombreConfig.setText(Emisor.getInstance().getNombre());
-        this.textApellidoConfig.setText(Emisor.getInstance().getApellido());
-        this.textIPConfig.setText(Emisor.getInstance().getIP());
-        this.textPuertoConfig.setText(Emisor.getInstance().getPuerto());
+        this.textNombreConfig.setText(Emisor.getInstancia().getNombre());
+        this.textApellidoConfig.setText(Emisor.getInstancia().getApellido());
+        this.textIPConfig.setText(Emisor.getInstancia().getIP());
+        this.textPuertoConfig.setText(Emisor.getInstancia().getPuerto());
         this.repaint();
         
     }

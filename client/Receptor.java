@@ -119,12 +119,12 @@ public class Receptor extends Persona implements ActionListener{
         if (comando.equalsIgnoreCase("ABRIR MENSAJE"))
             this.ventanaReceptor.abrirMensaje();
         else if (comando.equalsIgnoreCase("CERRAR MENSAJE"))
-                this.ventanaReceptor.cerrarMensaje();
+            this.ventanaReceptor.cerrarMensaje();
         else if (comando.equalsIgnoreCase("PARAR ALERTA"))
-                this.ventanaReceptor.pararAlerta();
+            this.ventanaReceptor.pararAlerta();
         else if (comando.equalsIgnoreCase("ABRIR CONFIGURACION"))
-                this.ventanaReceptor.abrirConfiguracion();
+            this.ventanaReceptor.abrirConfiguracion();
         else if (comando.equalsIgnoreCase("ACEPTAR CONFIGURACION"))
-                this.ventanaReceptor.confirmarConfiguracion();
+            this.ventanaReceptor.confirmarConfiguracion();
     }
 }
