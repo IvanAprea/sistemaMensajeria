@@ -1,6 +1,6 @@
 package negocio;
 
-import base.Comunicacion;
+import base.ComunicacionReceptor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -81,7 +81,7 @@ public class Receptor extends Persona implements ActionListener{
             }
             else if(mensaje.getTipo() == 2) {
             	try {
-                    Comunicacion.getInstancia().informarMensajeRecibido(
+                    ComunicacionReceptor.getInstancia().informarMensajeRecibido(
                                     InetAddress.getByName(this.getIP()),
                                     this.getPuerto(),
                                     InetAddress.getByName(mensaje.getEmisor().getIP()),
@@ -111,7 +111,7 @@ public class Receptor extends Persona implements ActionListener{
         this.setPuerto(puerto);
         this.setNombre(nombre);
         this.setApellido(apellido);
-        Comunicacion.getInstancia().escucharPuerto(this.getPuerto());
+        ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
     }
 	
     @Override

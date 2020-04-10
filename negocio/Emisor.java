@@ -2,7 +2,7 @@ package negocio;
 
 import base.Agenda;
 
-import base.Comunicacion;
+import base.ComunicacionEmisor;
 
 import presentación.IVentanaEmisor;
 
@@ -60,7 +60,7 @@ public class Emisor extends Persona implements ActionListener{
         tipo=vista.getTipo();
         mensaje = new Mensaje(asunto,texto,this,tipo);
         if(tipo == 2){
-            Comunicacion.getInstancia().escucharPuertoEmisor(this.getPuerto());
+            ComunicacionEmisor.getInstancia().escucharPuertoEmisor(this.getPuerto());
         }
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
@@ -71,13 +71,13 @@ public class Emisor extends Persona implements ActionListener{
             while(it.hasNext()){
                 personaAux=it.next();
                 try{
-                    Comunicacion.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
                 } catch (UnknownHostException e) {
                     this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
                 } catch (Exception e){
                     this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" "+personaAux.getApellido()+" no puede recibir el mensaje");
                     if(tipo == 2){
-                        Comunicacion.getInstancia().escucharPuertoEmisor(this.getPuerto());
+                        ComunicacionEmisor.getInstancia().escucharPuertoEmisor(this.getPuerto());
                     }
                 }
             }
