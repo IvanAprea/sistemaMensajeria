@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.sound.sampled.Clip;
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
@@ -26,8 +27,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         this.botonAbrir.setActionCommand("ABRIR MENSAJE");
         this.cerrarMensaje.setActionCommand("CERRAR MENSAJE");
         this.botonPararAlerta.setActionCommand("PARAR ALERTA");
-        this.btConfigReceptor.setActionCommand("ABRIR CONFIGURACION");
-        this.btConfirmarReceptor.setActionCommand("ACEPTAR CONFIGURACION");
+        this.btConfirmarReceptor.setActionCommand("ACEPTAR SESION");
     }
 
     /** This method is called from within the constructor to
@@ -66,35 +66,18 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel22 = new javax.swing.JPanel();
         botonPararAlerta = new javax.swing.JButton();
         jPanel23 = new javax.swing.JPanel();
-        jDiagConfigRecep = new javax.swing.JDialog();
+        jDiagSesionRecep = new javax.swing.JDialog();
         jPanel24 = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jPanel26 = new javax.swing.JPanel();
-        jPanel37 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        nombreReceptor = new javax.swing.JTextArea();
         jPanel27 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jPanel28 = new javax.swing.JPanel();
-        jPanel38 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        apellidoReceptor = new javax.swing.JTextArea();
-        jPanel29 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel30 = new javax.swing.JPanel();
-        jPanel39 = new javax.swing.JPanel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        ipReceptor = new javax.swing.JTextArea();
-        jPanel31 = new javax.swing.JPanel();
-        jPanel35 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jPanel36 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
         jPanel32 = new javax.swing.JPanel();
-        jPanel33 = new javax.swing.JPanel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        puertoReceptor = new javax.swing.JTextArea();
         jPanel34 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        nombreReceptor = new javax.swing.JTextArea();
+        jPanel26 = new javax.swing.JPanel();
         btConfirmarReceptor = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -106,7 +89,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        btConfigReceptor = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         botonAbrir = new javax.swing.JButton();
 
@@ -203,117 +185,40 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 
         jdiagAlertaSonora.getContentPane().add(jPanel20, java.awt.BorderLayout.CENTER);
 
-        jPanel24.setLayout(new java.awt.GridLayout(4, 2));
+        jPanel24.setLayout(new java.awt.GridLayout(2, 2));
 
-        jPanel25.setLayout(new java.awt.GridBagLayout());
+        jPanel25.setLayout(new java.awt.GridLayout(2, 0));
+
+        jLabel6.setText("Iniciar Sesion");
+        jPanel27.add(jLabel6);
+
+        jPanel25.add(jPanel27);
 
         jLabel5.setText("Nombre");
-        jPanel25.add(jLabel5, new java.awt.GridBagConstraints());
+        jPanel28.add(jLabel5);
+
+        jPanel25.add(jPanel28);
 
         jPanel24.add(jPanel25);
 
-        jPanel26.setLayout(new java.awt.GridLayout(2, 0));
-
-        jPanel37.setLayout(new java.awt.BorderLayout());
+        jPanel32.setLayout(new java.awt.GridLayout(2, 0));
 
         nombreReceptor.setColumns(20);
         nombreReceptor.setRows(5);
-        nombreReceptor.setText("default");
         jScrollPane4.setViewportView(nombreReceptor);
 
-        jPanel37.add(jScrollPane4, java.awt.BorderLayout.CENTER);
-
-        jPanel26.add(jPanel37);
-
-        jPanel24.add(jPanel26);
-
-        jPanel27.setLayout(new java.awt.GridBagLayout());
-
-        jLabel6.setText("Apellido");
-        jPanel27.add(jLabel6, new java.awt.GridBagConstraints());
-
-        jPanel24.add(jPanel27);
-
-        jPanel28.setLayout(new java.awt.GridLayout(2, 0));
-
-        jPanel38.setLayout(new java.awt.BorderLayout());
-
-        apellidoReceptor.setColumns(20);
-        apellidoReceptor.setRows(5);
-        apellidoReceptor.setText("default");
-        jScrollPane5.setViewportView(apellidoReceptor);
-
-        jPanel38.add(jScrollPane5, java.awt.BorderLayout.CENTER);
-
-        jPanel28.add(jPanel38);
-
-        jPanel24.add(jPanel28);
-
-        jPanel29.setLayout(new java.awt.GridBagLayout());
-
-        jLabel7.setText("IP");
-        jPanel29.add(jLabel7, new java.awt.GridBagConstraints());
-
-        jPanel24.add(jPanel29);
-
-        jPanel30.setLayout(new java.awt.GridLayout(2, 0));
-
-        jPanel39.setLayout(new java.awt.BorderLayout());
-
-        ipReceptor.setColumns(20);
-        ipReceptor.setRows(5);
-        jScrollPane6.setViewportView(ipReceptor);
-
-        jPanel39.add(jScrollPane6, java.awt.BorderLayout.CENTER);
-
-        jPanel30.add(jPanel39);
-
-        jPanel24.add(jPanel30);
-
-        jPanel31.setLayout(new java.awt.GridLayout(2, 0));
-
-        jPanel35.setLayout(new java.awt.GridBagLayout());
-
-        jLabel8.setText("Puerto");
-        jPanel35.add(jLabel8, new java.awt.GridBagConstraints());
-
-        jPanel31.add(jPanel35);
-
-        javax.swing.GroupLayout jPanel36Layout = new javax.swing.GroupLayout(jPanel36);
-        jPanel36.setLayout(jPanel36Layout);
-        jPanel36Layout.setHorizontalGroup(
-            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        jPanel36Layout.setVerticalGroup(
-            jPanel36Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 78, Short.MAX_VALUE)
-        );
-
-        jPanel31.add(jPanel36);
-
-        jPanel24.add(jPanel31);
-
-        jPanel32.setLayout(new java.awt.GridLayout(2, 0));
-
-        jPanel33.setLayout(new java.awt.BorderLayout());
-
-        puertoReceptor.setColumns(20);
-        puertoReceptor.setRows(5);
-        jScrollPane7.setViewportView(puertoReceptor);
-
-        jPanel33.add(jScrollPane7, java.awt.BorderLayout.CENTER);
-
-        jPanel32.add(jPanel33);
-
-        btConfirmarReceptor.setText("Confirmar");
-        jPanel34.add(btConfirmarReceptor);
+        jPanel34.add(jScrollPane4);
 
         jPanel32.add(jPanel34);
 
+        btConfirmarReceptor.setText("Confirmar");
+        jPanel26.add(btConfirmarReceptor);
+
+        jPanel32.add(jPanel26);
+
         jPanel24.add(jPanel32);
 
-        jDiagConfigRecep.getContentPane().add(jPanel24, java.awt.BorderLayout.CENTER);
+        jDiagSesionRecep.getContentPane().add(jPanel24, java.awt.BorderLayout.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -365,10 +270,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         jPanel4.add(jPanel6);
 
         jPanel7.setLayout(new java.awt.GridBagLayout());
-
-        btConfigReceptor.setText("Configuración");
-        jPanel7.add(btConfigReceptor, new java.awt.GridBagConstraints());
-
         jPanel4.add(jPanel7);
 
         jPanel8.setLayout(new java.awt.GridBagLayout());
@@ -409,29 +310,22 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     	}
     }
     
-    public void abrirConfiguracion() {
-        this.jDiagConfigRecep.setSize(200, 400);
-        this.jDiagConfigRecep.setVisible(true);
+    public void inicioSesion() {
+        this.jDiagSesionRecep.setSize(400, 400);
+        this.jDiagSesionRecep.setVisible(true);
         this.nombreReceptor.setText(Receptor.getInstancia().getNombre());
-        this.apellidoReceptor.setText(Receptor.getInstancia().getNombre());
-        this.ipReceptor.setText(Receptor.getInstancia().getIP());
-        this.puertoReceptor.setText(Receptor.getInstancia().getPuerto());
         this.repaint();
     }
     
-    public void confirmarConfiguracion() {
-    	String ip = this.ipReceptor.getText().trim();
-    	String puerto = this.puertoReceptor.getText().trim();
+    public void confirmarSesion() {
     	String nombre = this.nombreReceptor.getText().trim();
-    	String apellido = this.apellidoReceptor.getText().trim();
-    	if(!ip.equals("") &&
-		   !puerto.equals("") &&
-		   !nombre.equals("") &&
-		   !apellido.equals("") )
+    	if(!nombre.equals(""))
 		{
-            Receptor.getInstancia().configAtributos(ip, puerto, nombre, apellido);
-    		this.jDiagConfigRecep.setVisible(false);
-    		this.repaint();
+                    Receptor.getInstancia().configAtributos(nombre);
+                    this.jDiagSesionRecep.setVisible(false);
+                    this.setVisible(true);
+                    this.repaint();
+                    Receptor.getInstancia().iniciarSesion();
 		}
 		else {
 			this.lanzarCartelError("ERROR: debe completar todos los campos");
@@ -472,17 +366,18 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         this.asuntoMsjRecibido.setText(asuntoAct);
         this.labelDestinatario.setText("De: "+emisorAct.getNombre());
     }
+
+    public JDialog getJDiagSesionRecep() {
+        return jDiagSesionRecep;
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea apellidoReceptor;
     private javax.swing.JTextPane asuntoMsjRecibido;
     private javax.swing.JButton botonAbrir;
     private javax.swing.JButton botonPararAlerta;
-    private javax.swing.JButton btConfigReceptor;
     private javax.swing.JButton btConfirmarReceptor;
     private javax.swing.JButton cerrarMensaje;
-    private javax.swing.JTextArea ipReceptor;
-    private javax.swing.JDialog jDiagConfigRecep;
+    private javax.swing.JDialog jDiagSesionRecep;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -490,8 +385,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -514,18 +407,9 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
-    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel32;
-    private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel34;
-    private javax.swing.JPanel jPanel35;
-    private javax.swing.JPanel jPanel36;
-    private javax.swing.JPanel jPanel37;
-    private javax.swing.JPanel jPanel38;
-    private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
@@ -536,14 +420,10 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JDialog jdiagAlertaSonora;
     private javax.swing.JLabel labelDestinatario;
     private javax.swing.JList<Mensaje> listaMensajesRecibidos;
     private javax.swing.JTextArea nombreReceptor;
-    private javax.swing.JTextArea puertoReceptor;
     private javax.swing.JTextPane textoMsjRecibido;
     // End of variables declaration//GEN-END:variables
 
@@ -552,7 +432,6 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
 		this.botonAbrir.addActionListener(actionListener);
 		this.cerrarMensaje.addActionListener(actionListener);
 		this.botonPararAlerta.addActionListener(actionListener);
-		this.btConfigReceptor.addActionListener(actionListener);
 		this.btConfirmarReceptor.addActionListener(actionListener);
 		
 	}

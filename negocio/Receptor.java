@@ -103,14 +103,15 @@ public class Receptor extends Persona implements ActionListener{
         this.ventanaReceptor.addActionListener(this);
     }
 	
-    public void configAtributos(String ip, String puerto, String nombre, String apellido) {
-        this.setIP(ip);
-        this.setPuerto(puerto);
+    public void configAtributos(String nombre) {
         this.setNombre(nombre);
-        this.setApellido(apellido);
         ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
     }
 	
+    public void iniciarSesion(){
+        
+    }
+        
     @Override
     public void actionPerformed(ActionEvent arg) {
         String comando = arg.getActionCommand();
@@ -120,9 +121,7 @@ public class Receptor extends Persona implements ActionListener{
             this.ventanaReceptor.cerrarMensaje();
         else if (comando.equalsIgnoreCase("PARAR ALERTA"))
             this.ventanaReceptor.pararAlerta();
-        else if (comando.equalsIgnoreCase("ABRIR CONFIGURACION"))
-            this.ventanaReceptor.abrirConfiguracion();
-        else if (comando.equalsIgnoreCase("ACEPTAR CONFIGURACION"))
-            this.ventanaReceptor.confirmarConfiguracion();
+        else  if (comando.equalsIgnoreCase("ACEPTAR SESION"))
+            this.ventanaReceptor.confirmarSesion();
     }
 }

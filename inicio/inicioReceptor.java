@@ -16,8 +16,7 @@ public class inicioReceptor {
         Receptor.getInstancia().setearIp();
         Receptor.getInstancia().setVentanaReceptor(ventana);
         ventana.pack();
-        ventana.setVisible(true);
-        ventana.abrirConfiguracion();
+        ventana.inicioSesion();
     }
 
 }
