@@ -5,6 +5,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.io.StringWriter;
+
 import java.net.BindException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -12,10 +14,12 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 import negocio.Receptor;
+import negocio.UsuarioReceptor;
 
 public class ComunicacionReceptor {
 
     private static ComunicacionReceptor _instancia = null;
+    private Socket sem; //sem=socketEnviarMensaje
     
     private ComunicacionReceptor() {
         super();
@@ -78,6 +82,24 @@ public class ComunicacionReceptor {
             
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    
+    public void iniciarSesion(StringWriter mensaje,InetAddress ip,int puerto){
+        try {
+            sem = new Socket(ip,puerto);
+            DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
+            dOut.writeUTF(mensaje.toString());
+            dOut.flush();
+            sem.close();
+            
+        } catch (IOException e) {
+            try {
+                sem.close();
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
+            
         }
     }
     

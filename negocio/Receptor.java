@@ -1,5 +1,6 @@
 package negocio;
 
+import base.ComunicacionEmisor;
 import base.ComunicacionReceptor;
 
 import java.awt.event.ActionEvent;
@@ -19,9 +20,11 @@ import presentación.VentanaReceptor;
 import presentación.IVentanaReceptor;
 
 import java.io.File;
+import java.io.StringWriter;
 
 public class Receptor extends Persona implements ActionListener{
 	
+        private String IPDirectorio, puertoDirectorio;
 	private static Receptor _instancia = null;
 	private IVentanaReceptor ventanaReceptor;
         private boolean RMocupado=false;
@@ -29,7 +32,16 @@ public class Receptor extends Persona implements ActionListener{
     private Receptor() {
     	super();
     }
-    
+
+
+    public String getIPDirectorio() {
+        return IPDirectorio;
+    }
+
+    public String getPuertoDirectorio() {
+        return puertoDirectorio;
+    }
+
     /**
      * Thread-protected Singleton
      * @return
@@ -109,6 +121,21 @@ public class Receptor extends Persona implements ActionListener{
     }
 	
     public void iniciarSesion(){
+        UsuarioReceptor usuario = new UsuarioReceptor(this.getIP()+":"+this.getPuerto(), this.getNombre(), this.getIP(), this.getPuerto());
+        try{
+            javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
+            javax.xml.bind.Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter sw = new StringWriter();
+            marshaller.marshal(usuario, sw);
+            try{
+                ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
+            } catch (Exception e){
+                this.lanzarCartelError("No se pudo conectar con el directorio");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
     }
         
