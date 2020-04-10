@@ -12,7 +12,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
+
+import java.io.UnsupportedEncodingException;
 
 import java.util.Iterator;
 import java.util.List;
@@ -27,8 +34,13 @@ public class Emisor extends Persona implements ActionListener{
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     
     private IVentanaEmisor vista;
+    private String IPDirectorio, puertoDirectorio;
     private boolean RCocupado=false;
     private static Emisor instancia = null;
+    private final String regex=", *";
+    private final String nombreConfigDirectorio="config.txt";
+    private final String decoder="UTF8";
+    private final int cantDatos=2;
     
     private Emisor() {
         super();
@@ -158,7 +170,28 @@ public class Emisor extends Persona implements ActionListener{
     public IVentanaEmisor getVista() {
         return vista;
     }
+    
+    public void cargarDatosDirectorio(){
+        BufferedReader br;
+        String[] datos;
 
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
+            String linea = br.readLine();
+            while(linea!=null){
+                datos=linea.split(regex);
+                this.IPDirectorio=datos[0];
+                this.puertoDirectorio=datos[1];
+            }
+            br.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void actionPerformed(ActionEvent arg) {

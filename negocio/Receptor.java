@@ -5,6 +5,8 @@ import base.ComunicacionReceptor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.InetAddress;
@@ -20,7 +22,11 @@ import presentación.VentanaReceptor;
 import presentación.IVentanaReceptor;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 
 public class Receptor extends Persona implements ActionListener{
 	
@@ -28,6 +34,10 @@ public class Receptor extends Persona implements ActionListener{
 	private static Receptor _instancia = null;
 	private IVentanaReceptor ventanaReceptor;
         private boolean RMocupado=false;
+        private final String regex=", *";
+        private final String nombreConfigDirectorio="config.txt";
+        private final String decoder="UTF8";
+        private final int cantDatos=2;
 	
     private Receptor() {
     	super();
@@ -137,6 +147,28 @@ public class Receptor extends Persona implements ActionListener{
             e.printStackTrace();
         }
         
+    }
+    
+    public void cargarDatosDirectorio(){
+        BufferedReader br;
+        String[] datos;
+
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
+            String linea = br.readLine();
+            while(linea!=null){
+                datos=linea.split(regex);
+                this.IPDirectorio=datos[0];
+                this.puertoDirectorio=datos[1];
+            }
+            br.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
         
     @Override

@@ -86,19 +86,26 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         btAceptarConfig = new javax.swing.JButton();
         panelMsjRecibido = new javax.swing.JOptionPane();
         tipoMensaje = new javax.swing.ButtonGroup();
+        selecDestinatarios = new javax.swing.JDialog();
+        jPanel40 = new javax.swing.JPanel();
+        jPanel43 = new javax.swing.JPanel();
+        btConfirmSelect = new javax.swing.JButton();
+        jPanel42 = new javax.swing.JPanel();
+        btCancelSelect = new javax.swing.JButton();
+        jPanel41 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listAgenda = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listAgenda = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
-        botonEnviarEmisor = new javax.swing.JButton();
+        btSelecDestinatarios = new javax.swing.JButton();
         jPanel20 = new javax.swing.JPanel();
         botonConfigEmisor = new javax.swing.JButton();
+        botonEnviarEmisor = new javax.swing.JButton();
         jPanel14 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -227,19 +234,26 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
 
         jDialog1.getContentPane().add(jPanel21, java.awt.BorderLayout.CENTER);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel40.setLayout(new java.awt.GridLayout(1, 2));
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        btConfirmSelect.setText("Confirmar");
+        btConfirmSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btConfirmSelectActionPerformed(evt);
+            }
+        });
+        jPanel43.add(btConfirmSelect);
 
-        jPanel2.setPreferredSize(new java.awt.Dimension(175, 238));
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        jPanel40.add(jPanel43);
 
-        jLabel1.setText("Agenda");
-        jPanel5.add(jLabel1);
+        btCancelSelect.setText("Cancelar");
+        jPanel42.add(btCancelSelect);
 
-        jPanel2.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+        jPanel40.add(jPanel42);
 
-        jPanel6.setLayout(new java.awt.BorderLayout());
+        selecDestinatarios.getContentPane().add(jPanel40, java.awt.BorderLayout.PAGE_END);
+
+        jPanel41.setLayout(new java.awt.BorderLayout());
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(70, 138));
 
@@ -247,8 +261,19 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         listAgenda.setModel(modAgenda);
         jScrollPane1.setViewportView(listAgenda);
 
-        jPanel6.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        jPanel41.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        selecDestinatarios.getContentPane().add(jPanel41, java.awt.BorderLayout.CENTER);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jPanel2.setPreferredSize(new java.awt.Dimension(175, 238));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+        jPanel2.add(jPanel5, java.awt.BorderLayout.PAGE_START);
+
+        jPanel6.setLayout(new java.awt.BorderLayout());
         jPanel2.add(jPanel6, java.awt.BorderLayout.CENTER);
 
         jPanel1.add(jPanel2, java.awt.BorderLayout.LINE_END);
@@ -260,8 +285,13 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         jPanel13.setPreferredSize(new java.awt.Dimension(140, 100));
         jPanel13.setLayout(new java.awt.GridLayout(2, 0));
 
-        botonEnviarEmisor.setText("Enviar");
-        jPanel19.add(botonEnviarEmisor);
+        btSelecDestinatarios.setText("Seleccionar destinatarios");
+        btSelecDestinatarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSelecDestinatariosActionPerformed(evt);
+            }
+        });
+        jPanel19.add(btSelecDestinatarios);
 
         jPanel13.add(jPanel19);
 
@@ -273,6 +303,14 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
             }
         });
         jPanel20.add(botonConfigEmisor);
+
+        botonEnviarEmisor.setText("Enviar");
+        botonEnviarEmisor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonEnviarEmisorActionPerformed(evt);
+            }
+        });
+        jPanel20.add(botonEnviarEmisor);
 
         jPanel13.add(jPanel20);
 
@@ -388,6 +426,18 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         // TODO add your handling code here:
     }//GEN-LAST:event_botonConfigEmisorActionPerformed
 
+    private void botonEnviarEmisorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarEmisorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botonEnviarEmisorActionPerformed
+
+    private void btSelecDestinatariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecDestinatariosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btSelecDestinatariosActionPerformed
+
+    private void btConfirmSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmSelectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btConfirmSelectActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -464,9 +514,11 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JButton botonConfigEmisor;
     private javax.swing.JButton botonEnviarEmisor;
     private javax.swing.JButton btAceptarConfig;
+    private javax.swing.JButton btCancelSelect;
     private javax.swing.JButton btCancelarConfig;
+    private javax.swing.JButton btConfirmSelect;
+    private javax.swing.JButton btSelecDestinatarios;
     private javax.swing.JDialog jDialog1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -508,6 +560,10 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JPanel jPanel38;
     private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel40;
+    private javax.swing.JPanel jPanel41;
+    private javax.swing.JPanel jPanel42;
+    private javax.swing.JPanel jPanel43;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
@@ -522,6 +578,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JList<Persona> listAgenda;
     private javax.swing.JOptionPane panelMsjRecibido;
+    private javax.swing.JDialog selecDestinatarios;
     private javax.swing.JTextArea textApellidoConfig;
     private javax.swing.JTextArea textAsuntoEmisor;
     private javax.swing.JTextArea textIPConfig;
