@@ -4,12 +4,12 @@ public class UsuarioReceptor {
     
     private String ID, nombre, ip, puerto, estado;
     
-    public UsuarioReceptor(String ID, String nombre, String puerto, String estado) {
+    public UsuarioReceptor(String ID, String nombre, String ip, String puerto) {
         super();
         this.setID(ID);
         this.setNombre(nombre);
+        this.setIp(ip);
         this.setPuerto(puerto);
-        this.setEstado(estado);
     }
 
     public void setID(String ID) {
