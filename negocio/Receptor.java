@@ -17,9 +17,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import presentación.VentanaReceptor;
 import presentación.IVentanaReceptor;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 
 import java.io.File;
 
