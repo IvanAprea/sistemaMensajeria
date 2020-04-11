@@ -1,10 +1,10 @@
 package inicio;
 
-import presentación.VentanaEmisor;
+import presentaciÃ³n.VentanaEmisor;
 
 import negocio.Emisor;
 
-import presentación.IVentanaEmisor;
+import presentaciÃ³n.IVentanaEmisor;
 
 public class InicioEmisor {
     public InicioEmisor() {
@@ -14,6 +14,7 @@ public class InicioEmisor {
     public static void main(String[] args) {
         VentanaEmisor vista = new VentanaEmisor();
         vista.setVisible(true);
+        Emisor.getInstancia().cargarDatosDirectorio();
         Emisor.getInstancia().setearIp();
         Emisor.getInstancia().setVista(vista);
     }
