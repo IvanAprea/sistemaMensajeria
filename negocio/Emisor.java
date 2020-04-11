@@ -1,7 +1,5 @@
 package negocio;
 
-import base.Agenda;
-
 import base.ComunicacionEmisor;
 
 import presentación.IVentanaEmisor;
@@ -25,7 +23,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
+
+import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
@@ -41,6 +42,8 @@ public class Emisor extends Persona implements ActionListener{
     private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
     private final int cantDatos=2;
+    private Socket socketDirectorio;
+    private HashMap<String, Persona> listaActualReceptores;
     
     private Emisor() {
         super();
@@ -50,14 +53,29 @@ public class Emisor extends Persona implements ActionListener{
      * Thread-protected Singleton
      * @return
      */
-    
     public synchronized static Emisor getInstancia(){
         if(instancia==null){
             instancia = new Emisor();
         }
         return instancia;
     }
-    
+
+    public void setSocketDirectorio(Socket socketDirectorio) {
+        this.socketDirectorio = socketDirectorio;
+    }
+
+    public Socket getSocketDirectorio() {
+        return socketDirectorio;
+    }
+
+    public void setListaActualReceptores(HashMap<String, Persona> listaActualReceptores) {
+        this.listaActualReceptores = listaActualReceptores;
+    }
+
+    public HashMap<String, Persona> getListaActualReceptores() {
+        return listaActualReceptores;
+    }
+
     public synchronized void enviarMensaje(List<Persona> listaPersonas){
         String asunto,texto;
         int tipo;
@@ -72,7 +90,7 @@ public class Emisor extends Persona implements ActionListener{
         tipo=vista.getTipo();
         mensaje = new Mensaje(asunto,texto,this,tipo);
         if(tipo == 2){
-            ComunicacionEmisor.getInstancia().escucharPuertoEmisor(this.getPuerto());
+            ComunicacionEmisor.getInstancia().escucharPuerto(this.getPuerto());
         }
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
@@ -89,15 +107,14 @@ public class Emisor extends Persona implements ActionListener{
                 } catch (Exception e){
                     this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" "+personaAux.getApellido()+" no puede recibir el mensaje");
                     if(tipo == 2){
-                        ComunicacionEmisor.getInstancia().escucharPuertoEmisor(this.getPuerto());
+                        ComunicacionEmisor.getInstancia().escucharPuerto(this.getPuerto());
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        }
+    }
     
     public synchronized void recibirConfirmacion(String confirmacion){
         while(RCocupado==true){
@@ -134,7 +151,6 @@ public class Emisor extends Persona implements ActionListener{
     }
     
     public void setVista(IVentanaEmisor vista) {
-        
         this.vista = vista;
         KeyListener kl1 = new KeyListener(){
         
@@ -174,7 +190,6 @@ public class Emisor extends Persona implements ActionListener{
     public void cargarDatosDirectorio(){
         BufferedReader br;
         String[] datos;
-
         try {
             br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
             String linea = br.readLine();
@@ -192,7 +207,23 @@ public class Emisor extends Persona implements ActionListener{
             e.printStackTrace();
         }
     }
-
+    
+    public void abrirConexionDirectorio(){
+        try {
+            this.setSocketDirectorio(ComunicacionEmisor.getInstancia()
+                                     .abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),
+                                                              Integer.valueOf(puertoDirectorio)));
+        } catch (UnknownHostException e) {
+            this.lanzarCartelError("ERROR al conectar con el directorio");
+        }
+    }
+    
+    public void obtenerListaReceptores(){
+        this.abrirConexionDirectorio();
+        
+    }
+    
+    
     @Override
     public void actionPerformed(ActionEvent arg) {
         String comando = arg.getActionCommand();
