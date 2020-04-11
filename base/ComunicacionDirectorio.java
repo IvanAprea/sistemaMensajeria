@@ -1,8 +1,11 @@
 package base;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import java.io.StringWriter;
 
 import java.net.BindException;
 import java.net.InetAddress;
@@ -23,7 +26,8 @@ public class ComunicacionDirectorio {
     private ServerSocket sepd; //sepe=socketEscucharPuertoDirectorio
     private Socket socket;
     private DataInputStream dIn;
-    PrintWriter out;
+    private DataOutputStream dOut;
+    private PrintWriter out;
     
     private ComunicacionDirectorio() {
         super();
@@ -85,15 +89,16 @@ public class ComunicacionDirectorio {
         }.start();
     }
     
-    public void darLista(HashMap<String, UsuarioReceptor> hm){
+    public void darLista(StringWriter hashmapMarshalizado){
+        try 
+        {
+            dOut = new DataOutputStream(socket.getOutputStream());
+            dOut.writeUTF(hashmapMarshalizado.toString());
+            dOut.flush();
+            socket.close();
+        } 
+        catch (IOException e) {
         
-    }
-    
-    public void cerrarSocket(){
-        try {
-            this.getSocket().close();
-        } catch (IOException e) {
-            //Ver como lanzar error en Directorio
         }
     }
 }

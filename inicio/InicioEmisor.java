@@ -15,7 +15,7 @@ public class InicioEmisor {
     public static void main(String[] args) {
         VentanaEmisor vista = new VentanaEmisor();
         vista.setVisible(true);
-        Agenda.getInstance().cargarAgenda();
+        Emisor.getInstancia().cargarDatosDirectorio();
         Emisor.getInstancia().setearIp();
         Emisor.getInstancia().setVista(vista);
     }
