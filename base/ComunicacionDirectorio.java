@@ -11,8 +11,11 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import java.util.HashMap;
+
 import negocio.Directorio;
 import negocio.Emisor;
+import negocio.UsuarioReceptor;
 
 public class ComunicacionDirectorio {
 
@@ -34,7 +37,23 @@ public class ComunicacionDirectorio {
             _instancia = new ComunicacionDirectorio();
         return _instancia;
     }
+    
+    public synchronized void nuevoUsuario(){
+            new Thread() {
+                public void run() {
+                    try {
+                        while (true) {
+                            DataInputStream dIn = new DataInputStream(socket.getInputStream());
+                            Directorio.getInstancia().agregarALista(dIn.readUTF());
+                        }
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+        }
+    
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
@@ -76,7 +95,7 @@ public class ComunicacionDirectorio {
         }.start();
     }
     
-    public void darLista(){
+    public void darLista(HashMap<String, UsuarioReceptor> hm){
         
     }
     

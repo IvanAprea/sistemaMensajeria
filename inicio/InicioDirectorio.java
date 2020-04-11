@@ -1,7 +1,5 @@
 package inicio;
 
-import base.Agenda;
-
 import negocio.Emisor;
 
 import presentación.VentanaEmisor;

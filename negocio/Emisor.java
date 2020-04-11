@@ -126,7 +126,7 @@ public class Emisor extends Persona implements ActionListener{
             }
         }
         RCocupado=true;
-        Persona per = Agenda.getInstance().getPersona(confirmacion);
+        /*Persona per = Agenda.getInstance().getPersona(confirmacion);
         String nombre;
         if(per==null){
             nombre = confirmacion;
@@ -134,7 +134,7 @@ public class Emisor extends Persona implements ActionListener{
         else{
             nombre = per.toString();
         }
-        this.vista.lanzarCartelError(nombre + " ha recibido correctamente el mensaje.");
+        this.vista.lanzarCartelError(nombre + " ha recibido correctamente el mensaje.");*/
         RCocupado=false;
         notifyAll();
     }
@@ -180,7 +180,7 @@ public class Emisor extends Persona implements ActionListener{
         };
         this.vista.addKeyListener(kl1,kl2);
         this.vista.addActionListener(this);
-        vista.actualizarListaAgenda(Agenda.getInstance().getPersonas());
+        //vista.actualizarListaAgenda(Agenda.getInstance().getPersonas());
     }
 
     public IVentanaEmisor getVista() {

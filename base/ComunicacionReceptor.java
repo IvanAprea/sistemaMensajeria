@@ -49,8 +49,7 @@ public class ComunicacionReceptor {
                         DataInputStream dIn = new DataInputStream(soc.getInputStream());
                         Receptor.getInstancia().recibirMensaje(dIn.readUTF());
                     }
-
-                } 
+                }
                 catch (BindException e)
                 {
                     //Msj de error

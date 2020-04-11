@@ -291,23 +291,23 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     
     
     public Clip getClip() {
-		return this.clip;
-	}
+                return this.clip;
+        }
 
-	public void setClip(Clip clip) {
-		this.clip = clip;
-	}
+        public void setClip(Clip clip) {
+                this.clip = clip;
+        }
 
     public void abrirMensaje() {
-    	if(listaMensajesRecibidos.getSelectedValue()!= null) {
+        if(listaMensajesRecibidos.getSelectedValue()!= null) {
             this.actualizaMensajeAbierto(
-            		listaMensajesRecibidos.getSelectedValue().getEmisor(),
-            		listaMensajesRecibidos.getSelectedValue().getAsunto(),
-            		listaMensajesRecibidos.getSelectedValue().getTexto());
+                        listaMensajesRecibidos.getSelectedValue().getEmisor(),
+                        listaMensajesRecibidos.getSelectedValue().getAsunto(),
+                        listaMensajesRecibidos.getSelectedValue().getTexto());
             this.jDialog1.setSize(400, 400);
             this.jDialog1.setVisible(true);
             this.repaint();
-    	}
+        }
     }
     
     public void inicioSesion() {
@@ -318,22 +318,22 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     }
     
     public void confirmarSesion() {
-    	String nombre = this.nombreReceptor.getText().trim();
-    	if(!nombre.equals(""))
-		{
+        String nombre = this.nombreReceptor.getText().trim();
+        if(!nombre.equals(""))
+                {
                     Receptor.getInstancia().configAtributos(nombre);
                     this.jDiagSesionRecep.setVisible(false);
+                    Receptor.getInstancia().iniciarSesion();
                     this.setVisible(true);
                     this.repaint();
-                    Receptor.getInstancia().iniciarSesion();
-		}
-		else {
-			this.lanzarCartelError("ERROR: debe completar todos los campos");
-		}
+                }
+                else {
+                        this.lanzarCartelError("ERROR: debe completar todos los campos");
+                }
     }
     
     public void lanzarAlerta(String emisor) {
-    	this.jLabel4.setText("Mensaje entrante de: "+emisor);
+        this.jLabel4.setText("Mensaje entrante de: "+emisor);
         this.jdiagAlertaSonora.pack();
         this.jdiagAlertaSonora.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.jdiagAlertaSonora.setVisible(true);
@@ -346,8 +346,8 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     }
     
     public void pararAlerta() {
-    	this.clip.stop();
-    	this.jdiagAlertaSonora.setVisible(false);
+        this.clip.stop();
+        this.jdiagAlertaSonora.setVisible(false);
     }
     
     public void actualizaListaMensajes(Mensaje mensaje)
@@ -357,9 +357,9 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     }
     
     public void lanzarCartelError(String err) {
-    	JOptionPane.showMessageDialog(null, err);
+        JOptionPane.showMessageDialog(null, err);
     }
-   
+    
     public void actualizaMensajeAbierto(Persona emisorAct, String asuntoAct, String textoAct)
     {
         this.textoMsjRecibido.setText(textoAct);
@@ -427,13 +427,13 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
     private javax.swing.JTextPane textoMsjRecibido;
     // End of variables declaration//GEN-END:variables
 
-	@Override
-	public void addActionListener(ActionListener actionListener) {
-		this.botonAbrir.addActionListener(actionListener);
-		this.cerrarMensaje.addActionListener(actionListener);
-		this.botonPararAlerta.addActionListener(actionListener);
-		this.btConfirmarReceptor.addActionListener(actionListener);
-		
-	}
+    @Override
+            public void addActionListener(ActionListener actionListener) {
+                    this.botonAbrir.addActionListener(actionListener);
+                    this.cerrarMensaje.addActionListener(actionListener);
+                    this.botonPararAlerta.addActionListener(actionListener);
+                    this.btConfirmarReceptor.addActionListener(actionListener);
+                    
+            }
 
 }

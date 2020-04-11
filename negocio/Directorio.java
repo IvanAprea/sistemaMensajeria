@@ -4,6 +4,8 @@ import base.ComunicacionDirectorio;
 
 import java.awt.event.ActionEvent;
 
+import java.io.StringReader;
+
 import java.util.HashMap;
 
 public class Directorio {
@@ -32,10 +34,19 @@ public class Directorio {
     }
 
     //Puede venir un usuario nuevo o no, por lo que se contemplan las dos situaciones
-    public void agregarALista(UsuarioReceptor receptor){
-        receptor.setEstado("ONLINE");
-        this.listaDirectorio.put(receptor.getID(), receptor);
-    }
+    public void agregarALista(String str){
+            try {
+                javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
+                javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+                StringReader reader = new StringReader(str);
+                UsuarioReceptor receptor = (UsuarioReceptor)unmarshaller.unmarshal(reader);
+                receptor.setEstado("ONLINE");
+                this.listaDirectorio.put(receptor.getID(), receptor);
+            }
+            catch (Exception e){
+                
+            }
+        }
     
     public void darLista(){
         ComunicacionDirectorio.getInstancia().darLista(this.getListaDirectorio());            
@@ -43,7 +54,7 @@ public class Directorio {
     
     public void ejecutarComando(String comando) {
         if(comando.equalsIgnoreCase("AGREGAR")){
-            this.agregarALista();
+            
         }
         else if(comando.equalsIgnoreCase("GET")){
             this.darLista();

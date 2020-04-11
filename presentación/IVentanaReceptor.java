@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.sound.sampled.Clip;
 
+import javax.swing.JDialog;
+
 import negocio.Mensaje;
 
 public interface IVentanaReceptor 
@@ -22,4 +24,5 @@ public interface IVentanaReceptor
 	void addActionListener(ActionListener actionListener);
 	Clip getClip();
 	void setClip(Clip clip);
+        JDialog getJDiagSesionRecep();
 }

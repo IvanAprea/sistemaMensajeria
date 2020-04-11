@@ -141,7 +141,8 @@ public class Receptor extends Persona implements ActionListener{
             try{
                 ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
             } catch (Exception e){
-                this.lanzarCartelError("No se pudo conectar con el directorio");
+                this.lanzarCartelError("No se pudo iniciar la sesión");
+                this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
             }
         } catch (Exception e) {
             e.printStackTrace();
