@@ -84,11 +84,11 @@ public class ComunicacionReceptor {
         }
     }
     
-    public void iniciarSesion(StringWriter mensaje,InetAddress ip,int puerto){
+    public void iniciarSesion(StringWriter usuario,InetAddress ip,int puerto){
         try {
             sem = new Socket(ip,puerto);
             DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
-            dOut.writeUTF(mensaje.toString());
+            dOut.writeUTF(usuario.toString());
             dOut.flush();
             sem.close();
             

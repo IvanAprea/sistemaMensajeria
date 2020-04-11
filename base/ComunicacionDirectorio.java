@@ -22,6 +22,8 @@ public class ComunicacionDirectorio {
     private static ComunicacionDirectorio _instancia = null;
     private ServerSocket sepd; //sepe=socketEscucharPuertoDirectorio
     private Socket socket;
+    private DataInputStream dIn;
+    PrintWriter out;
     
     private ComunicacionDirectorio() {
         super();
@@ -39,20 +41,12 @@ public class ComunicacionDirectorio {
     }
     
     public synchronized void nuevoUsuario(){
-            new Thread() {
-                public void run() {
-                    try {
-                        while (true) {
-                            DataInputStream dIn = new DataInputStream(socket.getInputStream());
-                            Directorio.getInstancia().agregarALista(dIn.readUTF());
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
+        try {
+            Directorio.getInstancia().agregarALista(dIn.readUTF());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
     
     public void setSocket(Socket socket) {
         this.socket = socket;
@@ -67,15 +61,11 @@ public class ComunicacionDirectorio {
             public void run() {
                 try {
                     sepd = new ServerSocket(Integer.parseInt(puerto));
-                    sepd.setSoTimeout(1000);
                     while (true) {
-                        ComunicacionDirectorio.getInstancia().setSocket(sepd.accept());
-                        Socket soc = ComunicacionDirectorio.getInstancia().getSocket();                        
-                        PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-                        DataInputStream dIn = new DataInputStream(soc.getInputStream());
-                        String str = dIn.readUTF();
-                        str = str.substring(1);
-                        Directorio.getInstancia().ejecutarComando(str);
+                        socket = sepd.accept();
+                        out = new PrintWriter(socket.getOutputStream(), true);
+                        dIn = new DataInputStream(socket.getInputStream());
+                        Directorio.getInstancia().ejecutarComando(dIn.readUTF());
                     }
                     //ver donde cerrar el socket
                 } catch (BindException e) {
