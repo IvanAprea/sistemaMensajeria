@@ -1,11 +1,10 @@
 package inicio;
 
-import presentación.VentanaEmisor;
+import presentaciÃ³n.VentanaEmisor;
 
-import base.Agenda;
 import negocio.Emisor;
 
-import presentación.IVentanaEmisor;
+import presentaciÃ³n.IVentanaEmisor;
 
 public class InicioEmisor {
     public InicioEmisor() {

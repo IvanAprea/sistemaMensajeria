@@ -1,5 +1,8 @@
 package negocio;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class UsuarioReceptor {
     
     private String ID, nombre, ip, puerto, estado;
@@ -10,6 +13,10 @@ public class UsuarioReceptor {
         this.setNombre(nombre);
         this.setIp(ip);
         this.setPuerto(puerto);
+    }
+    
+    public UsuarioReceptor(){
+        
     }
 
     public void setID(String ID) {
@@ -51,4 +58,5 @@ public class UsuarioReceptor {
     public String getEstado() {
         return estado;
     }
+    
 }

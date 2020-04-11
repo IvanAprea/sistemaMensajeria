@@ -88,6 +88,7 @@ public class ComunicacionReceptor {
         try {
             sem = new Socket(ip,puerto);
             DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
+            dOut.writeUTF("AGREGAR");
             dOut.writeUTF(usuario.toString());
             dOut.flush();
             sem.close();

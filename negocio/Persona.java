@@ -23,7 +23,7 @@ public class Persona {
         try {
                 this.IP = InetAddress.getLocalHost().getHostAddress();//in.readLine();
         } 
-        catch(Exception e) { 
+        catch(Exception e) {
             e.printStackTrace(); }
     }
     
