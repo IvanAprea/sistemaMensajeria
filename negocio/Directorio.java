@@ -40,6 +40,7 @@ public class Directorio {
                 javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
                 StringReader reader = new StringReader(str);
                 UsuarioReceptor receptor = (UsuarioReceptor)unmarshaller.unmarshal(reader);
+                System.out.println(receptor.getNombre());
                 receptor.setEstado("ONLINE");
                 this.listaDirectorio.put(receptor.getID(), receptor);
             }
@@ -54,7 +55,7 @@ public class Directorio {
     
     public void ejecutarComando(String comando) {
         if(comando.equalsIgnoreCase("AGREGAR")){
-            
+            ComunicacionDirectorio.getInstancia().nuevoUsuario();
         }
         else if(comando.equalsIgnoreCase("GET")){
             this.darLista();

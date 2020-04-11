@@ -1,5 +1,6 @@
 package negocio;
 
+import base.ComunicacionDirectorio;
 import base.ComunicacionEmisor;
 import base.ComunicacionReceptor;
 
@@ -140,6 +141,7 @@ public class Receptor extends Persona implements ActionListener{
             marshaller.marshal(usuario, sw);
             try{
                 ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
+                //ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto()); COMENTARIO PARA QUE ANDE, SACAR!!!!!!!
             } catch (Exception e){
                 this.lanzarCartelError("No se pudo iniciar la sesión");
                 this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
@@ -161,6 +163,7 @@ public class Receptor extends Persona implements ActionListener{
                 datos=linea.split(regex);
                 this.IPDirectorio=datos[0];
                 this.puertoDirectorio=datos[1];
+                linea = br.readLine();
             }
             br.close();
         } catch (UnsupportedEncodingException e) {

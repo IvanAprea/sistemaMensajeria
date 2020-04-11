@@ -45,6 +45,11 @@ public class ComunicacionDirectorio {
             Directorio.getInstancia().agregarALista(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
+            try {
+                socket.close();
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
         }
     }
     
@@ -60,12 +65,14 @@ public class ComunicacionDirectorio {
         new Thread() {
             public void run() {
                 try {
+                    
                     sepd = new ServerSocket(Integer.parseInt(puerto));
                     while (true) {
                         socket = sepd.accept();
                         out = new PrintWriter(socket.getOutputStream(), true);
                         dIn = new DataInputStream(socket.getInputStream());
                         Directorio.getInstancia().ejecutarComando(dIn.readUTF());
+                        socket.close();
                     }
                     //ver donde cerrar el socket
                 } catch (BindException e) {
