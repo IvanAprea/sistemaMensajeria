@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -209,19 +210,26 @@ public class Emisor extends Persona implements ActionListener{
         }
     }
     
-    public void abrirConexionDirectorio(){
-        try {
+    public void abrirConexionDirectorio() throws UnknownHostException {
             this.setSocketDirectorio(ComunicacionEmisor.getInstancia()
                                      .abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),
                                                               Integer.valueOf(puertoDirectorio)));
-        } catch (UnknownHostException e) {
-            this.lanzarCartelError("ERROR al conectar con el directorio");
-        }
+
     }
     
     public void obtenerListaReceptores(){
-        this.abrirConexionDirectorio();
-        
+        try 
+        {
+            this.abrirConexionDirectorio();
+            ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
+            this.getSocketDirectorio().close();
+        } 
+        catch (UnknownHostException e) {
+            this.lanzarCartelError("ERROR al conectar con el directorio");
+        } 
+        catch (IOException e) {
+            this.lanzarCartelError("ERROR al cerrar la conexion con el directorio");
+        }
     }
     
     

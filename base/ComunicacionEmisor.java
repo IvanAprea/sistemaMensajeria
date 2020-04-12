@@ -97,7 +97,21 @@ public class ComunicacionEmisor {
             return null;
         }
     }
-
+    
+    public void pedirListaADirectorio(Socket socket){
+        try 
+        {
+            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+            String s = "GET";
+            dOut.writeUTF(s);
+            dOut.flush();         
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+        }
+    }
+    
     //Estas listas se tendrian que poder mostrar de alguna forma en la ventana:
     //Consultar a los que estan online -> devuelve lista de online
 
