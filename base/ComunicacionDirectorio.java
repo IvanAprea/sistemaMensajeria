@@ -102,7 +102,6 @@ public class ComunicacionDirectorio {
             dOut = new DataOutputStream(socket.getOutputStream());
             dOut.writeUTF(hashmapMarshalizado.toString());
             dOut.flush();
-            socket.close();
         } 
         catch (IOException e) {
         

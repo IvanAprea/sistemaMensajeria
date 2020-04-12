@@ -21,25 +21,27 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
+import negocio.UsuarioReceptor;
+
 /**
  *
  * @author ivan-
  */
 public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     
-    private DefaultListModel<Persona> modAgenda;
+    private DefaultListModel<UsuarioReceptor> modDirectorio;
 
     /** Creates new form VentanaEmisor */
     public VentanaEmisor() {
         
-        this.modAgenda = new DefaultListModel<Persona>();
+        this.modDirectorio = new DefaultListModel<UsuarioReceptor>();
             
         initComponents();
         this.botonEnviarEmisor.setActionCommand("ENVIAR MENSAJE");
         this.botonConfigEmisor.setActionCommand("CONFIGURACION");
         this.btCancelarConfig.setActionCommand("CANCELAR CAMBIO");
         this.btAceptarConfig.setActionCommand("ACEPTAR CAMBIO");
-        
+        this.btSelecDestinatarios.setActionCommand("SELECCIONAR DESTINATARIOS");
     }
 
     /** This method is called from within the constructor to
@@ -258,7 +260,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         jScrollPane1.setPreferredSize(new java.awt.Dimension(70, 138));
 
         listAgenda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        listAgenda.setModel(modAgenda);
+        listAgenda.setModel(modDirectorio);
         jScrollPane1.setViewportView(listAgenda);
 
         jPanel41.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -576,7 +578,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JList<Persona> listAgenda;
+    private javax.swing.JList<UsuarioReceptor> listAgenda;
     private javax.swing.JOptionPane panelMsjRecibido;
     private javax.swing.JDialog selecDestinatarios;
     private javax.swing.JTextArea textApellidoConfig;
@@ -600,7 +602,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     }
     
     public void enviarMensaje(){
-        List<Persona> personas = this.getPersonas();
+        List<UsuarioReceptor> personas = this.getPersonas();
         if(personas.size() > 0){
             if(!this.getAsunto().trim().equals("")){
                 if(!this.getMensaje().trim().equals("")){
@@ -621,7 +623,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     }
     
     @Override
-    public List<Persona> getPersonas() {
+    public List<UsuarioReceptor> getPersonas() {
         return this.listAgenda.getSelectedValuesList();
     }
     
@@ -640,7 +642,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         }
         else 
         {
-                this.lanzarCartelError("ERROR: debe completar todos los campos");
+            this.lanzarCartelError("ERROR: debe completar todos los campos");
         }
     }
     
@@ -685,7 +687,6 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     }
     
     public void abrirConfig() {
-        
         this.jDialog1.setSize(400, 400);
         this.jDialog1.setVisible(true);
         this.textNombreConfig.setText(Emisor.getInstancia().getNombre());
@@ -702,12 +703,12 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
 
 
     @Override
-    public void actualizarListaAgenda(HashMap<String,Persona> personas) {
-        Iterator<Persona> it = personas.values().iterator();
+    public void actualizarListaDirectorio(HashMap<String,UsuarioReceptor> personas) {
+        Iterator<UsuarioReceptor> it = personas.values().iterator();
         
-        this.modAgenda.clear();
+        this.modDirectorio.clear();
         while(it.hasNext()){
-            this.modAgenda.addElement(it.next());
+            this.modDirectorio.addElement(it.next());
         }
         
         this.repaint();
@@ -720,6 +721,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         this.botonEnviarEmisor.addActionListener(actionListener);
         this.btAceptarConfig.addActionListener(actionListener);
         this.btCancelarConfig.addActionListener(actionListener);
+        this.btSelecDestinatarios.addActionListener(actionListener);       
     }
     
     public void addKeyListener(KeyListener kl1,KeyListener kl2){
