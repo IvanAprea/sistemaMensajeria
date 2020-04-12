@@ -32,18 +32,21 @@ import negocio.UsuarioReceptor;
 public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     
     private DefaultListModel<UsuarioReceptor> modDirectorio;
-
+    private List<UsuarioReceptor> destinatariosConfirmados;
+    
     /** Creates new form VentanaEmisor */
     public VentanaEmisor() {
         
         this.modDirectorio = new DefaultListModel<UsuarioReceptor>();
-            
+        
         initComponents();
         this.botonEnviarEmisor.setActionCommand("ENVIAR MENSAJE");
         this.botonConfigEmisor.setActionCommand("CONFIGURACION");
         this.btCancelarConfig.setActionCommand("CANCELAR CAMBIO");
         this.btAceptarConfig.setActionCommand("ACEPTAR CAMBIO");
         this.btSelecDestinatarios.setActionCommand("SELECCIONAR DESTINATARIOS");
+        this.btConfirmSelect.setActionCommand("CONFIRMAR DESTINATARIOS");
+        this.btCancelSelect.setActionCommand("CANCELAR DESTINATARIOS");
     }
 
     /** This method is called from within the constructor to
@@ -98,7 +101,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         btCancelSelect = new javax.swing.JButton();
         jPanel41 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listAgenda = new javax.swing.JList<>();
+        listDirectorio = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -261,9 +264,9 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
 
         jScrollPane1.setPreferredSize(new java.awt.Dimension(70, 138));
 
-        listAgenda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        listAgenda.setModel(modDirectorio);
-        jScrollPane1.setViewportView(listAgenda);
+        listDirectorio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        listDirectorio.setModel(modDirectorio);
+        jScrollPane1.setViewportView(listDirectorio);
 
         jPanel41.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -580,7 +583,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JList<UsuarioReceptor> listAgenda;
+    private javax.swing.JList<UsuarioReceptor> listDirectorio;
     private javax.swing.JOptionPane panelMsjRecibido;
     private javax.swing.JDialog selecDestinatarios;
     private javax.swing.JTextArea textApellidoConfig;
@@ -626,7 +629,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     
     @Override
     public List<UsuarioReceptor> getPersonas() {
-        return this.listAgenda.getSelectedValuesList();
+        return this.destinatariosConfirmados;
     }
     
     public void confirmarConfiguracion() {
@@ -648,6 +651,15 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         }
     }
     
+    public void confirmarDestinatarios(){
+        this.destinatariosConfirmados = this.listDirectorio.getSelectedValuesList();
+        this.selecDestinatarios.setVisible(false);
+    }
+    
+    public void cancelarDestinatarios(){
+        this.selecDestinatarios.setVisible(false);
+    }
+    
     public void lanzarCartelError(String err) {
         JOptionPane.showMessageDialog(null, err);
     }
@@ -655,7 +667,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     
     @Override
     public int getTipo() {
-        // 0=simplea   1= alerta  2=aviso de recepcion
+        // 0=simple   1= alerta  2=aviso de recepcion
         int retorno = 0;
         
         if(this.RBAlerta.isSelected())
@@ -723,7 +735,9 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         this.botonEnviarEmisor.addActionListener(actionListener);
         this.btAceptarConfig.addActionListener(actionListener);
         this.btCancelarConfig.addActionListener(actionListener);
-        this.btSelecDestinatarios.addActionListener(actionListener);       
+        this.btSelecDestinatarios.addActionListener(actionListener);
+        this.btConfirmSelect.addActionListener(actionListener);
+        this.btCancelSelect.addActionListener(actionListener);
     }
     
     public void addKeyListener(KeyListener kl1,KeyListener kl2){

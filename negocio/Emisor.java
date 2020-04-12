@@ -236,6 +236,12 @@ public class Emisor extends Persona implements ActionListener{
             this.obtenerListaReceptores();
             this.vista.actualizarListaDirectorio(this.getListaActualReceptores().getUsuariosRecMap());
         }
+        else if(comando.equalsIgnoreCase("CONFIRMAR DESTINATARIOS")){
+            this.vista.confirmarDestinatarios();
+        }
+        else if(comando.equalsIgnoreCase("CANCELAR DESTINATARIOS")){
+            this.vista.cancelarDestinatarios();
+        }        
     }
 
     public static void setInstancia(Emisor instancia) {
