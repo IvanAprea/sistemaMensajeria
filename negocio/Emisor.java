@@ -2,6 +2,8 @@ package negocio;
 
 import base.ComunicacionEmisor;
 
+import java.util.Map;
+
 import presentación.IVentanaEmisor;
 
 import java.awt.event.ActionEvent;
@@ -43,7 +45,7 @@ public class Emisor extends Persona implements ActionListener{
     private final String decoder="UTF8";
     private final int cantDatos=2;
     private Socket socketDirectorio;
-    private HashMap<String, Persona> listaActualReceptores;
+    private UsuariosRecMap listaActualReceptores;
     
     private Emisor() {
         super();
@@ -68,23 +70,23 @@ public class Emisor extends Persona implements ActionListener{
         return socketDirectorio;
     }
 
-    public void setListaActualReceptores(HashMap<String, Persona> listaActualReceptores) {
+    public void setListaActualReceptores(UsuariosRecMap listaActualReceptores) {
         this.listaActualReceptores = listaActualReceptores;
     }
 
-    public HashMap<String, Persona> getListaActualReceptores() {
+    public UsuariosRecMap getListaActualReceptores() {
         return listaActualReceptores;
     }
 
-    public synchronized void enviarMensaje(List<Persona> listaPersonas){
+    public synchronized void enviarMensaje(List<UsuarioReceptor> listaPersonas){
         String asunto,texto;
         int tipo;
-        List<Persona> personas;
+        List<UsuarioReceptor> personas;
         Mensaje mensaje;
-        Persona personaAux;
+        UsuarioReceptor personaAux;
         
         personas = listaPersonas;
-        Iterator<Persona> it = personas.iterator();
+        Iterator<UsuarioReceptor> it = personas.iterator();
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
         tipo=vista.getTipo();
@@ -103,9 +105,9 @@ public class Emisor extends Persona implements ActionListener{
                 try{
                     ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
                 } catch (UnknownHostException e) {
-                    this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre()+" "+personaAux.getApellido());
+                    this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
                 } catch (Exception e){
-                    this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" "+personaAux.getApellido()+" no puede recibir el mensaje");
+                    this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" no puede recibir el mensaje");
                     if(tipo == 2){
                         ComunicacionEmisor.getInstancia().escucharPuerto(this.getPuerto());
                     }
@@ -139,11 +141,10 @@ public class Emisor extends Persona implements ActionListener{
         notifyAll();
     }
     
-    public void configAtributos(String ip, String puerto, String nombre, String apellido) {
+    public void configAtributos(String ip, String puerto, String nombre) {
         this.setIP(ip);
         this.setPuerto(puerto);
         this.setNombre(nombre);
-        this.setApellido(apellido);
     }
     
     public void lanzarCartelError(String err) {
@@ -238,6 +239,10 @@ public class Emisor extends Persona implements ActionListener{
         }else
         if(comando.equalsIgnoreCase("CANCELAR CAMBIO")){
             this.vista.cerrarConfig();
+        }
+        else if(comando.equalsIgnoreCase("SELECCIONAR DESTINATARIOS")){
+            this.obtenerListaReceptores();
+            this.vista.actualizarListaDirectorio(this.getListaActualReceptores().getUsuariosRecMap());
         }
     }
 

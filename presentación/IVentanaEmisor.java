@@ -1,5 +1,7 @@
 package presentación;
 
+import java.util.Map;
+
 import negocio.Persona;
 
 import java.awt.event.ActionListener;
@@ -10,12 +12,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import negocio.UsuarioReceptor;
+
 public interface IVentanaEmisor {
     String getAsunto();
 
     String getMensaje();
 
-    List<Persona> getPersonas();
+    List<UsuarioReceptor> getPersonas();
 
     int getTipo();
 
@@ -25,7 +29,7 @@ public interface IVentanaEmisor {
 
     void enviarMensaje();
 
-    void actualizarListaAgenda(HashMap<String, Persona> personas);
+    void actualizarListaDirectorio(Map<String, UsuarioReceptor> personas);
 
     void addActionListener(ActionListener actionListener);
 

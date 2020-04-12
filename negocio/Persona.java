@@ -9,22 +9,24 @@ import java.net.URL;
 
 public class Persona {
     
-    private String IP,Puerto="80",Nombre = "default",Apellido = "default";
+    private String IP,puerto="80",nombre = "default";
     
-    public Persona(String nombre,String apellido,String ip,String puerto) {
+    public Persona(String nombre,String ip,String puerto) {
         super();
-        this.Nombre=nombre;
-        this.Apellido=apellido;
+        this.nombre=nombre;
         this.IP=ip;
-        this.Puerto=puerto;
+        this.puerto=puerto;
     }
     
     public void setearIp(){
-        try {
-                this.IP = InetAddress.getLocalHost().getHostAddress();//in.readLine();
+        try 
+        {
+            this.IP = InetAddress.getLocalHost().getHostAddress();//in.readLine();
         } 
-        catch(Exception e) {
-            e.printStackTrace(); }
+        catch(Exception e) 
+        {
+            e.printStackTrace(); 
+        }
     }
     
     public Persona() {
@@ -36,15 +38,11 @@ public class Persona {
     }
 
     public String getPuerto() {
-        return Puerto;
+        return puerto;
     }
 
     public String getNombre() {
-        return Nombre;
-    }
-
-    public String getApellido() {
-        return Apellido;
+        return nombre;
     }
 
     public void setIP(String IP) {
@@ -52,20 +50,16 @@ public class Persona {
     }
 
     public void setPuerto(String Puerto) {
-        this.Puerto = Puerto;
+        this.puerto = Puerto;
     }
 
     public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
-    }
-
-    public void setApellido(String Apellido) {
-        this.Apellido = Apellido;
+        this.nombre = Nombre;
     }
 
     @Override
     public String toString() {
-        return this.getNombre()+" "+this.getApellido();
+        return this.getNombre();
     }
 
 }
