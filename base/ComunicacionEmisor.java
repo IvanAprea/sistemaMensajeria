@@ -98,17 +98,21 @@ public class ComunicacionEmisor {
         }
     }
     
-    public void pedirListaADirectorio(Socket socket){
+    public String pedirListaADirectorio(Socket socket){
+        String hm;
         try 
         {
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
             String s = "GET";
             dOut.writeUTF(s);
             dOut.flush();         
+            DataInputStream dIn = new DataInputStream(socket.getInputStream());
+            return dIn.readUTF();
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            return null;
         }
     }
     

@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.StringWriter;
 
 import java.io.UnsupportedEncodingException;
@@ -32,6 +33,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
+
+import presentacion.VentanaEmisor;
 
 public class Emisor extends Persona implements ActionListener{
     
@@ -152,7 +155,7 @@ public class Emisor extends Persona implements ActionListener{
         this.vista.lanzarCartelError(err);
     }
     
-    public void setVista(IVentanaEmisor vista) {
+    public void setVista(VentanaEmisor vista) {
         this.vista = vista;
         KeyListener kl1 = new KeyListener(){
         
@@ -199,6 +202,7 @@ public class Emisor extends Persona implements ActionListener{
                 datos=linea.split(regex);
                 this.IPDirectorio=datos[0];
                 this.puertoDirectorio=datos[1];
+                linea = br.readLine();
             }
             br.close();
         } catch (UnsupportedEncodingException e) {
@@ -211,9 +215,7 @@ public class Emisor extends Persona implements ActionListener{
     }
     
     public void abrirConexionDirectorio() throws UnknownHostException {
-            this.setSocketDirectorio(ComunicacionEmisor.getInstancia()
-                                     .abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),
-                                                              Integer.valueOf(puertoDirectorio)));
+            this.setSocketDirectorio(ComunicacionEmisor.getInstancia().abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),Integer.valueOf(puertoDirectorio)));
 
     }
     
@@ -221,14 +223,23 @@ public class Emisor extends Persona implements ActionListener{
         try 
         {
             this.abrirConexionDirectorio();
-            ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
+            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
             this.getSocketDirectorio().close();
+            if(hm!=null){
+                javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
+                javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+                StringReader reader = new StringReader(hm);
+                this.listaActualReceptores = (UsuariosRecMap)unmarshaller.unmarshal(reader);
+            }
         } 
         catch (UnknownHostException e) {
             this.lanzarCartelError("ERROR al conectar con el directorio");
         } 
         catch (IOException e) {
             this.lanzarCartelError("ERROR al cerrar la conexion con el directorio");
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
     
