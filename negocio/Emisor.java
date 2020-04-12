@@ -42,7 +42,6 @@ public class Emisor extends Persona implements ActionListener{
     
     private IVentanaEmisor vista;
     private String IPDirectorio, puertoDirectorio;
-    private boolean RCocupado=false;
     private static Emisor instancia = null;
     private final String regex=", *";
     private final String nombreConfigDirectorio="config.txt";
@@ -95,9 +94,6 @@ public class Emisor extends Persona implements ActionListener{
         texto=vista.getMensaje();
         tipo=vista.getTipo();
         mensaje = new Mensaje(asunto,texto,this,tipo);
-        if(tipo == 2){
-            ComunicacionEmisor.getInstancia().escucharPuerto(this.getPuerto());
-        }
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
@@ -107,14 +103,11 @@ public class Emisor extends Persona implements ActionListener{
             while(it.hasNext()){
                 personaAux=it.next();
                 try{
-                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()),mensaje.getTipo());
                 } catch (UnknownHostException e) {
                     this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
                 } catch (Exception e){
                     this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" no puede recibir el mensaje");
-                    if(tipo == 2){
-                        ComunicacionEmisor.getInstancia().escucharPuerto(this.getPuerto());
-                    }
                 }
             }
         } catch (Exception e) {
@@ -122,27 +115,8 @@ public class Emisor extends Persona implements ActionListener{
         }
     }
     
-    public synchronized void recibirConfirmacion(String confirmacion){
-        while(RCocupado==true){
-            try{
-                wait();
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        RCocupado=true;
-        /*Persona per = Agenda.getInstance().getPersona(confirmacion);
-        String nombre;
-        if(per==null){
-            nombre = confirmacion;
-        }
-        else{
-            nombre = per.toString();
-        }
-        this.vista.lanzarCartelError(nombre + " ha recibido correctamente el mensaje.");*/
-        RCocupado=false;
-        notifyAll();
+    public synchronized void recibirConfirmacion(String receptor){
+        this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje.");
     }
     
     public void configAtributos(String ip, String puerto, String nombre) {
@@ -185,7 +159,6 @@ public class Emisor extends Persona implements ActionListener{
         };
         this.vista.addKeyListener(kl1,kl2);
         this.vista.addActionListener(this);
-        //vista.actualizarListaAgenda(Agenda.getInstance().getPersonas());
     }
 
     public IVentanaEmisor getVista() {

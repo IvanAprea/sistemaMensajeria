@@ -100,15 +100,7 @@ public class Receptor extends Persona implements ActionListener{
             	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
             }
             else if(mensaje.getTipo() == 2) {
-            	try {
-                    ComunicacionReceptor.getInstancia().informarMensajeRecibido(
-                                    InetAddress.getByName(this.getIP()),
-                                    this.getPuerto(),
-                                    InetAddress.getByName(mensaje.getEmisor().getIP()),
-                                    mensaje.getEmisor().getPuerto());
-                } catch (UnknownHostException e) {
-                        e.printStackTrace();
-                }
+                    ComunicacionReceptor.getInstancia().informarMensajeRecibido(this.getNombre());
             }
             }catch (Exception e){
                 e.printStackTrace();
@@ -142,7 +134,7 @@ public class Receptor extends Persona implements ActionListener{
             try{
                 ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
                 this.ventanaReceptor.mostrarVentana();
-                //ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto()); COMENTARIO PARA QUE ANDE, SACAR!!!!!!!
+                ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
             } catch (Exception e){
                 this.lanzarCartelError("No se pudo iniciar la sesión");
                 this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
