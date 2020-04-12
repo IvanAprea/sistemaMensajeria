@@ -119,9 +119,7 @@ public class Emisor extends Persona implements ActionListener{
         this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje.");
     }
     
-    public void configAtributos(String ip, String puerto, String nombre) {
-        this.setIP(ip);
-        this.setPuerto(puerto);
+    public void configAtributos(String nombre) {
         this.setNombre(nombre);
     }
     
@@ -223,14 +221,8 @@ public class Emisor extends Persona implements ActionListener{
         if(comando.equalsIgnoreCase("ENVIAR MENSAJE")){
             this.vista.enviarMensaje();
         }else
-        if(comando.equalsIgnoreCase("CONFIGURACION")){
-            this.vista.abrirConfig();
-        }else
-        if(comando.equalsIgnoreCase("ACEPTAR CAMBIO")){
-            this.vista.confirmarConfiguracion();
-        }else
-        if(comando.equalsIgnoreCase("CANCELAR CAMBIO")){
-            this.vista.cerrarConfig();
+        if(comando.equalsIgnoreCase("ACEPTAR SESION")){
+            this.vista.confirmarSesion();
         }
         else if(comando.equalsIgnoreCase("SELECCIONAR DESTINATARIOS")){
             this.obtenerListaReceptores();

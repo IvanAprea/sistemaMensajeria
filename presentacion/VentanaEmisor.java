@@ -41,9 +41,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         
         initComponents();
         this.botonEnviarEmisor.setActionCommand("ENVIAR MENSAJE");
-        this.botonConfigEmisor.setActionCommand("CONFIGURACION");
-        this.btCancelarConfig.setActionCommand("CANCELAR CAMBIO");
-        this.btAceptarConfig.setActionCommand("ACEPTAR CAMBIO");
+        this.btAceptarSesion.setActionCommand("ACEPTAR SESION");
         this.btSelecDestinatarios.setActionCommand("SELECCIONAR DESTINATARIOS");
         this.btConfirmSelect.setActionCommand("CONFIRMAR DESTINATARIOS");
         this.btCancelSelect.setActionCommand("CANCELAR DESTINATARIOS");
@@ -57,40 +55,17 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     @SuppressWarnings("unchecked")
     private void initComponents() {//GEN-BEGIN:initComponents
 
-        jDialog1 = new javax.swing.JDialog();
+        sesionEmisor = new javax.swing.JDialog();
         jPanel21 = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
-        jPanel24 = new javax.swing.JPanel();
-        jPanel28 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jPanel29 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
-        jPanel30 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel25 = new javax.swing.JPanel();
-        jPanel31 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        textNombreConfig = new javax.swing.JTextArea();
-        jPanel32 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        textApellidoConfig = new javax.swing.JTextArea();
-        jPanel33 = new javax.swing.JPanel();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        textIPConfig = new javax.swing.JTextArea();
         jPanel23 = new javax.swing.JPanel();
-        jPanel26 = new javax.swing.JPanel();
-        jPanel34 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jPanel35 = new javax.swing.JPanel();
-        jPanel36 = new javax.swing.JPanel();
-        btCancelarConfig = new javax.swing.JButton();
-        jPanel27 = new javax.swing.JPanel();
-        jPanel37 = new javax.swing.JPanel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        textPuertoConfig = new javax.swing.JTextArea();
-        jPanel38 = new javax.swing.JPanel();
-        jPanel39 = new javax.swing.JPanel();
-        btAceptarConfig = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel29 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        textNombreSesion = new javax.swing.JTextArea();
+        jPanel30 = new javax.swing.JPanel();
+        btAceptarSesion = new javax.swing.JButton();
         panelMsjRecibido = new javax.swing.JOptionPane();
         tipoMensaje = new javax.swing.ButtonGroup();
         selecDestinatarios = new javax.swing.JDialog();
@@ -111,7 +86,6 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         jPanel19 = new javax.swing.JPanel();
         btSelecDestinatarios = new javax.swing.JButton();
         jPanel20 = new javax.swing.JPanel();
-        botonConfigEmisor = new javax.swing.JButton();
         botonEnviarEmisor = new javax.swing.JButton();
         jPanel14 = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
@@ -136,110 +110,38 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         jScrollPane3 = new javax.swing.JScrollPane();
         textMensajeEmisor = new javax.swing.JTextArea();
 
-        jPanel21.setLayout(new java.awt.GridLayout(2, 0));
+        jPanel21.setLayout(new java.awt.GridLayout(4, 0));
 
-        jPanel22.setLayout(new java.awt.GridLayout(1, 2));
-
-        jPanel24.setLayout(new java.awt.GridLayout(3, 0));
-
-        jLabel5.setText("Nombre");
-        jPanel28.add(jLabel5);
-
-        jPanel24.add(jPanel28);
-
-        jLabel6.setText("Apellido");
-        jPanel29.add(jLabel6);
-
-        jPanel24.add(jPanel29);
-
-        jLabel7.setText("IP");
-        jPanel30.add(jLabel7);
-
-        jPanel24.add(jPanel30);
-
-        jPanel22.add(jPanel24);
-
-        jPanel25.setLayout(new java.awt.GridLayout(3, 0));
-
-        jPanel31.setLayout(new java.awt.BorderLayout());
-
-        textNombreConfig.setColumns(20);
-        textNombreConfig.setRows(5);
-        jScrollPane4.setViewportView(textNombreConfig);
-
-        jPanel31.add(jScrollPane4, java.awt.BorderLayout.CENTER);
-
-        jPanel25.add(jPanel31);
-
-        jPanel32.setLayout(new java.awt.BorderLayout());
-
-        textApellidoConfig.setColumns(20);
-        textApellidoConfig.setRows(5);
-        jScrollPane5.setViewportView(textApellidoConfig);
-
-        jPanel32.add(jScrollPane5, java.awt.BorderLayout.CENTER);
-
-        jPanel25.add(jPanel32);
-
-        jPanel33.setLayout(new java.awt.BorderLayout());
-
-        textIPConfig.setColumns(20);
-        textIPConfig.setRows(5);
-        jScrollPane8.setViewportView(textIPConfig);
-
-        jPanel33.add(jScrollPane8, java.awt.BorderLayout.CENTER);
-
-        jPanel25.add(jPanel33);
-
-        jPanel22.add(jPanel25);
+        jLabel5.setText("Iniciar sesion");
+        jPanel22.add(jLabel5);
 
         jPanel21.add(jPanel22);
 
-        jPanel23.setLayout(new java.awt.GridLayout(1, 2));
-
-        jPanel26.setLayout(new java.awt.GridLayout(3, 0));
-
-        jLabel8.setText("Puerto");
-        jPanel34.add(jLabel8);
-
-        jPanel26.add(jPanel34);
-        jPanel26.add(jPanel35);
-
-        btCancelarConfig.setText("Cancelar");
-        jPanel36.add(btCancelarConfig);
-
-        jPanel26.add(jPanel36);
-
-        jPanel23.add(jPanel26);
-
-        jPanel27.setLayout(new java.awt.GridLayout(3, 0));
-
-        jPanel37.setLayout(new java.awt.BorderLayout());
-
-        textPuertoConfig.setColumns(20);
-        textPuertoConfig.setRows(5);
-        jScrollPane7.setViewportView(textPuertoConfig);
-
-        jPanel37.add(jScrollPane7, java.awt.BorderLayout.CENTER);
-
-        jPanel27.add(jPanel37);
-        jPanel27.add(jPanel38);
-
-        btAceptarConfig.setText("Aceptar");
-        btAceptarConfig.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAceptarConfigActionPerformed(evt);
-            }
-        });
-        jPanel39.add(btAceptarConfig);
-
-        jPanel27.add(jPanel39);
-
-        jPanel23.add(jPanel27);
+        jLabel1.setText("Nombre");
+        jPanel23.add(jLabel1);
 
         jPanel21.add(jPanel23);
 
-        jDialog1.getContentPane().add(jPanel21, java.awt.BorderLayout.CENTER);
+        textNombreSesion.setColumns(20);
+        textNombreSesion.setRows(5);
+        textNombreSesion.setText("Default");
+        jScrollPane4.setViewportView(textNombreSesion);
+
+        jPanel29.add(jScrollPane4);
+
+        jPanel21.add(jPanel29);
+
+        btAceptarSesion.setText("Confirmar");
+        btAceptarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAceptarSesionActionPerformed(evt);
+            }
+        });
+        jPanel30.add(btAceptarSesion);
+
+        jPanel21.add(jPanel30);
+
+        sesionEmisor.getContentPane().add(jPanel21, java.awt.BorderLayout.CENTER);
 
         jPanel40.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -301,15 +203,6 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         jPanel19.add(btSelecDestinatarios);
 
         jPanel13.add(jPanel19);
-
-        botonConfigEmisor.setText("Configuración");
-        botonConfigEmisor.setActionCommand("Configuracion");
-        botonConfigEmisor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonConfigEmisorActionPerformed(evt);
-            }
-        });
-        jPanel20.add(botonConfigEmisor);
 
         botonEnviarEmisor.setText("Enviar");
         botonEnviarEmisor.addActionListener(new java.awt.event.ActionListener() {
@@ -425,13 +318,9 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         // TODO add your handling code here:
     }//GEN-LAST:event_RBAvisoRecepActionPerformed
 
-    private void btAceptarConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarConfigActionPerformed
+    private void btAceptarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarSesionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btAceptarConfigActionPerformed
-
-    private void botonConfigEmisorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfigEmisorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botonConfigEmisorActionPerformed
+    }//GEN-LAST:event_btAceptarSesionActionPerformed
 
     private void botonEnviarEmisorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEnviarEmisorActionPerformed
         // TODO add your handling code here:
@@ -518,21 +407,16 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JRadioButton RBAlerta;
     private javax.swing.JRadioButton RBAvisoRecep;
     private javax.swing.JRadioButton RBSimple;
-    private javax.swing.JButton botonConfigEmisor;
     private javax.swing.JButton botonEnviarEmisor;
-    private javax.swing.JButton btAceptarConfig;
+    private javax.swing.JButton btAceptarSesion;
     private javax.swing.JButton btCancelSelect;
-    private javax.swing.JButton btCancelarConfig;
     private javax.swing.JButton btConfirmSelect;
     private javax.swing.JButton btSelecDestinatarios;
-    private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
@@ -549,23 +433,9 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
-    private javax.swing.JPanel jPanel24;
-    private javax.swing.JPanel jPanel25;
-    private javax.swing.JPanel jPanel26;
-    private javax.swing.JPanel jPanel27;
-    private javax.swing.JPanel jPanel28;
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
-    private javax.swing.JPanel jPanel31;
-    private javax.swing.JPanel jPanel32;
-    private javax.swing.JPanel jPanel33;
-    private javax.swing.JPanel jPanel34;
-    private javax.swing.JPanel jPanel35;
-    private javax.swing.JPanel jPanel36;
-    private javax.swing.JPanel jPanel37;
-    private javax.swing.JPanel jPanel38;
-    private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel40;
     private javax.swing.JPanel jPanel41;
@@ -580,18 +450,13 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane7;
-    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JList<UsuarioReceptor> listDirectorio;
     private javax.swing.JOptionPane panelMsjRecibido;
     private javax.swing.JDialog selecDestinatarios;
-    private javax.swing.JTextArea textApellidoConfig;
+    private javax.swing.JDialog sesionEmisor;
     private javax.swing.JTextArea textAsuntoEmisor;
-    private javax.swing.JTextArea textIPConfig;
     private javax.swing.JTextArea textMensajeEmisor;
-    private javax.swing.JTextArea textNombreConfig;
-    private javax.swing.JTextArea textPuertoConfig;
+    private javax.swing.JTextArea textNombreSesion;
     private javax.swing.ButtonGroup tipoMensaje;
     // End of variables declaration//GEN-END:variables
 
@@ -632,18 +497,13 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         return this.destinatariosConfirmados;
     }
     
-    public void confirmarConfiguracion() {
-        String ip = this.getIPConfig().trim();
-        String puerto = this.getPuertoConfig().trim();
+    public void confirmarSesion() {
         String nombre = this.getNombreConfig().trim();
-        String apellido = this.getApellidoConfig().trim();
-        if(!ip.equals("") &&
-                   !puerto.equals("") &&
-                   !nombre.equals("") &&
-                   !apellido.equals("") )
+        if(!nombre.equals(""))
         {
-            Emisor.getInstancia().configAtributos(ip, puerto, nombre);
-            this.cerrarConfig();
+            Emisor.getInstancia().configAtributos(nombre);
+            this.cerrarSesion();
+            this.setVisible(true);
         }
         else 
         {
@@ -681,37 +541,21 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     @Override
     public String getNombreConfig() {
         
-        return this.textNombreConfig.getText();
+        return this.textNombreSesion.getText();
     }
 
-    @Override
-    public String getApellidoConfig() {
-        
-        return this.textApellidoConfig.getText();
-    }
-    
-    @Override
-    public String getIPConfig() {
-        return this.textIPConfig.getText();
-    }
 
-    @Override
-    public String getPuertoConfig() {
-        return this.textPuertoConfig.getText();
-    }
     
-    public void abrirConfig() {
-        this.jDialog1.setSize(400, 400);
-        this.jDialog1.setVisible(true);
-        this.textNombreConfig.setText(Emisor.getInstancia().getNombre());
-        this.textIPConfig.setText(Emisor.getInstancia().getIP());
-        this.textPuertoConfig.setText(Emisor.getInstancia().getPuerto());
+    public void abrirSesion() {
+        this.sesionEmisor.setSize(400, 400);
+        this.sesionEmisor.setVisible(true);
+        this.textNombreSesion.setText(Emisor.getInstancia().getNombre());
         this.repaint();
         
     }
     
-    public void cerrarConfig(){
-        this.jDialog1.setVisible(false);
+    public void cerrarSesion(){
+        this.sesionEmisor.setVisible(false);
     }
 
 
@@ -731,10 +575,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
 
     @Override
     public void addActionListener(ActionListener actionListener) {
-        this.botonConfigEmisor.addActionListener(actionListener);
         this.botonEnviarEmisor.addActionListener(actionListener);
-        this.btAceptarConfig.addActionListener(actionListener);
-        this.btCancelarConfig.addActionListener(actionListener);
+        this.btAceptarSesion.addActionListener(actionListener);
         this.btSelecDestinatarios.addActionListener(actionListener);
         this.btConfirmSelect.addActionListener(actionListener);
         this.btCancelSelect.addActionListener(actionListener);
