@@ -15,35 +15,23 @@ import java.util.List;
 import negocio.UsuarioReceptor;
 
 public interface IVentanaEmisor {
+    
     String getAsunto();
-
     String getMensaje();
-
     List<UsuarioReceptor> getPersonas();
-
     int getTipo();
-
     String getNombreConfig();
-
     String getApellidoConfig();
-
     void enviarMensaje();
-
     void actualizarListaDirectorio(Map<String, UsuarioReceptor> personas);
-
+    void confirmarDestinatarios();  
+    void cancelarDestinatarios();
     void addActionListener(ActionListener actionListener);
-
     void abrirConfig();
-
     void confirmarConfiguracion();
-
     void cerrarConfig();
-
     void lanzarCartelError(String err);
-
     String getIPConfig();
-
     String getPuertoConfig();
-
     void addKeyListener(KeyListener kl1, KeyListener kl2);
 }
