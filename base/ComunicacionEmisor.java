@@ -20,7 +20,7 @@ public class ComunicacionEmisor {
 
     private static ComunicacionEmisor _instancia = null;
     private ServerSocket sepe; //sepe=socketEscucharPuertoEmisor
-    private Socket sem; //sem=socketEnviarMensaje
+    private Socket s; //sem=socketEnviarMensaje
 
     private ComunicacionEmisor() {
         super();
@@ -73,20 +73,20 @@ public class ComunicacionEmisor {
 
     public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto,int tipo) {
         try {
-            sem = new Socket(ip, puerto);
-            DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
+            s = new Socket(ip, puerto);
+            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
             dOut.writeUTF(mensaje.toString());
             dOut.flush();
             if(tipo == 2){
-                DataInputStream dIn = new DataInputStream(sem.getInputStream());
+                DataInputStream dIn = new DataInputStream(s.getInputStream());
                 String resultado = dIn.readUTF();
                 Emisor.getInstancia().recibirConfirmacion(resultado);
             }
-            sem.close();
+            s.close();
 
         } catch (IOException e) {
             try {
-                sem.close();
+                s.close();
             } catch (IOException f) {
                 f.printStackTrace();
             }
@@ -121,10 +121,4 @@ public class ComunicacionEmisor {
         }
     }
     
-    //Estas listas se tendrian que poder mostrar de alguna forma en la ventana:
-    //Consultar a los que estan online -> devuelve lista de online
-
-    //Consultar a los que estan offline _> devuelve lista de offline
-
-    //Consultar a todos -> los devuelve a todos (destinatarios registrados)
 }

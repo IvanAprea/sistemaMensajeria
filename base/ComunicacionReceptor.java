@@ -105,5 +105,28 @@ public class ComunicacionReceptor {
         }
     }
     
-    //INICIAR THREAD HEATBEAT -> Cada cierto tiempo manda mensaje a directorio con el metodo de ivan Scheduled...
+    public void notificarDesconexionDirectorio(String ID,InetAddress ip,int puerto) throws Exception {
+        try {
+            s = new Socket(ip,puerto);
+            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
+            dOut.writeUTF("DESCONECTAR");
+            dOut.writeUTF(ID);
+            dOut.flush();
+            s.close();
+            
+        } catch (IOException e) {
+            try {
+                if(s!=null){
+                    s.close();
+                }
+                throw new Exception("ERROR");
+            } catch (IOException f) {
+                f.printStackTrace();
+            }     
+        }
+        catch(Exception e){
+            System.out.println(e);
+            System.out.println(e.getMessage());
+        }
+    }
 }
