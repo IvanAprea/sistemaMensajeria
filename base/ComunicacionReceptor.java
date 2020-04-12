@@ -84,7 +84,7 @@ public class ComunicacionReceptor {
         }
     }
     
-    public void iniciarSesion(StringWriter usuario,InetAddress ip,int puerto){
+    public void iniciarSesion(StringWriter usuario,InetAddress ip,int puerto) throws Exception {
         try {
             sem = new Socket(ip,puerto);
             DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
@@ -95,11 +95,18 @@ public class ComunicacionReceptor {
             
         } catch (IOException e) {
             try {
-                sem.close();
+                if(sem!=null){
+                    sem.close();
+                }
+                throw new Exception("ERROR");
             } catch (IOException f) {
                 f.printStackTrace();
             }
             
+        }
+        catch(Exception e){
+            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
     

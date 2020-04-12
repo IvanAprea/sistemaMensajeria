@@ -128,7 +128,6 @@ public class Receptor extends Persona implements ActionListener{
 	
     public void configAtributos(String nombre) {
         this.setNombre(nombre);
-        ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
     }
 	
     public void iniciarSesion(){
