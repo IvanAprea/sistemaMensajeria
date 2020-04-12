@@ -18,6 +18,8 @@ import java.util.Iterator;
 
 import java.util.List;
 
+import java.util.Map;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -637,7 +639,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
                    !nombre.equals("") &&
                    !apellido.equals("") )
         {
-            Emisor.getInstancia().configAtributos(ip, puerto, nombre, apellido);
+            Emisor.getInstancia().configAtributos(ip, puerto, nombre);
             this.cerrarConfig();
         }
         else 
@@ -690,7 +692,6 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         this.jDialog1.setSize(400, 400);
         this.jDialog1.setVisible(true);
         this.textNombreConfig.setText(Emisor.getInstancia().getNombre());
-        this.textApellidoConfig.setText(Emisor.getInstancia().getApellido());
         this.textIPConfig.setText(Emisor.getInstancia().getIP());
         this.textPuertoConfig.setText(Emisor.getInstancia().getPuerto());
         this.repaint();
@@ -703,7 +704,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
 
 
     @Override
-    public void actualizarListaDirectorio(HashMap<String,UsuarioReceptor> personas) {
+    public void actualizarListaDirectorio(Map<String,UsuarioReceptor> personas) {
         Iterator<UsuarioReceptor> it = personas.values().iterator();
         
         this.modDirectorio.clear();

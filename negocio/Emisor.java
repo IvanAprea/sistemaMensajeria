@@ -103,7 +103,7 @@ public class Emisor extends Persona implements ActionListener{
             while(it.hasNext()){
                 personaAux=it.next();
                 try{
-                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIp()), Integer.parseInt(personaAux.getPuerto()));
+                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
                 } catch (UnknownHostException e) {
                     this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
                 } catch (Exception e){
@@ -141,11 +141,10 @@ public class Emisor extends Persona implements ActionListener{
         notifyAll();
     }
     
-    public void configAtributos(String ip, String puerto, String nombre, String apellido) {
+    public void configAtributos(String ip, String puerto, String nombre) {
         this.setIP(ip);
         this.setPuerto(puerto);
         this.setNombre(nombre);
-        this.setApellido(apellido);
     }
     
     public void lanzarCartelError(String err) {

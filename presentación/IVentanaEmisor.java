@@ -1,5 +1,7 @@
 package presentación;
 
+import java.util.Map;
+
 import negocio.Persona;
 
 import java.awt.event.ActionListener;
@@ -27,7 +29,7 @@ public interface IVentanaEmisor {
 
     void enviarMensaje();
 
-    void actualizarListaDirectorio(HashMap<String, UsuarioReceptor> personas);
+    void actualizarListaDirectorio(Map<String, UsuarioReceptor> personas);
 
     void addActionListener(ActionListener actionListener);
 
