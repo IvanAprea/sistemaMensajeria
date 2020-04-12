@@ -38,19 +38,30 @@ public class Directorio {
 
     //Puede venir un usuario nuevo o no, por lo que se contemplan las dos situaciones
     public void agregarALista(String str){
-            try {
-                javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
-                javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
-                StringReader reader = new StringReader(str);
-                UsuarioReceptor receptor = (UsuarioReceptor)unmarshaller.unmarshal(reader);
-                System.out.println(receptor.getNombre());
-                receptor.setEstado("ONLINE");
-                this.listaDirectorio.getUsuariosRecMap().put(receptor.getID(), receptor);
-            }
-            catch (Exception e){
-                
-            }
+        try {
+            javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
+            javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+            StringReader reader = new StringReader(str);
+            UsuarioReceptor receptor = (UsuarioReceptor)unmarshaller.unmarshal(reader);
+            System.out.println(receptor.getNombre());
+            receptor.setEstado("ONLINE");
+            this.listaDirectorio.getUsuariosRecMap().put(receptor.getID(), receptor);
         }
+        catch (Exception e){
+            
+        }
+    }
+    
+    public void setearUsuarioDesconectado(String ID){
+        try {
+            UsuarioReceptor receptor = this.getListaDirectorio().getUsuariosRecMap().get(ID);
+            receptor.setEstado("OFFLINE");
+            this.listaDirectorio.getUsuariosRecMap().put(ID, receptor);
+        }
+        catch (Exception e){
+            
+        }
+    }
     
     public void darLista(){
         try
@@ -74,6 +85,9 @@ public class Directorio {
         }
         else if(comando.equalsIgnoreCase("GET")){
             this.darLista();
+        }
+        else if(comando.equalsIgnoreCase("DESCONECTAR")){
+            ComunicacionDirectorio.getInstancia().setearUsuarioDesconectado();
         }
     }
     

@@ -145,6 +145,17 @@ public class Receptor extends Persona implements ActionListener{
         
     }
     
+    public void notificarDesconexionDirectorio() {
+        try {
+            ComunicacionReceptor.getInstancia()
+                .notificarDesconexionDirectorio(this.getIP() + ":" + this.getPuerto(),
+                                                InetAddress.getByName(this.getIPDirectorio()),
+                                                Integer.parseInt(this.getPuertoDirectorio()));
+        } catch (Exception e) {
+            this.lanzarCartelError("ERROR al notificar al Directorio la desconexion");
+        }
+    }
+    
     public void cargarDatosDirectorio(){
         BufferedReader br;
         String[] datos;

@@ -80,7 +80,7 @@ public class Emisor extends Persona implements ActionListener{
     public UsuariosRecMap getListaActualReceptores() {
         return listaActualReceptores;
     }
-
+  
     public synchronized void enviarMensaje(List<UsuarioReceptor> listaPersonas){
         String asunto,texto;
         int tipo;

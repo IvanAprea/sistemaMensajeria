@@ -107,4 +107,17 @@ public class ComunicacionDirectorio {
         
         }
     }
+
+    public void setearUsuarioDesconectado() {
+        try {
+            Directorio.getInstancia().setearUsuarioDesconectado(dIn.readUTF());
+        } catch (IOException e) {
+            e.printStackTrace();
+            try {
+                socket.close();
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
+        }
+    }
 }
