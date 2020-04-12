@@ -36,7 +36,7 @@ public class ComunicacionEmisor {
         return _instancia;
     }
 
-    public synchronized void escucharPuerto(String puerto) {
+    /*public synchronized void escucharPuerto(String puerto) {
         new Thread() {
             public void run() {
                 try {
@@ -69,14 +69,19 @@ public class ComunicacionEmisor {
                 }
             }
         }.start();
-    }
+    }*/
 
-    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto) {
+    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto,int tipo) {
         try {
             sem = new Socket(ip, puerto);
             DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
             dOut.writeUTF(mensaje.toString());
             dOut.flush();
+            if(tipo == 2){
+                DataInputStream dIn = new DataInputStream(sem.getInputStream());
+                String resultado = dIn.readUTF();
+                Emisor.getInstancia().recibirConfirmacion(resultado);
+            }
             sem.close();
 
         } catch (IOException e) {
@@ -98,17 +103,21 @@ public class ComunicacionEmisor {
         }
     }
     
-    public void pedirListaADirectorio(Socket socket){
+    public String pedirListaADirectorio(Socket socket){
+        String hm;
         try 
         {
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
             String s = "GET";
             dOut.writeUTF(s);
             dOut.flush();         
+            DataInputStream dIn = new DataInputStream(socket.getInputStream());
+            return dIn.readUTF();
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            return null;
         }
     }
     

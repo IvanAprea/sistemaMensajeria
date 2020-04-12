@@ -723,7 +723,8 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         while(it.hasNext()){
             this.modDirectorio.addElement(it.next());
         }
-        
+        this.selecDestinatarios.setSize(200,400);
+        this.selecDestinatarios.setVisible(true);
         this.repaint();
     }
 

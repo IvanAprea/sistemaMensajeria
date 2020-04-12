@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.StringWriter;
 
 import java.io.UnsupportedEncodingException;
@@ -33,13 +34,14 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
+import presentacion.VentanaEmisor;
+
 public class Emisor extends Persona implements ActionListener{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     
     private IVentanaEmisor vista;
     private String IPDirectorio, puertoDirectorio;
-    private boolean RCocupado=false;
     private static Emisor instancia = null;
     private final String regex=", *";
     private final String nombreConfigDirectorio="config.txt";
@@ -92,9 +94,6 @@ public class Emisor extends Persona implements ActionListener{
         texto=vista.getMensaje();
         tipo=vista.getTipo();
         mensaje = new Mensaje(asunto,texto,this,tipo);
-        if(tipo == 2){
-            ComunicacionEmisor.getInstancia().escucharPuerto(this.getPuerto());
-        }
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
@@ -104,14 +103,11 @@ public class Emisor extends Persona implements ActionListener{
             while(it.hasNext()){
                 personaAux=it.next();
                 try{
-                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()));
+                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()),mensaje.getTipo());
                 } catch (UnknownHostException e) {
                     this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
                 } catch (Exception e){
                     this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" no puede recibir el mensaje");
-                    if(tipo == 2){
-                        ComunicacionEmisor.getInstancia().escucharPuerto(this.getPuerto());
-                    }
                 }
             }
         } catch (Exception e) {
@@ -119,27 +115,8 @@ public class Emisor extends Persona implements ActionListener{
         }
     }
     
-    public synchronized void recibirConfirmacion(String confirmacion){
-        while(RCocupado==true){
-            try{
-                wait();
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        RCocupado=true;
-        /*Persona per = Agenda.getInstance().getPersona(confirmacion);
-        String nombre;
-        if(per==null){
-            nombre = confirmacion;
-        }
-        else{
-            nombre = per.toString();
-        }
-        this.vista.lanzarCartelError(nombre + " ha recibido correctamente el mensaje.");*/
-        RCocupado=false;
-        notifyAll();
+    public synchronized void recibirConfirmacion(String receptor){
+        this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje.");
     }
     
     public void configAtributos(String ip, String puerto, String nombre) {
@@ -152,7 +129,7 @@ public class Emisor extends Persona implements ActionListener{
         this.vista.lanzarCartelError(err);
     }
     
-    public void setVista(IVentanaEmisor vista) {
+    public void setVista(VentanaEmisor vista) {
         this.vista = vista;
         KeyListener kl1 = new KeyListener(){
         
@@ -182,7 +159,6 @@ public class Emisor extends Persona implements ActionListener{
         };
         this.vista.addKeyListener(kl1,kl2);
         this.vista.addActionListener(this);
-        //vista.actualizarListaAgenda(Agenda.getInstance().getPersonas());
     }
 
     public IVentanaEmisor getVista() {
@@ -199,6 +175,7 @@ public class Emisor extends Persona implements ActionListener{
                 datos=linea.split(regex);
                 this.IPDirectorio=datos[0];
                 this.puertoDirectorio=datos[1];
+                linea = br.readLine();
             }
             br.close();
         } catch (UnsupportedEncodingException e) {
@@ -211,9 +188,7 @@ public class Emisor extends Persona implements ActionListener{
     }
     
     public void abrirConexionDirectorio() throws UnknownHostException {
-            this.setSocketDirectorio(ComunicacionEmisor.getInstancia()
-                                     .abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),
-                                                              Integer.valueOf(puertoDirectorio)));
+            this.setSocketDirectorio(ComunicacionEmisor.getInstancia().abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),Integer.valueOf(puertoDirectorio)));
 
     }
     
@@ -221,14 +196,23 @@ public class Emisor extends Persona implements ActionListener{
         try 
         {
             this.abrirConexionDirectorio();
-            ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());  
+            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
             this.getSocketDirectorio().close();
+            if(hm!=null){
+                javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
+                javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+                StringReader reader = new StringReader(hm);
+                this.listaActualReceptores = (UsuariosRecMap)unmarshaller.unmarshal(reader);
+            }
         } 
         catch (UnknownHostException e) {
             this.lanzarCartelError("ERROR al conectar con el directorio");
         } 
         catch (IOException e) {
             this.lanzarCartelError("ERROR al cerrar la conexion con el directorio");
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
     

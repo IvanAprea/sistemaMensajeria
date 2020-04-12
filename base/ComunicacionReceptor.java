@@ -19,7 +19,7 @@ import negocio.UsuarioReceptor;
 public class ComunicacionReceptor {
 
     private static ComunicacionReceptor _instancia = null;
-    private Socket sem; //sem=socketEnviarMensaje
+    private Socket s; //sem=socketEnviarMensaje
     
     private ComunicacionReceptor() {
         super();
@@ -41,13 +41,13 @@ public class ComunicacionReceptor {
         Thread tr = new Thread() {
             public void run() {
                 try {
-                    ServerSocket s = new ServerSocket(Integer.parseInt(puerto));
+                    ServerSocket sv = new ServerSocket(Integer.parseInt(puerto));
                     while (true) 
                     {
-                        Socket soc = s.accept();
-                        PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-                        DataInputStream dIn = new DataInputStream(soc.getInputStream());
+                        s = sv.accept();
+                        DataInputStream dIn = new DataInputStream(s.getInputStream());
                         Receptor.getInstancia().recibirMensaje(dIn.readUTF());
+                        s.close();
                     }
                 }
                 catch (BindException e)
@@ -70,15 +70,10 @@ public class ComunicacionReceptor {
         tr.start();
     }
     
-    public synchronized void informarMensajeRecibido(InetAddress ipPropia,String puertoPropio, InetAddress ipAInformar, String puertoAInformar){
+    public synchronized void informarMensajeRecibido(String msj){
         try {
-            Socket socket = new Socket(ipAInformar,Integer.parseInt(puertoAInformar));
-            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
-            String s = ipPropia.toString()+":"+puertoPropio;
-            dOut.writeUTF(s);
-            dOut.flush();
-            socket.close();
-            
+            DataOutputStream out = new DataOutputStream(s.getOutputStream());
+            out.writeUTF(msj);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,17 +81,17 @@ public class ComunicacionReceptor {
     
     public void iniciarSesion(StringWriter usuario,InetAddress ip,int puerto) throws Exception {
         try {
-            sem = new Socket(ip,puerto);
-            DataOutputStream dOut = new DataOutputStream(sem.getOutputStream());
+            s = new Socket(ip,puerto);
+            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
             dOut.writeUTF("AGREGAR");
             dOut.writeUTF(usuario.toString());
             dOut.flush();
-            sem.close();
+            s.close();
             
         } catch (IOException e) {
             try {
-                if(sem!=null){
-                    sem.close();
+                if(s!=null){
+                    s.close();
                 }
                 throw new Exception("ERROR");
             } catch (IOException f) {

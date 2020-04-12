@@ -31,5 +31,10 @@ public class UsuarioReceptor extends Persona{
     public String getEstado() {
         return estado;
     }
-    
+
+    @Override
+    public String toString() {
+        return super.toString()+"   "+this.getEstado();
+    }
+
 }
