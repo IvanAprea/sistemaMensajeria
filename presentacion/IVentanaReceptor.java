@@ -25,4 +25,5 @@ public interface IVentanaReceptor
 	Clip getClip();
 	void setClip(Clip clip);
         JDialog getJDiagSesionRecep();
+        void mostrarVentana();
 }

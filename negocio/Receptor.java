@@ -132,6 +132,7 @@ public class Receptor extends Persona implements ActionListener{
     }
 	
     public void iniciarSesion(){
+        
         UsuarioReceptor usuario = new UsuarioReceptor(this.getIP()+":"+this.getPuerto(), this.getNombre(), this.getIP(), this.getPuerto());
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
@@ -141,6 +142,7 @@ public class Receptor extends Persona implements ActionListener{
             marshaller.marshal(usuario, sw);
             try{
                 ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
+                this.ventanaReceptor.mostrarVentana();
                 //ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto()); COMENTARIO PARA QUE ANDE, SACAR!!!!!!!
             } catch (Exception e){
                 this.lanzarCartelError("No se pudo iniciar la sesión");

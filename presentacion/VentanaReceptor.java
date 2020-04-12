@@ -324,12 +324,15 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
                     Receptor.getInstancia().configAtributos(nombre);
                     this.jDiagSesionRecep.setVisible(false);
                     Receptor.getInstancia().iniciarSesion();
-                    this.setVisible(true);
-                    this.repaint();
                 }
                 else {
                         this.lanzarCartelError("ERROR: debe completar todos los campos");
                 }
+    }
+    
+    public void mostrarVentana(){
+        this.setVisible(true);
+        this.repaint();
     }
     
     public void lanzarAlerta(String emisor) {
