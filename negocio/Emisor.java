@@ -4,7 +4,7 @@ import base.ComunicacionEmisor;
 
 import java.util.Map;
 
-import presentación.IVentanaEmisor;
+import presentacion.IVentanaEmisor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

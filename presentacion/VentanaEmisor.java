@@ -1,5 +1,5 @@
 
-package presentación;
+package presentacion;
 
 import negocio.Emisor;
 import negocio.Persona;

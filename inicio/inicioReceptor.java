@@ -1,6 +1,6 @@
 package inicio;
 
-import presentación.VentanaReceptor;
+import presentacion.VentanaReceptor;
 import negocio.Receptor;
 import negocio.Mensaje;
 import negocio.Persona;

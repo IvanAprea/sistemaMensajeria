@@ -1,5 +1,5 @@
 
-package presentación;
+package presentacion;
 
 import java.awt.event.ActionListener;
 

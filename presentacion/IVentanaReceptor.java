@@ -1,4 +1,4 @@
-package presentación;
+package presentacion;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
