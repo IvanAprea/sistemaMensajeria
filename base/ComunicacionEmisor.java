@@ -1,5 +1,7 @@
 package base;
 
+import exceptions.excepcionEnviarMensaje;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -71,7 +73,7 @@ public class ComunicacionEmisor {
         }.start();
     }*/
 
-    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto,int tipo) {
+    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto,int tipo) throws excepcionEnviarMensaje {
         try {
             s = new Socket(ip, puerto);
             DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
@@ -86,7 +88,9 @@ public class ComunicacionEmisor {
 
         } catch (IOException e) {
             try {
-                s.close();
+                if(s!=null)
+                    s.close();
+                throw new excepcionEnviarMensaje();
             } catch (IOException f) {
                 f.printStackTrace();
             }

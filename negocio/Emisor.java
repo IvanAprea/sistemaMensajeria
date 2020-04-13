@@ -2,6 +2,8 @@ package negocio;
 
 import base.ComunicacionEmisor;
 
+import exceptions.excepcionEnviarMensaje;
+
 import java.util.Map;
 
 import presentacion.IVentanaEmisor;
@@ -104,7 +106,9 @@ public class Emisor extends Persona implements ActionListener{
                 personaAux=it.next();
                 try{
                     ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()),mensaje.getTipo());
-                } catch (UnknownHostException e) {
+                } catch(excepcionEnviarMensaje e){
+                    this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
+                }catch (UnknownHostException e) {
                     this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
                 } catch (Exception e){
                     this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" no puede recibir el mensaje");
