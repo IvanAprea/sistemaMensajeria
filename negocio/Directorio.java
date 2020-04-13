@@ -48,7 +48,7 @@ public class Directorio {
             this.listaDirectorio.getUsuariosRecMap().put(receptor.getID(), receptor);
         }
         catch (Exception e){
-            
+            e.printStackTrace();
         }
     }
     
@@ -59,7 +59,7 @@ public class Directorio {
             this.listaDirectorio.getUsuariosRecMap().put(ID, receptor);
         }
         catch (Exception e){
-            
+            e.printStackTrace();
         }
     }
     
@@ -75,7 +75,7 @@ public class Directorio {
         }
         catch(Exception e)
         {
-            
+            e.printStackTrace();
         } 
     }
     
@@ -88,6 +88,8 @@ public class Directorio {
         }
         else if(comando.equalsIgnoreCase("DESCONECTAR")){
             ComunicacionDirectorio.getInstancia().setearUsuarioDesconectado();
+        }
+        else if(comando.equalsIgnoreCase("ALIVE")){
         }
     }
     

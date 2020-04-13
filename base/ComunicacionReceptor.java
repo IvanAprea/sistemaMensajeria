@@ -13,6 +13,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import java.net.UnknownHostException;
+
 import negocio.Receptor;
 import negocio.UsuarioReceptor;
 
@@ -66,6 +68,36 @@ public class ComunicacionReceptor {
                 }
             }
             
+        };
+        tr.start();
+    }
+    
+    public synchronized void heartbeat(InetAddress ipDirectorio,int puertoDirectorio,String id){
+        Thread tr = new Thread(){
+            DataOutputStream dOut;
+            public void run(){
+                try {
+                    while(true){
+                        Thread.sleep(5000);
+                        s = new Socket(ipDirectorio,puertoDirectorio);
+                        dOut = new DataOutputStream(s.getOutputStream());
+                        dOut.writeUTF("ALIVE");
+                        dOut.writeUTF(id);
+                        dOut.flush();
+                        s.close();
+                    }
+                } catch (InterruptedException e) {
+                    if(s!=null)
+                        try {
+                            s.close();
+                        } catch (IOException f) {
+                            f.printStackTrace();
+                        }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         };
         tr.start();
     }
