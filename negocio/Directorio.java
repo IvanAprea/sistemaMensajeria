@@ -22,6 +22,8 @@ public class Directorio {
     
     private static Directorio _instancia = null;
     private UsuariosRecMap listaDirectorio;
+    private boolean listaDirOcupado=false;
+    private boolean usrOnlineOcupado=false;
     private ArrayList<String> usuariosOnlineActuales;
     
     private Directorio() {
@@ -52,13 +54,18 @@ public class Directorio {
     //INICIAR
     public synchronized void comprobacionUsuariosOnline(){
         Thread tr = new Thread(){
-            public void run(){
+            public synchronized void  run(){
                 try {
                     HashMap<String, UsuarioReceptor> listaNueva;
                     String IDAux;
                     UsuarioReceptor usrACambiar;
                     while(true){
                         Thread.sleep(7500);
+                        while(Directorio.getInstancia().isListaDirOcupado()==true && Directorio.getInstancia().isUsrOnlineOcupado()==true){
+                            wait();
+                        }
+                        Directorio.getInstancia().setListaDirOcupado(true);
+                        Directorio.getInstancia().setUsrOnlineOcupado(true);
                         listaNueva = (HashMap<String, UsuarioReceptor>) Directorio.getInstancia().getListaDirectorio().getUsuariosRecMap();
                         Iterator it = listaNueva.entrySet().iterator();
                         ArrayList<String> usrsOnline = Directorio.getInstancia().getUsuariosOnlineActuales();
@@ -70,8 +77,13 @@ public class Directorio {
                                 Directorio.getInstancia().setearUsuarioDesconectado(IDAux);
                             }
                         }
+                        Directorio.getInstancia().limpiarUsuariosOnline();
+                        Directorio.getInstancia().setListaDirOcupado(false);
+                        Directorio.getInstancia().setUsrOnlineOcupado(false);
+                        notifyAll();
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     //Lanzar error
                 }
             }
@@ -79,25 +91,40 @@ public class Directorio {
         tr.start();
     }
     
+    public void limpiarUsuariosOnline(){
+        this.usuariosOnlineActuales.clear();
+    }
+    
     //Puede venir un usuario nuevo o no, por lo que se contemplan las dos situaciones
-    public void agregarALista(String str){
+    public synchronized void agregarALista(String str){
+        while(this.listaDirOcupado==true && this.usrOnlineOcupado==true){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.listaDirOcupado=true;
+        this.usrOnlineOcupado=true;
         try {
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
             StringReader reader = new StringReader(str);
             UsuarioReceptor receptor = (UsuarioReceptor)unmarshaller.unmarshal(reader);
-            System.out.println(receptor.getNombre());
             receptor.setEstado("ONLINE");
             this.listaDirectorio.getUsuariosRecMap().put(receptor.getID(), receptor);
             //Lo pongo en la lista de usuarios activos
             this.getUsuariosOnlineActuales().add(receptor.getID());
+            this.listaDirOcupado=false;
+            this.usrOnlineOcupado=false;
+            notifyAll();
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
     
-    public void setearUsuarioDesconectado(String ID){
+    public synchronized void setearUsuarioDesconectado(String ID){
         try {
             UsuarioReceptor receptor = this.getListaDirectorio().getUsuariosRecMap().get(ID);
             receptor.setEstado("OFFLINE");
@@ -108,15 +135,21 @@ public class Directorio {
         }
     }
     
-    public void darLista(){
+    public synchronized void darLista(){
         try
         {
+            while(this.listaDirOcupado==true){
+                wait();
+            }
+            this.listaDirOcupado=true;
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
             marshaller.marshal(this.getListaDirectorio(), sw);
-            ComunicacionDirectorio.getInstancia().darLista(sw);      
+            ComunicacionDirectorio.getInstancia().darLista(sw);     
+            this.listaDirOcupado=true;
+            notifyAll();
         }
         catch(Exception e)
         {
@@ -124,13 +157,23 @@ public class Directorio {
         } 
     }
     
-    public void recibirAlive(String id) {
+    public synchronized void recibirAlive(String id) {
+        while(this.usrOnlineOcupado==true){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.usrOnlineOcupado=true;
         if(!this.getUsuariosOnlineActuales().contains(id)){
             this.getUsuariosOnlineActuales().add(id);
         }
+        this.usrOnlineOcupado=false;
+        notifyAll();
     }
     
-    public void ejecutarComando(String comando) {
+    public synchronized void ejecutarComando(String comando) {
         if(comando.equalsIgnoreCase("AGREGAR")){
             ComunicacionDirectorio.getInstancia().nuevoUsuario();
         }
@@ -138,7 +181,17 @@ public class Directorio {
             this.darLista();
         }
         else if(comando.equalsIgnoreCase("DESCONECTAR")){
+            while(this.listaDirOcupado==true){
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            this.listaDirOcupado=true;
             ComunicacionDirectorio.getInstancia().setearUsuarioDesconectado();
+            this.listaDirOcupado=false;
+            notifyAll();
         }
         else if(comando.equalsIgnoreCase("ALIVE")){
             ComunicacionDirectorio.getInstancia().recibirAlive();
@@ -146,4 +199,19 @@ public class Directorio {
     }
 
 
+    public void setListaDirOcupado(boolean listaDirOcupado) {
+        this.listaDirOcupado = listaDirOcupado;
+    }
+
+    public boolean isListaDirOcupado() {
+        return listaDirOcupado;
+    }
+
+    public void setUsrOnlineOcupado(boolean usrOnlineOcupado) {
+        this.usrOnlineOcupado = usrOnlineOcupado;
+    }
+
+    public boolean isUsrOnlineOcupado() {
+        return usrOnlineOcupado;
+    }
 }

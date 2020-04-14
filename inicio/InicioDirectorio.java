@@ -14,5 +14,6 @@ public class InicioDirectorio {
 
     public static void main(String[] args) {
         ComunicacionDirectorio.getInstancia().escucharPuerto("70");
+        Directorio.getInstancia().comprobacionUsuariosOnline();
     }
 }
