@@ -20,4 +20,5 @@ public class UsuariosRecMap {
     public void setUsuariosRecMap(Map<String, UsuarioReceptor> usuariosRecMap) {
         this.usuariosRecMap = usuariosRecMap;
     }
+    
 }

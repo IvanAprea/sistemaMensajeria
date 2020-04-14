@@ -120,4 +120,17 @@ public class ComunicacionDirectorio {
             }
         }
     }
+    
+    public void recibirAlive(){
+        try {
+            Directorio.getInstancia().recibirAlive(dIn.readUTF());
+        } catch (IOException e) {
+            e.printStackTrace();
+            try {
+                socket.close();
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
+        }
+    }
 }
