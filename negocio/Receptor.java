@@ -4,6 +4,10 @@ import base.ComunicacionDirectorio;
 import base.ComunicacionEmisor;
 import base.ComunicacionReceptor;
 
+import interfaces.ICargaDirectorio;
+import interfaces.IRecibirMensaje;
+import interfaces.IUsuario;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -29,7 +33,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
-public class Receptor extends Persona implements ActionListener{
+public class Receptor extends Persona implements ActionListener,IUsuario,ICargaDirectorio,IRecibirMensaje{
 	
         private String IPDirectorio, puertoDirectorio;
 	private static Receptor _instancia = null;

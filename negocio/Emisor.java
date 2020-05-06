@@ -4,6 +4,9 @@ import base.ComunicacionEmisor;
 
 import exceptions.excepcionEnviarMensaje;
 
+import interfaces.ICargaDirectorio;
+import interfaces.IEnviarMensaje;
+
 import java.util.Map;
 
 import presentacion.IVentanaEmisor;
@@ -38,7 +41,7 @@ import javax.swing.JOptionPane;
 
 import presentacion.VentanaEmisor;
 
-public class Emisor extends Persona implements ActionListener{
+public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICargaDirectorio{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     

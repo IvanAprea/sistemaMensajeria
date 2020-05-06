@@ -17,7 +17,7 @@ public class inicioReceptor {
         Receptor.getInstancia().setVentanaReceptor(ventana);
         Receptor.getInstancia().cargarDatosDirectorio();
         ventana.pack();
-        ventana.inicioSesion();
+        ventana.iniciarSesion();
     }
 
 }

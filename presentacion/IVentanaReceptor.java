@@ -19,7 +19,7 @@ public interface IVentanaReceptor
 	void lanzarAlerta(String emisor);
 	void pararAlerta();
 	void confirmarSesion();
-	void inicioSesion();
+	void iniciarSesion();
 	void lanzarCartelError(String err);
 	void addActionListener(ActionListener actionListener);
 	Clip getClip();

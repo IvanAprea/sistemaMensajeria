@@ -1,6 +1,8 @@
 
 package presentacion;
 
+import interfaces.IEnviarMensaje;
+
 import negocio.Emisor;
 import negocio.Persona;
 

@@ -2,6 +2,8 @@ package negocio;
 
 import base.ComunicacionDirectorio;
 
+import interfaces.IGestionUsuarios;
+
 import java.awt.event.ActionEvent;
 
 import java.io.DataOutputStream;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Directorio {
+public class Directorio implements IGestionUsuarios{
     
     private static Directorio _instancia = null;
     private UsuariosRecMap listaDirectorio;
@@ -96,7 +98,7 @@ public class Directorio {
     }
     
     //Puede venir un usuario nuevo o no, por lo que se contemplan las dos situaciones
-    public synchronized void agregarALista(String str){
+    public synchronized void nuevoUsuario(String str){
         while(this.listaDirOcupado==true && this.usrOnlineOcupado==true){
             try {
                 wait();

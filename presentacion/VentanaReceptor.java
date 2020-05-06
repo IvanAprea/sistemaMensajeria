@@ -321,7 +321,7 @@ public class VentanaReceptor extends javax.swing.JFrame implements IVentanaRecep
         }
     }
     
-    public void inicioSesion() {
+    public void iniciarSesion() {
         this.jDiagSesionRecep.setSize(400, 400);
         this.jDiagSesionRecep.setVisible(true);
         this.nombreReceptor.setText(Receptor.getInstancia().getNombre());

@@ -1,5 +1,9 @@
 package base;
 
+import interfaces.IEscucharPuerto;
+
+import interfaces.IRegistro;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,7 +24,7 @@ import negocio.Directorio;
 import negocio.Emisor;
 import negocio.UsuarioReceptor;
 
-public class ComunicacionDirectorio {
+public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
 
     private static ComunicacionDirectorio _instancia = null;
     private ServerSocket sepd; //sepe=socketEscucharPuertoDirectorio
@@ -46,7 +50,7 @@ public class ComunicacionDirectorio {
     
     public synchronized void nuevoUsuario(){
         try {
-            Directorio.getInstancia().agregarALista(dIn.readUTF());
+            Directorio.getInstancia().nuevoUsuario(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
             try {
