@@ -1,5 +1,7 @@
 package inicio;
 
+import base.ComunicacionEmisor;
+
 import presentacion.VentanaEmisor;
 
 import negocio.NegocioEmisor;
@@ -13,9 +15,10 @@ public class InicioEmisor {
 
     public static void main(String[] args) {
         VentanaEmisor vista = new VentanaEmisor();
-        NegocioEmisor.getInstancia().cargarDatosDirectorio();
+        NegocioEmisor.getInstancia().cargarDatosConfig();
         NegocioEmisor.getInstancia().setearIp();
         NegocioEmisor.getInstancia().setVista(vista);
+        NegocioEmisor.getInstancia().escucharPuerto();
         vista.abrirSesion();
     }
 }

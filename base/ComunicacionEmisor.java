@@ -18,9 +18,11 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import negocio.NegocioEmisor;
+import negocio.NegocioReceptor;
 
 public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
 
@@ -47,12 +49,19 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
         try {
             s = new Socket(ip, puerto);
             DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
+            dOut.writeUTF("MSJ_NUEVOMSJ");
             dOut.writeUTF(mensaje.toString());
             dOut.flush();
             if(tipo == 2){
                 DataInputStream dIn = new DataInputStream(s.getInputStream());
                 String resultado = dIn.readUTF();
-                NegocioEmisor.getInstancia().recibirConfirmacion(resultado);
+                if(resultado.equalsIgnoreCase("DISCCONECTED"))
+                {
+                    s.close();
+                    throw new excepcionEnviarMensaje();
+                }
+                else
+                    NegocioEmisor.getInstancia().recibirConfirmacion(resultado);
             }
             s.close();
 
@@ -60,12 +69,44 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             try {
                 if(s!=null)
                     s.close();
-                throw new excepcionEnviarMensaje();
             } catch (IOException f) {
                 f.printStackTrace();
             }
 
         }
+    }
+    
+    public synchronized void escucharPuerto(String puerto) {
+        Thread tr = new Thread() {
+            public void run() {
+                try {
+                    ServerSocket sepe = new ServerSocket(Integer.parseInt(puerto));
+                    while (true) 
+                    {
+                        s = sepe.accept();
+                        DataInputStream dIn = new DataInputStream(s.getInputStream());
+                        NegocioEmisor.getInstancia().lanzarCartelError(dIn.readUTF());
+                        s.close();
+                    }
+                }
+                catch (BindException e)
+                {
+                    //Msj de error
+                    e.printStackTrace();
+                }
+                catch (SocketTimeoutException  e)
+                {
+                    //Msj de error
+                    e.printStackTrace();
+                }
+                catch (Exception e) 
+                {
+                    e.printStackTrace();
+                }
+            }
+            
+        };
+        tr.start();
     }
 
     public Socket abrirConexionDirectorio(InetAddress ip, int puerto) {

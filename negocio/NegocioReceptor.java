@@ -93,10 +93,10 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
         }
         RMocupado=true;
     	try {
-    	    javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
+    	    javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
     	    javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
     	    StringReader reader = new StringReader(str);
-    	    Mensaje mensaje = (Mensaje) unmarshaller.unmarshal(reader);
+    	    Mensaje mensaje = (MensajeEmisor) unmarshaller.unmarshal(reader);
             this.ventanaReceptor.actualizaListaMensajes(mensaje);
             
             if(mensaje.getTipo() == 1) {

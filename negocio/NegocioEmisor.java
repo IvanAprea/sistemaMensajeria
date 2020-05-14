@@ -44,7 +44,7 @@ import presentacion.VentanaEmisor;
 public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensaje,ICargaConfig{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
-    
+    private final String puerto="79";
     private IVentanaEmisor vista;
     private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
     private static NegocioEmisor instancia = null;
@@ -90,7 +90,7 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         String asunto,texto;
         int tipo;
         List<UsuarioReceptor> personas;
-        Mensaje mensaje;
+        MensajeEmisor mensaje;
         UsuarioReceptor personaAux;
         
         personas = listaPersonas;
@@ -98,19 +98,20 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
         tipo=vista.getTipo();
-        mensaje = new Mensaje(asunto,texto,this,tipo);
+        mensaje = new MensajeEmisor(asunto,texto,this,tipo,null);
         try{
-            javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(Mensaje.class);
-            javax.xml.bind.Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            StringWriter sw = new StringWriter();
-            marshaller.marshal(mensaje, sw);
             while(it.hasNext()){
                 personaAux=it.next();
+                mensaje.setReceptor(personaAux);
+                javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
+                javax.xml.bind.Marshaller marshaller = context.createMarshaller();
+                marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                StringWriter sw = new StringWriter();
+                marshaller.marshal(mensaje, sw);
                 try{
-                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(personaAux.getIP()), Integer.parseInt(personaAux.getPuerto()),mensaje.getTipo());
+                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(this.IPMensajeria), Integer.parseInt(this.puertoMensajeria),mensaje.getTipo());
                 } catch(excepcionEnviarMensaje e){
-                    this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
+                    this.confirmacionPendiente(personaAux.getNombre());
                 }catch (UnknownHostException e) {
                     this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
                 } catch (Exception e){
@@ -126,12 +127,21 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje.");
     }
     
+    public synchronized void confirmacionPendiente(String receptor){
+        this.vista.lanzarCartelError(receptor + " no esta conectado, se avisara cuando reciba el mensaje.");
+    }
+    
     public void configAtributos(String nombre) {
         this.setNombre(nombre);
     }
     
     public void lanzarCartelError(String err) {
         this.vista.lanzarCartelError(err);
+    }
+    
+    public void escucharPuerto()
+    {
+        ComunicacionEmisor.getInstancia().escucharPuerto(this.puerto);
     }
     
     public void setVista(VentanaEmisor vista) {

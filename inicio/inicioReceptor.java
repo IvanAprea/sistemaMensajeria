@@ -15,7 +15,7 @@ public class inicioReceptor {
         VentanaReceptor ventana = new VentanaReceptor();
         NegocioReceptor.getInstancia().setearIp();
         NegocioReceptor.getInstancia().setVentanaReceptor(ventana);
-        NegocioReceptor.getInstancia().cargarDatosDirectorio();
+        NegocioReceptor.getInstancia().cargarDatosConfig();
         ventana.pack();
         ventana.iniciarSesion();
     }
