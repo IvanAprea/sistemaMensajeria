@@ -53,7 +53,6 @@ public class NegocioDirectorio implements IGestionUsuarios{
         return listaDirectorio;
     }
     
-    //INICIAR
     public synchronized void comprobacionUsuariosOnline(){
         Thread tr = new Thread(){
             public synchronized void  run(){
