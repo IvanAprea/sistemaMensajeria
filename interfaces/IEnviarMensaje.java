@@ -7,5 +7,5 @@ import negocio.UsuarioReceptor;
 public interface IEnviarMensaje {
     void enviarMensaje(List<UsuarioReceptor> listaPersonas);
     void recibirConfirmacion(String receptor);
-    void obtenerListaReceptores();
+    void obtenerListaReceptores() throws Exception;
 }

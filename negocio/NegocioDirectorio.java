@@ -20,15 +20,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Directorio implements IGestionUsuarios{
+public class NegocioDirectorio implements IGestionUsuarios{
     
-    private static Directorio _instancia = null;
+    private static NegocioDirectorio _instancia = null;
     private UsuariosRecMap listaDirectorio;
     private boolean listaDirOcupado=false;
     private boolean usrOnlineOcupado=false;
     private ArrayList<String> usuariosOnlineActuales;
     
-    private Directorio() {
+    private NegocioDirectorio() {
         super();
         listaDirectorio = new UsuariosRecMap();
         usuariosOnlineActuales = new ArrayList<String>();
@@ -38,10 +38,10 @@ public class Directorio implements IGestionUsuarios{
      * Thread-protected Singleton
      * @return
      */
-    public synchronized static Directorio getInstancia()
+    public synchronized static NegocioDirectorio getInstancia()
     {
         if(_instancia == null)
-            _instancia = new Directorio();
+            _instancia = new NegocioDirectorio();
         return _instancia;
     }
 
@@ -63,25 +63,26 @@ public class Directorio implements IGestionUsuarios{
                     UsuarioReceptor usrACambiar;
                     while(true){
                         Thread.sleep(7500);
-                        while(Directorio.getInstancia().isListaDirOcupado()==true && Directorio.getInstancia().isUsrOnlineOcupado()==true){
+                        while(NegocioDirectorio.getInstancia().isListaDirOcupado()==true &&
+                               NegocioDirectorio.getInstancia().isUsrOnlineOcupado()==true){
                             wait();
                         }
-                        Directorio.getInstancia().setListaDirOcupado(true);
-                        Directorio.getInstancia().setUsrOnlineOcupado(true);
-                        listaNueva = (HashMap<String, UsuarioReceptor>) Directorio.getInstancia().getListaDirectorio().getUsuariosRecMap();
+                        NegocioDirectorio.getInstancia().setListaDirOcupado(true);
+                        NegocioDirectorio.getInstancia().setUsrOnlineOcupado(true);
+                        listaNueva = (HashMap<String, UsuarioReceptor>) NegocioDirectorio.getInstancia().getListaDirectorio().getUsuariosRecMap();
                         Iterator it = listaNueva.entrySet().iterator();
-                        ArrayList<String> usrsOnline = Directorio.getInstancia().getUsuariosOnlineActuales();
+                        ArrayList<String> usrsOnline = NegocioDirectorio.getInstancia().getUsuariosOnlineActuales();
                         while(it.hasNext()){
                             Map.Entry me = (Map.Entry) it.next();
                             IDAux = (String) me.getKey();
                             usrACambiar = listaNueva.get(IDAux);
                             if(usrACambiar.getEstado().equalsIgnoreCase("ONLINE") && (!usrsOnline.contains(IDAux))){
-                                Directorio.getInstancia().setearUsuarioDesconectado(IDAux);
+                                NegocioDirectorio.getInstancia().setearUsuarioDesconectado(IDAux);
                             }
                         }
-                        Directorio.getInstancia().limpiarUsuariosOnline();
-                        Directorio.getInstancia().setListaDirOcupado(false);
-                        Directorio.getInstancia().setUsrOnlineOcupado(false);
+                        NegocioDirectorio.getInstancia().limpiarUsuariosOnline();
+                        NegocioDirectorio.getInstancia().setListaDirOcupado(false);
+                        NegocioDirectorio.getInstancia().setUsrOnlineOcupado(false);
                         notifyAll();
                     }
                 } catch (Exception e) {

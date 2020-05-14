@@ -20,8 +20,8 @@ import java.net.UnknownHostException;
 
 import java.util.HashMap;
 
-import negocio.Directorio;
-import negocio.Emisor;
+import negocio.NegocioDirectorio;
+import negocio.NegocioEmisor;
 import negocio.UsuarioReceptor;
 
 public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
@@ -50,7 +50,7 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
     
     public synchronized void nuevoUsuario(){
         try {
-            Directorio.getInstancia().nuevoUsuario(dIn.readUTF());
+            NegocioDirectorio.getInstancia().nuevoUsuario(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
             try {
@@ -79,12 +79,12 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
                         socket = sepd.accept();
                         out = new PrintWriter(socket.getOutputStream(), true);
                         dIn = new DataInputStream(socket.getInputStream());
-                        Directorio.getInstancia().ejecutarComando(dIn.readUTF());
+                        NegocioDirectorio.getInstancia().ejecutarComando(dIn.readUTF());
                         socket.close();
                     }
                     //ver donde cerrar el socket
                 } catch (BindException e) {
-                    Emisor.getInstancia().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
+                    NegocioEmisor.getInstancia().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                  } catch (SocketException e) {
@@ -114,7 +114,7 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
 
     public void setearUsuarioDesconectado() {
         try {
-            Directorio.getInstancia().setearUsuarioDesconectado(dIn.readUTF());
+            NegocioDirectorio.getInstancia().setearUsuarioDesconectado(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
             try {
@@ -127,7 +127,7 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
     
     public void recibirAlive(){
         try {
-            Directorio.getInstancia().recibirAlive(dIn.readUTF());
+            NegocioDirectorio.getInstancia().recibirAlive(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
             try {

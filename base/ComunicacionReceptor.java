@@ -19,7 +19,7 @@ import java.net.SocketTimeoutException;
 
 import java.net.UnknownHostException;
 
-import negocio.Receptor;
+import negocio.NegocioReceptor;
 import negocio.UsuarioReceptor;
 
 public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPuerto{
@@ -52,7 +52,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
                     {
                         s = sv.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
-                        Receptor.getInstancia().recibirMensaje(dIn.readUTF());
+                        NegocioReceptor.getInstancia().recibirMensaje(dIn.readUTF());
                         s.close();
                     }
                 }

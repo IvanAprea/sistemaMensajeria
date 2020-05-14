@@ -4,7 +4,7 @@ import base.ComunicacionEmisor;
 
 import exceptions.excepcionEnviarMensaje;
 
-import interfaces.ICargaDirectorio;
+import interfaces.ICargaConfig;
 import interfaces.IEnviarMensaje;
 
 import java.util.Map;
@@ -41,13 +41,13 @@ import javax.swing.JOptionPane;
 
 import presentacion.VentanaEmisor;
 
-public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICargaDirectorio{
+public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensaje,ICargaConfig{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     
     private IVentanaEmisor vista;
-    private String IPDirectorio, puertoDirectorio;
-    private static Emisor instancia = null;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private static NegocioEmisor instancia = null;
     private final String regex=", *";
     private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
@@ -55,7 +55,7 @@ public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICa
     private Socket socketDirectorio;
     private UsuariosRecMap listaActualReceptores;
     
-    private Emisor() {
+    private NegocioEmisor() {
         super();
     }
     
@@ -63,9 +63,9 @@ public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICa
      * Thread-protected Singleton
      * @return
      */
-    public synchronized static Emisor getInstancia(){
+    public synchronized static NegocioEmisor getInstancia(){
         if(instancia==null){
-            instancia = new Emisor();
+            instancia = new NegocioEmisor();
         }
         return instancia;
     }
@@ -140,7 +140,7 @@ public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICa
         
             public void keyTyped(KeyEvent e){
                 if (vista.getAsunto().length()== cantCarAsunto){
-                    Emisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
+                    NegocioEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
                     e.consume();
                 }
             }
@@ -153,7 +153,7 @@ public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICa
         
             public void keyTyped(KeyEvent e){
                 if (vista.getAsunto().length()== cantCarMensaje){
-                    Emisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
+                    NegocioEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
                     e.consume();
                 }
             }
@@ -170,7 +170,7 @@ public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICa
         return vista;
     }
     
-    public void cargarDatosDirectorio(){
+    public void cargarDatosConfig(){
         BufferedReader br;
         String[] datos;
         try {
@@ -180,6 +180,8 @@ public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICa
                 datos=linea.split(regex);
                 this.IPDirectorio=datos[0];
                 this.puertoDirectorio=datos[1];
+                this.IPMensajeria=datos[2];
+                this.puertoMensajeria=datos[3];
                 linea = br.readLine();
             }
             br.close();
@@ -197,53 +199,57 @@ public class Emisor extends Persona implements ActionListener,IEnviarMensaje,ICa
 
     }
     
-    public void obtenerListaReceptores(){
-        try 
-        {
-            this.abrirConexionDirectorio();
-            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
-            this.getSocketDirectorio().close();
-            if(hm!=null){
-                javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
-                javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
-                StringReader reader = new StringReader(hm);
-                this.listaActualReceptores = (UsuariosRecMap)unmarshaller.unmarshal(reader);
+    public void obtenerListaReceptores() throws Exception {
+            try 
+            {
+                this.abrirConexionDirectorio();
+                String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
+                this.getSocketDirectorio().close();
+                if(hm!=null){
+                    javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
+                    javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+                    StringReader reader = new StringReader(hm);
+                    this.listaActualReceptores = (UsuariosRecMap)unmarshaller.unmarshal(reader);
+                }
+            } 
+            catch (UnknownHostException e) {
+                throw new Exception("ERROR al conectar con el directorio");
+            } 
+            catch (IOException e) {
+                throw new Exception("ERROR al cerrar la conexion con el directorio");
             }
-        } 
-        catch (UnknownHostException e) {
-            this.lanzarCartelError("ERROR al conectar con el directorio");
-        } 
-        catch (IOException e) {
-            this.lanzarCartelError("ERROR al cerrar la conexion con el directorio");
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }
     
     
     @Override
-    public void actionPerformed(ActionEvent arg) {
-        String comando = arg.getActionCommand();
-        if(comando.equalsIgnoreCase("ENVIAR MENSAJE")){
-            this.vista.enviarMensaje();
-        }else
-        if(comando.equalsIgnoreCase("ACEPTAR SESION")){
-            this.vista.confirmarSesion();
+        public void actionPerformed(ActionEvent arg) {
+            String comando = arg.getActionCommand();
+            if(comando.equalsIgnoreCase("ENVIAR MENSAJE")){
+                this.vista.enviarMensaje();
+            }else
+            if(comando.equalsIgnoreCase("ACEPTAR SESION")){
+                this.vista.confirmarSesion();
+            }
+            else if(comando.equalsIgnoreCase("SELECCIONAR DESTINATARIOS")){
+                try {
+                    this.obtenerListaReceptores();
+                    this.vista.actualizarListaDirectorio(this.getListaActualReceptores().getUsuariosRecMap());
+                } catch (Exception e) {
+                    this.lanzarCartelError(e.getMessage());
+                }
+            }
+            else if(comando.equalsIgnoreCase("CONFIRMAR DESTINATARIOS")){
+                this.vista.confirmarDestinatarios();
+            }
+            else if(comando.equalsIgnoreCase("CANCELAR DESTINATARIOS")){
+                this.vista.cancelarDestinatarios();
+            }
         }
-        else if(comando.equalsIgnoreCase("SELECCIONAR DESTINATARIOS")){
-            this.obtenerListaReceptores();
-            this.vista.actualizarListaDirectorio(this.getListaActualReceptores().getUsuariosRecMap());
-        }
-        else if(comando.equalsIgnoreCase("CONFIRMAR DESTINATARIOS")){
-            this.vista.confirmarDestinatarios();
-        }
-        else if(comando.equalsIgnoreCase("CANCELAR DESTINATARIOS")){
-            this.vista.cancelarDestinatarios();
-        }        
-    }
 
-    public static void setInstancia(Emisor instancia) {
-        Emisor.instancia = instancia;
+    public static void setInstancia(NegocioEmisor instancia) {
+        NegocioEmisor.instancia = instancia;
     }
 }

@@ -20,7 +20,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import negocio.Emisor;
+import negocio.NegocioEmisor;
 
 public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
 
@@ -52,7 +52,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             if(tipo == 2){
                 DataInputStream dIn = new DataInputStream(s.getInputStream());
                 String resultado = dIn.readUTF();
-                Emisor.getInstancia().recibirConfirmacion(resultado);
+                NegocioEmisor.getInstancia().recibirConfirmacion(resultado);
             }
             s.close();
 
@@ -72,7 +72,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
         try {
             return new Socket(ip, puerto);
         } catch (IOException e) {
-            Emisor.getInstancia().lanzarCartelError("ERROR al conectar con el directorio");
+            NegocioEmisor.getInstancia().lanzarCartelError("ERROR al conectar con el directorio");
             return null;
         }
     }

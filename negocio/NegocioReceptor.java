@@ -4,7 +4,7 @@ import base.ComunicacionDirectorio;
 import base.ComunicacionEmisor;
 import base.ComunicacionReceptor;
 
-import interfaces.ICargaDirectorio;
+import interfaces.ICargaConfig;
 import interfaces.IRecibirMensaje;
 import interfaces.IUsuario;
 
@@ -33,10 +33,10 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
-public class Receptor extends Persona implements ActionListener,IUsuario,ICargaDirectorio,IRecibirMensaje{
+public class NegocioReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
         private String IPDirectorio, puertoDirectorio;
-	private static Receptor _instancia = null;
+	private static NegocioReceptor _instancia = null;
 	private IVentanaReceptor ventanaReceptor;
         private boolean RMocupado=false;
         private final String regex=", *";
@@ -44,7 +44,7 @@ public class Receptor extends Persona implements ActionListener,IUsuario,ICargaD
         private final String decoder="UTF8";
         private final int cantDatos=2;
 	
-    private Receptor() {
+    private NegocioReceptor() {
     	super();
     }
 
@@ -61,10 +61,10 @@ public class Receptor extends Persona implements ActionListener,IUsuario,ICargaD
      * Thread-protected Singleton
      * @return
      */
-    public synchronized static Receptor getInstancia()
+    public synchronized static NegocioReceptor getInstancia()
     {
         if(_instancia == null)
-            _instancia = new Receptor();
+            _instancia = new NegocioReceptor();
         return _instancia;
     }
     
@@ -161,7 +161,7 @@ public class Receptor extends Persona implements ActionListener,IUsuario,ICargaD
         }
     }
     
-    public void cargarDatosDirectorio(){
+    public void cargarDatosConfig(){
         BufferedReader br;
         String[] datos;
 
