@@ -33,6 +33,8 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
+import java.net.Socket;
+
 public class NegocioReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
         private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
@@ -113,6 +115,12 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
         notifyAll();
     }
     
+    
+    public void pedirMensajesPendientes()
+    {
+        ComunicacionReceptor.getInstancia().pedirMensajesPendientes(this.getIPMensajeria(),this.getPuertoMensajeria());
+    }
+    
     public void lanzarCartelError(String err) {
     	this.ventanaReceptor.lanzarCartelError(err);
     }
@@ -138,6 +146,7 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
             try{
                 ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
                 this.ventanaReceptor.mostrarVentana();
+                this.pedirMensajesPendientes();
                 ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
                 ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getIP()+":"+this.getPuerto());
             } catch (Exception e){
@@ -185,7 +194,18 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
             e.printStackTrace();
         }
     }
-        
+
+
+    public String getIPMensajeria()
+    {
+        return IPMensajeria;
+    }
+
+    public String getPuertoMensajeria()
+    {
+        return puertoMensajeria;
+    }
+
     @Override
     public void actionPerformed(ActionEvent arg) {
         String comando = arg.getActionCommand();
