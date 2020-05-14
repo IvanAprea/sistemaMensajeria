@@ -35,7 +35,7 @@ import java.io.UnsupportedEncodingException;
 
 public class NegocioReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
-        private String IPDirectorio, puertoDirectorio;
+        private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
 	private static NegocioReceptor _instancia = null;
 	private IVentanaReceptor ventanaReceptor;
         private boolean RMocupado=false;
@@ -172,6 +172,8 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
                 datos=linea.split(regex);
                 this.IPDirectorio=datos[0];
                 this.puertoDirectorio=datos[1];
+                this.IPMensajeria=datos[2];
+                this.puertoMensajeria=datos[3];
                 linea = br.readLine();
             }
             br.close();
