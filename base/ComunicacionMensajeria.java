@@ -72,24 +72,12 @@ public class ComunicacionMensajeria {
         }.start();
     }
     
-    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto,int tipo) throws excepcionEnviarMensaje {
-        try {
+    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto) throws excepcionEnviarMensaje, IOException {
             socket = new Socket(ip, puerto);
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
             dOut.writeUTF(mensaje.toString());
             dOut.flush();
             socket.close();
-
-        } catch (IOException e) {
-            try {
-                if(socket!=null)
-                    socket.close();
-                throw new excepcionEnviarMensaje();
-            } catch (IOException f) {
-                f.printStackTrace();
-            }
-
-        }
     }
     
     public String recibirMsj() throws Exception{
