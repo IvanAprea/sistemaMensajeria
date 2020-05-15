@@ -115,20 +115,20 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         }
     }
     
-    public void pedirMensajesPendientes(String IPMensajeria, String PuertoMensajeria, String id)
+    public synchronized void pedirMensajesPendientes(String IPMensajeria, String PuertoMensajeria, String id)
     {
         try
         {
-            Socket socketMensajeria = new Socket(InetAddress.getByName(IPMensajeria), Integer.parseInt(PuertoMensajeria));
-            DataOutputStream dOut = new DataOutputStream(socketMensajeria.getOutputStream());
+            s = new Socket(InetAddress.getByName(IPMensajeria), Integer.parseInt(PuertoMensajeria));
+            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
             dOut.writeUTF("MSJ_PEDIDOMSJREC");
             dOut.writeUTF(id);
-            DataInputStream dIn = new DataInputStream(socketMensajeria.getInputStream());
+            DataInputStream dIn = new DataInputStream(s.getInputStream());
             while(dIn.readUTF().equalsIgnoreCase("TRUE"))
             {
                 NegocioReceptor.getInstancia().recibirMensaje(dIn.readUTF());
             }
-            socketMensajeria.close();
+            s.close();
         } catch (IOException e)
         {
             e.printStackTrace();

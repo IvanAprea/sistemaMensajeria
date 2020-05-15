@@ -76,6 +76,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
         }
     }
     
+    
     public synchronized void escucharPuerto(String puerto) {
         Thread tr = new Thread() {
             public void run() {
@@ -135,5 +136,23 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             return null;
         }
     }
-    
+
+    public void pedirAvisosPendientes(String IPMensajeria, String puertoMensajeria, String idEmisor) {
+        try
+        {
+            s = new Socket(InetAddress.getByName(IPMensajeria), Integer.parseInt(puertoMensajeria));
+            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
+            dOut.writeUTF("MSJ_PEDIDOAVISOSEM");
+            dOut.writeUTF(idEmisor);
+            DataInputStream dIn = new DataInputStream(s.getInputStream());
+            while(dIn.readUTF().equalsIgnoreCase("TRUE"))
+            {
+                NegocioEmisor.getInstancia().recibirConfirmacion(dIn.readUTF());
+            }
+            s.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }
