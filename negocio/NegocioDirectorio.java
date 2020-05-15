@@ -62,7 +62,7 @@ public class NegocioDirectorio implements IGestionUsuarios{
                     UsuarioReceptor usrACambiar;
                     while(true){
                         Thread.sleep(7500);
-                        while(NegocioDirectorio.getInstancia().isListaDirOcupado()==true && //no seria or?
+                        while(NegocioDirectorio.getInstancia().isListaDirOcupado()==true || //no seria or?
                                NegocioDirectorio.getInstancia().isUsrOnlineOcupado()==true){
                             wait();
                         }
@@ -150,7 +150,7 @@ public class NegocioDirectorio implements IGestionUsuarios{
             StringWriter sw = new StringWriter();
             marshaller.marshal(this.getListaDirectorio(), sw);
             ComunicacionDirectorio.getInstancia().darLista(sw);     
-            this.listaDirOcupado=true;
+            this.listaDirOcupado=false;
             notifyAll();
         }
         catch(Exception e)

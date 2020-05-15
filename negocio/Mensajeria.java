@@ -48,7 +48,6 @@ public class Mensajeria {
                         sw.getBuffer().setLength(0);
                         it.remove();
                     }
-                    //el otro ciclo para tpo 2
                 }
                 sw.write("FALSE");
                 ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
