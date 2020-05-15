@@ -10,6 +10,8 @@ public class InicioMensajeria {
     }
     
     public static void main(String[] args) {
+        Mensajeria.getInstancia().recuperarDatos();
         ComunicacionMensajeria.getInstancia().escucharPuerto("71");
+        Mensajeria.getInstancia().backUp();
     }
 }

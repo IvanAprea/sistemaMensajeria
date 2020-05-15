@@ -3,6 +3,10 @@ package negocio;
 import base.ComunicacionDirectorio;
 import base.ComunicacionMensajeria;
 
+import base.PersistenciaMensajeria;
+
+import interfaces.IBackUp;
+
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -15,11 +19,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Mensajeria {
+public class Mensajeria implements IBackUp{
     
+    private static final String fileNoEnviados="noEnviados.bin",fileNoEnviadosCAviso="noEnviadosCAviso.bin";
     private static Mensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
     private HashMap<String, ArrayList<String>> mensajesNoEnviadosCAviso;
+    private boolean mensajesNoEnviadosOcup=false,mensajesNoEnviadosCAvisoOcup=false;
     
     private Mensajeria() {
         super();
@@ -124,5 +130,64 @@ public class Mensajeria {
             return null;
         }
     }
-                            
+
+    public boolean isMensajesNoEnviadosOcup()
+    {
+        return mensajesNoEnviadosOcup;
+    }
+
+    public boolean isMensajesNoEnviadosCAvisoOcup()
+    {
+        return mensajesNoEnviadosCAvisoOcup;
+    }
+
+    public void setMensajesNoEnviadosOcup(boolean mensajesNoEnviadosOcup)
+    {
+        this.mensajesNoEnviadosOcup = mensajesNoEnviadosOcup;
+    }
+
+    public void setMensajesNoEnviadosCAvisoOcup(boolean mensajesNoEnviadosCAvisoOcup)
+    {
+        this.mensajesNoEnviadosCAvisoOcup = mensajesNoEnviadosCAvisoOcup;
+    }
+    
+
+    public synchronized void backUp()
+    {
+        Thread tr = new Thread()
+        {
+            public synchronized void run()
+            {
+                try{
+                    while(true)
+                    {
+                        Thread.sleep(15000);
+                        while(Mensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup()== true ||
+                        Mensajeria.getInstancia().isMensajesNoEnviadosOcup())
+                        {
+                            wait();
+                        }
+                        Mensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
+                        Mensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
+                        PersistenciaMensajeria.getInstancia().backUp(Mensajeria.getInstancia().getMensajesNoEnviados(),Mensajeria.fileNoEnviados);
+                        PersistenciaMensajeria.getInstancia().backUp(Mensajeria.getInstancia().getMensajesNoEnviadosCAviso(),Mensajeria.fileNoEnviadosCAviso);
+                        Mensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
+                        Mensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
+                        notifyAll();
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        };
+        tr.start();
+    }
+    
+    public void recuperarDatos()
+    {
+        this.mensajesNoEnviados = (HashMap<String, ArrayList<String>>) PersistenciaMensajeria.getInstancia().recuperarDatos(this.fileNoEnviados);
+        this.mensajesNoEnviadosCAviso = (HashMap<String, ArrayList<String>>) PersistenciaMensajeria.getInstancia().recuperarDatos(this.fileNoEnviadosCAviso);
+    }
 }
