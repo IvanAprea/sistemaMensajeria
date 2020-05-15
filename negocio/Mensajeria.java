@@ -32,7 +32,6 @@ public class Mensajeria {
     }
     
     public synchronized void enviarPendientes(String id){
-        String[] tokens = id.split(":");
         StringWriter sw = new StringWriter();
         try{
             if(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
