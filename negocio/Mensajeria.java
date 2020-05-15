@@ -19,10 +19,12 @@ public class Mensajeria {
     
     private static Mensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
+    private HashMap<String, ArrayList<String>> mensajesNoEnviadosCAviso;
     
     private Mensajeria() {
         super();
         this.mensajesNoEnviados = new HashMap<String, ArrayList<String>>();
+        this.mensajesNoEnviadosCAviso = new HashMap<String, ArrayList<String>>();
     }
     
     public synchronized static  Mensajeria getInstancia(){
@@ -32,25 +34,30 @@ public class Mensajeria {
     }
     
     public synchronized void enviarPendientes(String id){
-        StringWriter sw = new StringWriter();
-        try{
-            if(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
-                Iterator it = Mensajeria.getInstancia().getMensajesNoEnviados().get(id).iterator();
-                while(it.hasNext()){
-                    String msj = (String) it.next();
-                    sw.write("TRUE");
-                    ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
-                    sw.write(msj);
-                    ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+            StringWriter sw = new StringWriter();
+            try{
+                if(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
+                    Iterator it = Mensajeria.getInstancia().getMensajesNoEnviados().get(id).iterator();
+                    while(it.hasNext()){
+                        String msj = (String) it.next();
+                        sw.write("TRUE");
+                        ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+                        sw.getBuffer().setLength(0);
+                        sw.write(msj);
+                        ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+                        sw.getBuffer().setLength(0);
+                        it.remove();
+                    }
+                    //el otro ciclo para tpo 2
                 }
+                sw.write("FALSE");
+                ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+                sw.getBuffer().setLength(0);
             }
-            sw.write("FALSE");
-            ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+            catch(Exception e){
+                e.printStackTrace();
+            }
         }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 
     public synchronized void ejecutarComando(String comando) {
         if(comando.equalsIgnoreCase("MSJ_NUEVOMSJ")){
@@ -63,6 +70,10 @@ public class Mensajeria {
 
     public HashMap<String, ArrayList<String>> getMensajesNoEnviados() {
         return mensajesNoEnviados;
+    }
+    
+    public HashMap<String, ArrayList<String>> getMensajesNoEnviadosCAviso() {
+        return mensajesNoEnviadosCAviso;
     }
     
     public String obtenerIDReceptor(){
@@ -86,10 +97,12 @@ public class Mensajeria {
             StringWriter sw = new StringWriter();
             sw.write(msj);
             ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(mensajeEm.getReceptor().getIP()), Integer.parseInt(mensajeEm.getReceptor().getPuerto()));
+            //avisar al emisor que se recibio
         } catch (IOException e) {
             String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
             ArrayList<String> arr;
-            if(this.getMensajesNoEnviados().containsKey(id)){ //ya existe arrayList
+            int tipo = mensajeEm.getTipo();
+            if(this.getMensajesNoEnviados().containsKey(id) && tipo!=2){ //ya existe arrayList
                 arr = this.getMensajesNoEnviados().get(id);
                 arr.add(msj);
             }
@@ -98,10 +111,17 @@ public class Mensajeria {
                 arr.add(msj);
                 this.getMensajesNoEnviados().put(id, arr);
             }
+            if(this.getMensajesNoEnviadosCAviso().containsKey(id) && tipo==2){
+                arr = this.getMensajesNoEnviadosCAviso().get(id);
+                arr.add(msj);
+            }
+            else{
+                arr = new ArrayList<String>();
+                arr.add(msj);
+                this.getMensajesNoEnviadosCAviso().put(id, arr);
+            }
         } catch (Exception e) {
-            //ver como tratar error
             e.printStackTrace();
         }
     }
-
 }
