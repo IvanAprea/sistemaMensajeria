@@ -62,7 +62,7 @@ public class NegocioDirectorio implements IGestionUsuarios{
                     UsuarioReceptor usrACambiar;
                     while(true){
                         Thread.sleep(7500);
-                        while(NegocioDirectorio.getInstancia().isListaDirOcupado()==true &&
+                        while(NegocioDirectorio.getInstancia().isListaDirOcupado()==true && //no seria or?
                                NegocioDirectorio.getInstancia().isUsrOnlineOcupado()==true){
                             wait();
                         }

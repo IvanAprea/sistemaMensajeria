@@ -121,7 +121,8 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         {
             Socket socketMensajeria = new Socket(InetAddress.getByName(IPMensajeria), Integer.parseInt(PuertoMensajeria));
             DataOutputStream dOut = new DataOutputStream(socketMensajeria.getOutputStream());
-            dOut.writeUTF("REC_PEDIDOMSJ");
+            dOut.writeUTF("MSJ_PEDIDOMSJREC");
+            //MANDAR ID TAMBIEN
             DataInputStream dIn = new DataInputStream(socketMensajeria.getInputStream());
             while(dIn.readUTF().equalsIgnoreCase("TRUE"))
             {
