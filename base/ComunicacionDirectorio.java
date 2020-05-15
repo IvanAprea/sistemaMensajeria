@@ -79,7 +79,7 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
                         socket = sepd.accept();
                         out = new PrintWriter(socket.getOutputStream(), true);
                         dIn = new DataInputStream(socket.getInputStream());
-                        NegocioDirectorio.getInstancia().ejecutarComando(dIn.readUTF());
+                            NegocioDirectorio.getInstancia().ejecutarComando(dIn.readUTF());
                         socket.close();
                     }
                     //ver donde cerrar el socket

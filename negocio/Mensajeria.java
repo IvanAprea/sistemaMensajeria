@@ -40,12 +40,16 @@ public class Mensajeria {
                     String msj = (String) it.next();
                     sw.write("TRUE");
                     ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+                    sw.getBuffer().setLength(0);
                     sw.write(msj);
                     ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+                    sw.getBuffer().setLength(0);
+                    it.remove();
                 }
             }
             sw.write("FALSE");
             ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+            sw.getBuffer().setLength(0);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -103,5 +107,6 @@ public class Mensajeria {
             e.printStackTrace();
         }
     }
+    
 
 }
