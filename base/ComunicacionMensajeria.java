@@ -90,5 +90,10 @@ public class ComunicacionMensajeria {
     public String recibirMsj() throws Exception{
             return dIn.readUTF();
     }
-    
+
+    public void notificarEmisorLlegadaMsj(String nombreRec) throws IOException {
+        DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+        dOut.writeUTF(nombreRec);
+        dOut.flush();
+    }
 }

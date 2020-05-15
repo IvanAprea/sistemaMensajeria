@@ -85,7 +85,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
                     {
                         s = sepe.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
-                        NegocioEmisor.getInstancia().lanzarCartelError(dIn.readUTF());
+                        NegocioEmisor.getInstancia().recibirConfirmacion(dIn.readUTF());
                         s.close();
                     }
                 }
