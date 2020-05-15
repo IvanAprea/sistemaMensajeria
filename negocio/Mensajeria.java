@@ -42,10 +42,11 @@ public class Mensajeria {
                     sw.write("TRUE");
                     ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
                     sw.write(msj);
+                    ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
                 }
             }
             sw.write("FALSE");
-            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(tokens[0]), Integer.parseInt(tokens[1]));
+            ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
         }
         catch(Exception e){
             e.printStackTrace();
