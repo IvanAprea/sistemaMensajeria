@@ -115,13 +115,14 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         }
     }
     
-    public void pedirMensajesPendientes(String IPMensajeria, String PuertoMensajeria)
+    public void pedirMensajesPendientes(String IPMensajeria, String PuertoMensajeria, String id)
     {
         try
         {
             Socket socketMensajeria = new Socket(InetAddress.getByName(IPMensajeria), Integer.parseInt(PuertoMensajeria));
             DataOutputStream dOut = new DataOutputStream(socketMensajeria.getOutputStream());
             dOut.writeUTF("MSJ_PEDIDOMSJREC");
+            dOut.writeUTF(id);
             DataInputStream dIn = new DataInputStream(socketMensajeria.getInputStream());
             while(dIn.readUTF().equalsIgnoreCase("TRUE"))
             {

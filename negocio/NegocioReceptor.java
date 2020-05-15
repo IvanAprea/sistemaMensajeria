@@ -118,7 +118,7 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
     
     public void pedirMensajesPendientes()
     {
-        ComunicacionReceptor.getInstancia().pedirMensajesPendientes(this.getIPMensajeria(),this.getPuertoMensajeria());
+        ComunicacionReceptor.getInstancia().pedirMensajesPendientes(this.getIPMensajeria(),this.getPuertoMensajeria(),this.getIP()+":"+this.getPuerto());
     }
     
     public void lanzarCartelError(String err) {
