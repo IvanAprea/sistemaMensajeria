@@ -2,6 +2,8 @@ package negocio;
 
 import base.ComunicacionEmisor;
 
+import base.ComunicacionReceptor;
+
 import exceptions.excepcionEnviarMensaje;
 
 import interfaces.ICargaConfig;
@@ -210,29 +212,32 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
     }
     
     public void obtenerListaReceptores() throws Exception {
-            try 
-            {
-                this.abrirConexionDirectorio();
-                String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
-                this.getSocketDirectorio().close();
-                if(hm!=null){
-                    javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
-                    javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
-                    StringReader reader = new StringReader(hm);
-                    this.listaActualReceptores = (UsuariosRecMap)unmarshaller.unmarshal(reader);
-                }
-            } 
-            catch (UnknownHostException e) {
-                throw new Exception("ERROR al conectar con el directorio");
-            } 
-            catch (IOException e) {
-                throw new Exception("ERROR al cerrar la conexion con el directorio");
+        try 
+        {
+            this.abrirConexionDirectorio();
+            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
+            this.getSocketDirectorio().close();
+            if(hm!=null){
+                javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
+                javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+                StringReader reader = new StringReader(hm);
+                this.listaActualReceptores = (UsuariosRecMap)unmarshaller.unmarshal(reader);
             }
-            catch(Exception e){
-                e.printStackTrace();
-            }
+        } 
+        catch (UnknownHostException e) {
+            throw new Exception("ERROR al conectar con el directorio");
+        } 
+        catch (IOException e) {
+            throw new Exception("ERROR al cerrar la conexion con el directorio");
         }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     
+    public void pedirAvisosPendientes() {
+        ComunicacionEmisor.getInstancia().pedirAvisosPendientes(this.IPMensajeria,this.puertoMensajeria, this.getIP()+":"+this.getPuerto());
+    }
     
     @Override
         public void actionPerformed(ActionEvent arg) {
@@ -262,4 +267,6 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
     public static void setInstancia(NegocioEmisor instancia) {
         NegocioEmisor.instancia = instancia;
     }
+
+
 }
