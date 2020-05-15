@@ -19,15 +19,10 @@ public class Mensajeria {
     
     private static Mensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
-    private ArrayList<String> pendientesDeEnvio;
-    private boolean mensajesNoEnviadosOcupado=false;
-    private boolean pendientesDeEnvioOcupado=false;
-    //donde ponerlos true? (ademas del thread)
     
     private Mensajeria() {
         super();
         this.mensajesNoEnviados = new HashMap<String, ArrayList<String>>();
-        this.pendientesDeEnvio = new ArrayList<String>();
     }
     
     public synchronized static  Mensajeria getInstancia(){
@@ -36,63 +31,25 @@ public class Mensajeria {
         return _instancia;
     }
     
-    public synchronized void mensajeriaDeamon(){
-        Thread tr = new Thread(){
-            public synchronized void  run(){
-                try { 
-                    while(true){
-                        Thread.sleep(1500);
-                        while(Mensajeria.getInstancia().isMensajesNoEnviadosOcupado() == true ||
-                              Mensajeria.getInstancia().isPendientesDeEnvioOcupado() == true){
-                            wait();
-                        }
-                        Mensajeria.getInstancia().setMensajesNoEnviadosOcupado(true);
-                        Mensajeria.getInstancia().setPendientesDeEnvioOcupado(true);
-                        Iterator it = Mensajeria.getInstancia().getPendientesDeEnvio().iterator();
-                        while(it.hasNext()){
-                            String id = (String) it.next();
-                            String[] tokens = id.split(":");
-                            StringWriter sw = new StringWriter();
-                            if(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
-                                Iterator it2 = Mensajeria.getInstancia().getMensajesNoEnviados().get(id).iterator();
-                                while(it2.hasNext()){
-                                    String msj = (String) it.next();
-                                    sw.write("TRUE");
-                                    ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(tokens[0]), Integer.parseInt(tokens[1]));
-                                    sw.write(msj);
-                                    ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(tokens[0]), Integer.parseInt(tokens[1]));
-                                }
-                            }
-                            sw.write("FALSE");
-                            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(tokens[0]), Integer.parseInt(tokens[1]));
-                        }
-                        Mensajeria.getInstancia().setMensajesNoEnviadosOcupado(false);
-                        Mensajeria.getInstancia().setPendientesDeEnvioOcupado(false);
-                        notifyAll();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    //Lanzar error
+    public synchronized void enviarPendientes(String id){
+        String[] tokens = id.split(":");
+        StringWriter sw = new StringWriter();
+        try{
+            if(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
+                Iterator it = Mensajeria.getInstancia().getMensajesNoEnviados().get(id).iterator();
+                while(it.hasNext()){
+                    String msj = (String) it.next();
+                    sw.write("TRUE");
+                    ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+                    sw.write(msj);
                 }
             }
-        };
-        tr.start();
-    }
-
-    public void setMensajesNoEnviadosOcupado(boolean mensajesNoEnviadosOcupado) {
-        this.mensajesNoEnviadosOcupado = mensajesNoEnviadosOcupado;
-    }
-
-    public boolean isMensajesNoEnviadosOcupado() {
-        return mensajesNoEnviadosOcupado;
-    }
-
-    public void setPendientesDeEnvioOcupado(boolean pendientesDeEnvioOcupado) {
-        this.pendientesDeEnvioOcupado = pendientesDeEnvioOcupado;
-    }
-
-    public boolean isPendientesDeEnvioOcupado() {
-        return pendientesDeEnvioOcupado;
+            sw.write("FALSE");
+            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(tokens[0]), Integer.parseInt(tokens[1]));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public synchronized void ejecutarComando(String comando) {
@@ -100,7 +57,7 @@ public class Mensajeria {
             this.intentarEnviarMensaje();
         }
         else if(comando.equalsIgnoreCase("MSJ_PEDIDOMSJREC")){
-            this.agregarAPendientes();
+            this.enviarPendientes(obtenerIDReceptor());
         }
     }
 
@@ -108,6 +65,15 @@ public class Mensajeria {
         return mensajesNoEnviados;
     }
     
+    public String obtenerIDReceptor(){
+        try {
+            return ComunicacionMensajeria.getInstancia().recibirMsj();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+                              
     private void intentarEnviarMensaje() {
         MensajeEmisor mensajeEm = null;
         String msj = null;
@@ -138,17 +104,4 @@ public class Mensajeria {
         }
     }
 
-    public ArrayList<String> getPendientesDeEnvio() {
-        return pendientesDeEnvio;
-    }
-
-    private void agregarAPendientes() {
-        try {
-            String id = ComunicacionMensajeria.getInstancia().recibirMsj();
-            this.getPendientesDeEnvio().add(id);
-        } catch (Exception e) {
-            //VER como tratar error
-        }
-
-    }
 }

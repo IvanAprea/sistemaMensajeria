@@ -80,6 +80,13 @@ public class ComunicacionMensajeria {
             socket.close();
     }
     
+    public void enviarPendientes(StringWriter mensaje) throws IOException {
+        DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+        dOut.writeUTF(mensaje.toString());
+        dOut.flush();
+    }
+    
+    
     public String recibirMsj() throws Exception{
             return dIn.readUTF();
     }
