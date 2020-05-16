@@ -145,9 +145,11 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             dOut.writeUTF("MSJ_PEDIDOAVISOSEM");
             dOut.writeUTF(idEmisor);
             DataInputStream dIn = new DataInputStream(s.getInputStream());
-            while(dIn.readUTF().equalsIgnoreCase("TRUE"))
+            String res = dIn.readUTF();
+            while(res.equalsIgnoreCase("TRUE"))
             {
                 NegocioEmisor.getInstancia().recibirConfirmacion(dIn.readUTF());
+                res = dIn.readUTF();
             }
             s.close();
         } catch (IOException e)

@@ -510,6 +510,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
             NegocioEmisor.getInstancia().configAtributos(nombre);
             this.cerrarSesion();
             this.setVisible(true);
+            NegocioEmisor.getInstancia().pedirAvisosPendientes();
         }
         else 
         {

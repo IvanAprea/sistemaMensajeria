@@ -18,7 +18,6 @@ public class InicioEmisor {
         NegocioEmisor.getInstancia().cargarDatosConfig();
         NegocioEmisor.getInstancia().setearIp();
         NegocioEmisor.getInstancia().setVista(vista);
-        NegocioEmisor.getInstancia().pedirAvisosPendientes();
         NegocioEmisor.getInstancia().escucharPuerto();
         vista.abrirSesion();
     }

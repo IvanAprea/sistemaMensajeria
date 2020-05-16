@@ -28,7 +28,7 @@ public class ComunicacionMensajeria {
     
     private static ComunicacionMensajeria _instancia = null;
     private ServerSocket sepd;
-    private Socket socket;
+    private Socket socket,socketEmisor;
     private DataInputStream dIn;
     private DataOutputStream dOut;
     private PrintWriter out;
@@ -72,7 +72,7 @@ public class ComunicacionMensajeria {
         }.start();
     }
     
-    public synchronized void enviarMensaje(StringWriter mensaje, InetAddress iprec, int puertorec, int tipo, InetAddress ipem, int puertoem) throws excepcionEnviarMensaje, IOException {
+    public synchronized void enviarMensaje(StringWriter mensaje, InetAddress iprec, int puertorec, int tipo, InetAddress ipem, int puertoem) throws /*excepcionEnviarMensaje,*/ IOException {
             socket = new Socket(iprec, puertorec);
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
             dIn = new DataInputStream(socket.getInputStream());
@@ -111,5 +111,12 @@ public class ComunicacionMensajeria {
         dOut.writeUTF(nombreRec);
         dOut.flush();
     }
-
+    
+    public synchronized void enviarConfirmacion(InetAddress ipem, int puertoem,String nReceptor) throws IOException
+    {
+            this.socketEmisor = new Socket(ipem, puertoem);
+            DataOutputStream dOut = new DataOutputStream(this.socketEmisor.getOutputStream());
+            dOut.writeUTF(nReceptor);
+            this.socketEmisor.close();
+    }
 }
