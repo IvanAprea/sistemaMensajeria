@@ -13,6 +13,7 @@ public class inicioReceptor {
     
     public static void main(String[] args) {
         VentanaReceptor ventana = new VentanaReceptor();
+        NegocioReceptor.getInstancia().setearPuerto("81");
         NegocioReceptor.getInstancia().setearIp();
         NegocioReceptor.getInstancia().setVentanaReceptor(ventana);
         NegocioReceptor.getInstancia().cargarDatosConfig();

@@ -46,7 +46,6 @@ import presentacion.VentanaEmisor;
 public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensaje,ICargaConfig{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
-    private final String puerto="79";
     private IVentanaEmisor vista;
     private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
     private static NegocioEmisor instancia = null;
@@ -143,7 +142,7 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
     
     public void escucharPuerto()
     {
-        ComunicacionEmisor.getInstancia().escucharPuerto(this.puerto);
+        ComunicacionEmisor.getInstancia().escucharPuerto(super.getPuerto());
     }
     
     public void setVista(VentanaEmisor vista) {

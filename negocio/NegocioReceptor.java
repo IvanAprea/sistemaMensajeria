@@ -218,4 +218,9 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
         else  if (comando.equalsIgnoreCase("ACEPTAR SESION"))
             this.ventanaReceptor.confirmarSesion();
     }
+    
+    public void setearPuerto(String p)
+    {
+        super.setPuerto(p);
+    }
 }

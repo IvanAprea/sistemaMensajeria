@@ -52,7 +52,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             dOut.writeUTF("MSJ_NUEVOMSJ");
             dOut.writeUTF(mensaje.toString());
             dOut.flush();
-            if(tipo == 2){
+            /*if(tipo == 2){
                 DataInputStream dIn = new DataInputStream(s.getInputStream());
                 String resultado = dIn.readUTF();
                 if(resultado.equalsIgnoreCase("DISCCONECTED"))
@@ -62,7 +62,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
                 }
                 else
                     NegocioEmisor.getInstancia().recibirConfirmacion(resultado);
-            }
+            }*/
             s.close();
 
         } catch (IOException e) {
