@@ -35,6 +35,8 @@ import java.io.UnsupportedEncodingException;
 
 import java.net.Socket;
 
+import java.time.format.DateTimeFormatter;
+
 public class NegocioReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
         private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
@@ -106,7 +108,8 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
             	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
             }
             else if(mensaje.getTipo() == 2) {
-                    ComunicacionReceptor.getInstancia().informarMensajeRecibido(this.getNombre());
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+                ComunicacionReceptor.getInstancia().informarMensajeRecibido(this.getNombre()+"/"+dtf.format(mensaje.getFecha()));
             }
             }catch (Exception e){
                 e.printStackTrace();

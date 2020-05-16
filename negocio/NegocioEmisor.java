@@ -100,6 +100,7 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         texto=vista.getMensaje();
         tipo=vista.getTipo();
         mensaje = new MensajeEmisor(asunto,texto,this,tipo,null);
+        mensaje.setearFecha();
         try{
             while(it.hasNext()){
                 personaAux=it.next();
@@ -124,8 +125,8 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         }
     }
     
-    public synchronized void recibirConfirmacion(String receptor){
-        this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje.");
+    public synchronized void recibirConfirmacion(String receptor, String fecha){
+        this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje enviado el "+fecha+".");
     }
     
     public synchronized void confirmacionPendiente(String receptor){

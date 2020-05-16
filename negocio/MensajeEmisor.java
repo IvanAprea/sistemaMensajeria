@@ -27,4 +27,5 @@ public class MensajeEmisor extends Mensaje
     {
         this.receptor = receptor;
     }
+    
 }
