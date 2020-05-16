@@ -87,7 +87,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
                     {
                         s = sepe.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
-                        tokens = dIn.readUTF().split("/");
+                        tokens = dIn.readUTF().split("-");
                         NegocioEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                         s.close();
                     }
@@ -151,7 +151,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             String[] tokens;
             while(res.equalsIgnoreCase("TRUE"))
             {
-                tokens = dIn.readUTF().split("/");
+                tokens = dIn.readUTF().split("-");
                 NegocioEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                 res = dIn.readUTF();
             }

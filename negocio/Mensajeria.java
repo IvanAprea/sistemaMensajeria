@@ -389,7 +389,7 @@ public class Mensajeria implements IBackUp{
         tr.start();
     }
     
-    public void recuperarDatos()
+    public synchronized void recuperarDatos()
     {
         while(Mensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup() ||
                 Mensajeria.getInstancia().isMensajesNoEnviadosOcup() ||

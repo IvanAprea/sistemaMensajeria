@@ -108,8 +108,7 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
             	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
             }
             else if(mensaje.getTipo() == 2) {
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-                ComunicacionReceptor.getInstancia().informarMensajeRecibido(this.getNombre()+"/"+dtf.format(mensaje.getFecha()));
+                ComunicacionReceptor.getInstancia().informarMensajeRecibido(this.getNombre()+"-"+mensaje.getFecha());
             }
             }catch (Exception e){
                 e.printStackTrace();

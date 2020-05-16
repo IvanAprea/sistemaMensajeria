@@ -12,13 +12,13 @@ public class Mensaje {
 	private String texto;
 	private Persona emisor;
 	private int tipo;
-        private LocalDateTime fecha;
+        private String fecha;
         
         public Mensaje() {
                 super();
         }
             
-	public Mensaje(String asunto, String texto, Persona emisor, int tip) {
+	public Mensaje(String asunto, String texto, Persona emisor, int tipo) {
 		super();
 		this.asunto = asunto;
 		this.texto = texto;
@@ -28,8 +28,8 @@ public class Mensaje {
 
     @Override
     public String toString() {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        return "["+dtf.format(this.getFecha())+"]    " + "De: " + emisor.toString() + " Asunto: " + asunto +((tipo == 1) ? "  [!] " : "     ");
+        
+        return "["+this.fecha+"]    " + "De: " + emisor.toString() + " Asunto: " + asunto +((tipo == 1) ? "  [!] " : "     ");
     }
 
     public void setAsunto(String asunto) {
@@ -49,10 +49,11 @@ public class Mensaje {
     }
     
     public void setearFecha(){
-        this.fecha = LocalDateTime.now();    
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        this.fecha = dtf.format(LocalDateTime.now());
     }
 
-    public LocalDateTime getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
@@ -70,5 +71,10 @@ public class Mensaje {
 
     public int getTipo() {
         return tipo;
+    }
+
+    public void setFecha(String fecha)
+    {
+        this.fecha = fecha;
     }
 }
