@@ -14,6 +14,9 @@ import java.io.StringWriter;
 
 import java.net.InetAddress;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -50,9 +53,9 @@ public class Mensajeria implements IBackUp{
         String idEmisor;
         Iterator it;
         try{
-            System.out.println(id);
-            System.out.println(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id));
+            this.informarConsola(id+" solicita recibir sus mensajes pendientes");
             if(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
+                this.informarConsola(id+" tiene mensajes pendientes de tipo 0 y/o 1... enviando");
                 it = Mensajeria.getInstancia().getMensajesNoEnviados().get(id).iterator();
                 while(it.hasNext()){
                     String msj = (String) it.next();
@@ -63,9 +66,11 @@ public class Mensajeria implements IBackUp{
                     ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
                     sw.getBuffer().setLength(0);
                     it.remove();
+                    this.informarConsola("Mensaje pendiente enviado a "+id);
                 }
             }
             if(Mensajeria.getInstancia().getMensajesNoEnviadosCAviso().containsKey(id)){
+                this.informarConsola(id+" tiene mensajes pendientes de tipo 2... enviando");
                 it = Mensajeria.getInstancia().getMensajesNoEnviadosCAviso().get(id).iterator();
                 sw.getBuffer().setLength(0);
                 while(it.hasNext()){
@@ -89,13 +94,16 @@ public class Mensajeria implements IBackUp{
                         arr.add(msj);
                         this.getAvisosPendientes().put(idEmisor, arr);
                     }
+                    this.informarConsola("Mensaje pendiente enviado a "+id);
                 }
             }
             sw.write("FALSE");
             ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
             sw.getBuffer().setLength(0);
+            this.informarConsola("Fin de envio de mensajes pendientes a "+id);
         }
         catch(Exception e){
+            this.informarConsola("ERROR en envio de mensajes pendientes a "+id);
             e.printStackTrace();
         }
     }
@@ -104,6 +112,7 @@ public class Mensajeria implements IBackUp{
         Iterator it;
         StringWriter sw = new StringWriter();
         try{
+            this.informarConsola(idEmisor+" solicita recibir sus avisos de recepcion pendientes");
             if(Mensajeria.getInstancia().getAvisosPendientes().containsKey(idEmisor)){
                 it = Mensajeria.getInstancia().getMensajesNoEnviados().get(idEmisor).iterator();
                 while(it.hasNext()){
@@ -115,13 +124,16 @@ public class Mensajeria implements IBackUp{
                     ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
                     sw.getBuffer().setLength(0);
                     it.remove();
+                    this.informarConsola("Se ha enviado un aviso de recepcion a "+idEmisor);
                 }
             }    
             sw.write("FALSE");
             ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
             sw.getBuffer().setLength(0);
+            this.informarConsola("Fin de envio de avisos de recepcion pendientes a "+idEmisor);
         }
         catch(Exception e){
+            this.informarConsola("ERROR en envio de avisos de recepcion pendientes a "+idEmisor);
             e.printStackTrace();
         }
     }
@@ -129,7 +141,9 @@ public class Mensajeria implements IBackUp{
     private synchronized void intentarEnviarMensaje() {
         MensajeEmisor mensajeEm = null;
         String msj = null;
+        String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
         try {
+            this.informarConsola("Intentado enviar mensaje a "+id);
             msj = ComunicacionMensajeria.getInstancia().recibirMsj();
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -139,8 +153,8 @@ public class Mensajeria implements IBackUp{
             sw.write(msj);
             ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(mensajeEm.getReceptor().getIP()), Integer.parseInt(mensajeEm.getReceptor().getPuerto()),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
             //avisar al emisor que se recibio: (Y SI NO ESTUVIERA CONECTADO?)
+            this.informarConsola("Mensaje enviado con exito a "+id);
         } catch (IOException e) {
-            String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
             ArrayList<String> arr;
             int tipo = mensajeEm.getTipo();
             if(this.getMensajesNoEnviados().containsKey(id) && tipo!=2){ //ya existe arrayList
@@ -161,7 +175,9 @@ public class Mensajeria implements IBackUp{
                 arr.add(msj);
                 this.getMensajesNoEnviadosCAviso().put(id, arr);
             }
+            this.informarConsola("No se ha podido enviar el mensaje a "+id+", guardandolo como pendiente (tipo="+tipo+")");
         } catch (Exception e) {
+            this.informarConsola("ERROR al intentar enviar el mensaje a "+id);
             e.printStackTrace();
         }
     }
@@ -170,6 +186,7 @@ public class Mensajeria implements IBackUp{
         try {
             return ComunicacionMensajeria.getInstancia().recibirMsj();
         } catch (Exception e) {
+            this.informarConsola("ERROR al obtener id del receptor");
             e.printStackTrace();
             return null;
         }
@@ -180,6 +197,7 @@ public class Mensajeria implements IBackUp{
         try {
             return ComunicacionMensajeria.getInstancia().recibirMsj();
         } catch (Exception e) {
+            this.informarConsola("ERROR al obtener id del emisor");
             return null;
         }
     }
@@ -192,9 +210,16 @@ public class Mensajeria implements IBackUp{
             StringReader reader = new StringReader(msj);
             mensajeEm = (MensajeEmisor) unmarshaller.unmarshal(reader);
             return mensajeEm.getEmisor().getIP()+":"+mensajeEm.getEmisor().getPuerto();
-        } catch (JAXBException e) {
+        } catch (Exception e) {
+            this.informarConsola("ERROR al obtener id del emisor desde un mensaje");
             return null;
         }
+    }
+    
+    public void informarConsola(String log){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        System.out.println("["+dtf.format(now)+"]    "+log);      
     }
     
     public synchronized void ejecutarComando(String comando) {
@@ -266,8 +291,9 @@ public class Mensajeria implements IBackUp{
                         notifyAll();
                     }
                 }
-                catch (InterruptedException e)
+                catch (Exception e)
                 {
+                    Mensajeria.getInstancia().informarConsola("ERROR al hacer back-up de Mensajeria");
                     e.printStackTrace();
                 }
             }

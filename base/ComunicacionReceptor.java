@@ -87,7 +87,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
                         Thread.sleep(5000);
                         s = new Socket(ipDirectorio,puertoDirectorio);
                         dOut = new DataOutputStream(s.getOutputStream());
-                        dOut.writeUTF("ALIVE");
+                        dOut.writeUTF("DIR_DAR_ALIVE");
                         dOut.writeUTF(id);
                         dOut.flush();
                         s.close();
@@ -141,7 +141,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         try {
             s = new Socket(ip,puerto);
             DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
-            dOut.writeUTF("AGREGAR");
+            dOut.writeUTF("DIR_AGREGAR_REC");
             dOut.writeUTF(usuario.toString());
             dOut.flush();
             s.close();
@@ -167,7 +167,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         try {
             s = new Socket(ip,puerto);
             DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
-            dOut.writeUTF("DESCONECTAR");
+            dOut.writeUTF("DIR_DESCONECTAR_REC");
             dOut.writeUTF(ID);
             dOut.flush();
             s.close();

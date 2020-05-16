@@ -15,6 +15,9 @@ import java.io.StringWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -131,8 +134,10 @@ public class NegocioDirectorio implements IGestionUsuarios{
             UsuarioReceptor receptor = this.getListaDirectorio().getUsuariosRecMap().get(ID);
             receptor.setEstado("OFFLINE");
             this.listaDirectorio.getUsuariosRecMap().put(ID, receptor);
+            this.informarConsola("Se ha desconectado al usuario "+ID);
         }
         catch (Exception e){
+            this.informarConsola("ERROR al desconectar usuario "+ID);
             e.printStackTrace();
         }
     }
@@ -144,17 +149,20 @@ public class NegocioDirectorio implements IGestionUsuarios{
                 wait();
             }
             this.listaDirOcupado=true;
+            this.informarConsola("Intentando enviar lista de receptores");
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
             marshaller.marshal(this.getListaDirectorio(), sw);
-            ComunicacionDirectorio.getInstancia().darLista(sw);     
+            ComunicacionDirectorio.getInstancia().darLista(sw);
+            this.informarConsola("Lista de receptores enviada con exito");
             this.listaDirOcupado=false;
             notifyAll();
         }
         catch(Exception e)
         {
+            this.informarConsola("ERROR al enviar lista de receptores");
             e.printStackTrace();
         } 
     }
@@ -168,6 +176,7 @@ public class NegocioDirectorio implements IGestionUsuarios{
             }
         }
         this.usrOnlineOcupado=true;
+        this.informarConsola("Alive recibido de "+id);
         if(!this.getUsuariosOnlineActuales().contains(id)){
             this.getUsuariosOnlineActuales().add(id);
         }
@@ -175,14 +184,20 @@ public class NegocioDirectorio implements IGestionUsuarios{
         notifyAll();
     }
     
+    public void informarConsola(String log){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        System.out.println("["+dtf.format(now)+"]    "+log);      
+    }
+    
     public synchronized void ejecutarComando(String comando) {
-        if(comando.equalsIgnoreCase("AGREGAR")){
+        if(comando.equalsIgnoreCase("DIR_AGREGAR_REC")){
             ComunicacionDirectorio.getInstancia().nuevoUsuario();
         }
-        else if(comando.equalsIgnoreCase("GET")){
+        else if(comando.equalsIgnoreCase("DIR_GETLISTA")){
             this.darLista();
         }
-        else if(comando.equalsIgnoreCase("DESCONECTAR")){
+        else if(comando.equalsIgnoreCase("DIR_DESCONECTAR_REC")){
             while(this.listaDirOcupado==true){
                 try {
                     wait();
@@ -192,10 +207,11 @@ public class NegocioDirectorio implements IGestionUsuarios{
             }
             this.listaDirOcupado=true;
             ComunicacionDirectorio.getInstancia().setearUsuarioDesconectado();
+            this.informarConsola("Usuario intentando desconectarse...");
             this.listaDirOcupado=false;
             notifyAll();
         }
-        else if(comando.equalsIgnoreCase("ALIVE")){
+        else if(comando.equalsIgnoreCase("DIR_DAR_ALIVE")){
             ComunicacionDirectorio.getInstancia().recibirAlive();
         }
     }

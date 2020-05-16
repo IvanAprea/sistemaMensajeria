@@ -124,7 +124,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
         try 
         {
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
-            String s = "GET";
+            String s = "DIR_GETLISTA";
             dOut.writeUTF(s);
             dOut.flush();         
             DataInputStream dIn = new DataInputStream(socket.getInputStream());
