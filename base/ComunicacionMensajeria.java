@@ -72,26 +72,41 @@ public class ComunicacionMensajeria {
         }.start();
     }
     
-    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto) throws excepcionEnviarMensaje, IOException {
-            socket = new Socket(ip, puerto);
+    public synchronized void enviarMensaje(StringWriter mensaje, InetAddress iprec, int puertorec, int tipo, InetAddress ipem, int puertoem) throws excepcionEnviarMensaje, IOException {
+            socket = new Socket(iprec, puertorec);
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+            dIn = new DataInputStream(socket.getInputStream());
             dOut.writeUTF(mensaje.toString());
             dOut.flush();
+            if(tipo == 2){
+            try
+            {
+                String msjAux;
+                msjAux = ComunicacionMensajeria.getInstancia().recibirMsj();
+                socket.close();
+                socket = new Socket(ipem,puertoem);
+                ComunicacionMensajeria.getInstancia().notificarEmisorConLlegadaMsj(msjAux);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            }
             socket.close();
     }
     
-    public void enviarPendientes(StringWriter mensaje) throws IOException {
+    public synchronized void enviarPendientes(StringWriter mensaje) throws IOException {
         DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
         dOut.writeUTF(mensaje.toString());
         dOut.flush();
     }
     
     
-    public String recibirMsj() throws Exception{
-            return dIn.readUTF();
+    public synchronized String recibirMsj() throws Exception{
+            String msj = dIn.readUTF();
+            return msj;
     }
 
-    public void notificarEmisorConLlegadaMsj(String nombreRec) throws IOException {
+    public synchronized void notificarEmisorConLlegadaMsj(String nombreRec) throws IOException {
         DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
         dOut.writeUTF(nombreRec);
         dOut.flush();

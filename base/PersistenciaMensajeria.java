@@ -3,10 +3,15 @@ package base;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 
+import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import java.util.ArrayList;
@@ -15,10 +20,10 @@ import java.util.HashMap;
 public class PersistenciaMensajeria {
     
     private static PersistenciaMensajeria _instancia = null;
-    private XMLEncoder xe;
-    private XMLDecoder xd;
     private FileOutputStream fileoutput;
     private FileInputStream fileinput;
+    private ObjectOutputStream objectoutput;
+    private ObjectInputStream objectinput;
     
     /**
      * Thread-protected Singleton
@@ -41,32 +46,49 @@ public class PersistenciaMensajeria {
         try
         {
             fileoutput = new FileOutputStream(fileName);
+            objectoutput = new ObjectOutputStream(fileoutput);
+            if(objectoutput != null){
+                objectoutput.writeObject(mensajesNoEnviados);
+                objectoutput.close();
+            }
+            
         } catch (FileNotFoundException e)
         {
             e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
         }
-        xe = new XMLEncoder(fileoutput);
-        xe.writeObject(mensajesNoEnviados);
-        xe.close();
     }
     
-    public Serializable recuperarDatos(String fileName)
+    public HashMap<String, ArrayList<String>> recuperarDatos(String fileName)
     {
-        Serializable s = null;
-
+        HashMap<String, ArrayList<String>> hm = new HashMap<String, ArrayList<String>>();
         try
         {
             fileinput = new FileInputStream(fileName);
-        } catch (FileNotFoundException e)
+            objectinput = new ObjectInputStream(fileinput);
+            if(objectinput != null)
+            {
+                    hm = (HashMap<String, ArrayList<String>>) objectinput.readObject();
+                    objectinput.close();
+            }
+        } 
+        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
-        xd = new XMLDecoder(fileinput);
-        if(xd != null)
+        catch (FileNotFoundException e)
         {
-            s = (Serializable) xd.readObject();
+            e.printStackTrace();
+        } catch (EOFException e)
+        {
+            System.out.println("El archivo se abrio vacio");
         }
-        xd.close();
-        return s;
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return hm;
     }
 }

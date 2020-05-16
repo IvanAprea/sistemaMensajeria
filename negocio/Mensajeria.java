@@ -24,7 +24,7 @@ import javax.xml.bind.JAXBException;
 public class Mensajeria implements IBackUp{
 
     
-    private static final String fileNoEnviados="noEnviados.bin",fileNoEnviadosCAviso="noEnviadosCAviso.bin";
+    private static final String fileNoEnviados="noEnviados.txt",fileNoEnviadosCAviso="noEnviadosCAviso.txt";
     private static Mensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
     private HashMap<String, ArrayList<String>> mensajesNoEnviadosCAviso;
@@ -48,9 +48,11 @@ public class Mensajeria implements IBackUp{
         StringWriter sw = new StringWriter();
         ArrayList<String> arr;
         String idEmisor;
+        Iterator it;
         try{
+            System.out.println(id);
+            System.out.println(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id));
             if(Mensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
-                Iterator it;
                 it = Mensajeria.getInstancia().getMensajesNoEnviados().get(id).iterator();
                 while(it.hasNext()){
                     String msj = (String) it.next();
@@ -62,6 +64,8 @@ public class Mensajeria implements IBackUp{
                     sw.getBuffer().setLength(0);
                     it.remove();
                 }
+            }
+            if(Mensajeria.getInstancia().getMensajesNoEnviadosCAviso().containsKey(id)){
                 it = Mensajeria.getInstancia().getMensajesNoEnviadosCAviso().get(id).iterator();
                 sw.getBuffer().setLength(0);
                 while(it.hasNext()){
@@ -112,10 +116,10 @@ public class Mensajeria implements IBackUp{
                     sw.getBuffer().setLength(0);
                     it.remove();
                 }
-                sw.write("FALSE");
-                ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
-                sw.getBuffer().setLength(0);
             }    
+            sw.write("FALSE");
+            ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
+            sw.getBuffer().setLength(0);
         }
         catch(Exception e){
             e.printStackTrace();
@@ -133,9 +137,8 @@ public class Mensajeria implements IBackUp{
             mensajeEm = (MensajeEmisor) unmarshaller.unmarshal(reader);
             StringWriter sw = new StringWriter();
             sw.write(msj);
-            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(mensajeEm.getReceptor().getIP()), Integer.parseInt(mensajeEm.getReceptor().getPuerto()));
+            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(mensajeEm.getReceptor().getIP()), Integer.parseInt(mensajeEm.getReceptor().getPuerto()),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
             //avisar al emisor que se recibio: (Y SI NO ESTUVIERA CONECTADO?)
-            ComunicacionMensajeria.getInstancia().notificarEmisorConLlegadaMsj(ComunicacionMensajeria.getInstancia().recibirMsj());
         } catch (IOException e) {
             String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
             ArrayList<String> arr;
@@ -274,7 +277,7 @@ public class Mensajeria implements IBackUp{
     
     public void recuperarDatos()
     {
-        this.mensajesNoEnviados = (HashMap<String, ArrayList<String>>) PersistenciaMensajeria.getInstancia().recuperarDatos(this.fileNoEnviados);
-        this.mensajesNoEnviadosCAviso = (HashMap<String, ArrayList<String>>) PersistenciaMensajeria.getInstancia().recuperarDatos(this.fileNoEnviadosCAviso);
+        this.mensajesNoEnviados =  PersistenciaMensajeria.getInstancia().recuperarDatos(Mensajeria.fileNoEnviados);
+        this.mensajesNoEnviadosCAviso = PersistenciaMensajeria.getInstancia().recuperarDatos(Mensajeria.fileNoEnviadosCAviso);
     }
 }

@@ -26,6 +26,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
 
     private static ComunicacionReceptor _instancia = null;
     private Socket s; //sem=socketEnviarMensaje
+    private DataOutputStream dOutRecepcion;
     
     private ComunicacionReceptor() {
         super();
@@ -52,6 +53,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
                     {
                         s = sv.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
+                        dOutRecepcion = new DataOutputStream(s.getOutputStream());
                         NegocioReceptor.getInstancia().recibirMensaje(dIn.readUTF());
                         s.close();
                     }
@@ -108,8 +110,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
     
     public synchronized void informarMensajeRecibido(String msj){
         try {
-            DataOutputStream out = new DataOutputStream(s.getOutputStream());
-            out.writeUTF(msj);
+            this.dOutRecepcion.writeUTF(msj);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,7 +125,8 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
             dOut.writeUTF("MSJ_PEDIDOMSJREC");
             dOut.writeUTF(id);
             DataInputStream dIn = new DataInputStream(s.getInputStream());
-            while(dIn.readUTF().equalsIgnoreCase("TRUE"))
+            String st = dIn.readUTF();
+            while(st.equalsIgnoreCase("TRUE"))
             {
                 NegocioReceptor.getInstancia().recibirMensaje(dIn.readUTF());
             }
