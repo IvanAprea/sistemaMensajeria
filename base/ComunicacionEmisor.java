@@ -82,11 +82,13 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             public void run() {
                 try {
                     ServerSocket sepe = new ServerSocket(Integer.parseInt(puerto));
+                    String[] tokens;
                     while (true) 
                     {
                         s = sepe.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
-                        NegocioEmisor.getInstancia().recibirConfirmacion(dIn.readUTF());
+                        tokens = dIn.readUTF().split("/");
+                        NegocioEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                         s.close();
                     }
                 }
@@ -146,9 +148,11 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
             dOut.writeUTF(idEmisor);
             DataInputStream dIn = new DataInputStream(s.getInputStream());
             String res = dIn.readUTF();
+            String[] tokens;
             while(res.equalsIgnoreCase("TRUE"))
             {
-                NegocioEmisor.getInstancia().recibirConfirmacion(dIn.readUTF());
+                tokens = dIn.readUTF().split("/");
+                NegocioEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                 res = dIn.readUTF();
             }
             s.close();
