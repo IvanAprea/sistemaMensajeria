@@ -141,20 +141,21 @@ public class Mensajeria implements IBackUp{
     private synchronized void intentarEnviarMensaje() {
         MensajeEmisor mensajeEm = null;
         String msj = null;
-        String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
         try {
-            this.informarConsola("Intentado enviar mensaje a "+id);
             msj = ComunicacionMensajeria.getInstancia().recibirMsj();
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
             StringReader reader = new StringReader(msj);
             mensajeEm = (MensajeEmisor) unmarshaller.unmarshal(reader);
+            String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
+            this.informarConsola("Intentado enviar mensaje a "+id);
             StringWriter sw = new StringWriter();
             sw.write(msj);
             ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(mensajeEm.getReceptor().getIP()), Integer.parseInt(mensajeEm.getReceptor().getPuerto()),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
             //avisar al emisor que se recibio: (Y SI NO ESTUVIERA CONECTADO?)
             this.informarConsola("Mensaje enviado con exito a "+id);
         } catch (IOException e) {
+            String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
             ArrayList<String> arr;
             int tipo = mensajeEm.getTipo();
             if(this.getMensajesNoEnviados().containsKey(id) && tipo!=2){ //ya existe arrayList
@@ -162,22 +163,26 @@ public class Mensajeria implements IBackUp{
                 arr.add(msj);
             }
             else{
-                arr = new ArrayList<String>();
-                arr.add(msj);
-                this.getMensajesNoEnviados().put(id, arr);
+                if(tipo != 2){
+                    arr = new ArrayList<String>();
+                    arr.add(msj);
+                    this.getMensajesNoEnviados().put(id, arr);
+                }
             }
             if(this.getMensajesNoEnviadosCAviso().containsKey(id) && tipo==2){
                 arr = this.getMensajesNoEnviadosCAviso().get(id);
                 arr.add(msj);
             }
             else{
-                arr = new ArrayList<String>();
-                arr.add(msj);
-                this.getMensajesNoEnviadosCAviso().put(id, arr);
+                if(tipo == 2){
+                    arr = new ArrayList<String>();
+                    arr.add(msj);
+                    this.getMensajesNoEnviadosCAviso().put(id, arr);
+                }
             }
             this.informarConsola("No se ha podido enviar el mensaje a "+id+", guardandolo como pendiente (tipo="+tipo+")");
         } catch (Exception e) {
-            this.informarConsola("ERROR al intentar enviar el mensaje a "+id);
+            this.informarConsola("ERROR al intentar enviar el mensaje");
             e.printStackTrace();
         }
     }

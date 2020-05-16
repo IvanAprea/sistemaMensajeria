@@ -129,6 +129,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
             while(st.equalsIgnoreCase("TRUE"))
             {
                 NegocioReceptor.getInstancia().recibirMensaje(dIn.readUTF());
+                st = dIn.readUTF();
             }
             s.close();
         } catch (IOException e)
