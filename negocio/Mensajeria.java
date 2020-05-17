@@ -360,7 +360,7 @@ public class Mensajeria implements IBackUp{
                 try{
                     while(true)
                     {
-                        Thread.sleep(15000);
+                        Thread.sleep(3000);
                         while(Mensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup()== true ||
                         Mensajeria.getInstancia().isMensajesNoEnviadosOcup() ||
                         Mensajeria.getInstancia().isAvisosPendientesOcup())
