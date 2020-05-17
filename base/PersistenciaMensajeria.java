@@ -1,5 +1,7 @@
 package base;
 
+import interfaces.IBackUp;
+
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 
@@ -17,7 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PersistenciaMensajeria {
+public class PersistenciaMensajeria implements IBackUp{
     
     private static PersistenciaMensajeria _instancia = null;
     private FileOutputStream fileoutput;
