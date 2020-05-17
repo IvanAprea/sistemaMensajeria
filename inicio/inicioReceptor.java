@@ -1,6 +1,7 @@
 package inicio;
 
 import presentacion.VentanaReceptor;
+import presentacion.VentanaReceptor2;
 import negocio.NegocioReceptor;
 import negocio.Mensaje;
 import negocio.Persona;
@@ -12,7 +13,7 @@ public class inicioReceptor {
     }
     
     public static void main(String[] args) {
-        VentanaReceptor ventana = new VentanaReceptor();
+        VentanaReceptor2 ventana = new VentanaReceptor2();
         NegocioReceptor.getInstancia().setearPuerto("81");
         NegocioReceptor.getInstancia().setearIp();
         NegocioReceptor.getInstancia().setVentanaReceptor(ventana);
