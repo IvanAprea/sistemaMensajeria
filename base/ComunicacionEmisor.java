@@ -6,6 +6,10 @@ import interfaces.IDirectorio;
 
 import interfaces.IEnviarMensajeCom;
 
+import interfaces.IEscucharPuerto;
+
+import interfaces.IPendienteEmisor;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,7 +28,7 @@ import java.net.UnknownHostException;
 import negocio.NegocioEmisor;
 import negocio.NegocioReceptor;
 
-public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio{
+public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscucharPuerto,IPendienteEmisor{
 
     private static ComunicacionEmisor _instancia = null;
     private ServerSocket sepe; //sepe=socketEscucharPuertoEmisor

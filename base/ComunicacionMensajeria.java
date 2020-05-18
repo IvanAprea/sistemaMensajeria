@@ -2,6 +2,9 @@ package base;
 
 import exceptions.excepcionEnviarMensaje;
 
+import interfaces.IComMensajeria;
+import interfaces.IEscucharPuerto;
+
 import java.io.DataInputStream;
 
 import java.io.DataOutputStream;
@@ -24,7 +27,7 @@ import negocio.NegocioDirectorio;
 import negocio.NegocioEmisor;
 import negocio.NegocioReceptor;
 
-public class ComunicacionMensajeria {
+public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
     
     private static ComunicacionMensajeria _instancia = null;
     private ServerSocket sepd;
@@ -72,7 +75,7 @@ public class ComunicacionMensajeria {
         }.start();
     }
     
-    public synchronized void enviarMensaje(StringWriter mensaje, InetAddress iprec, int puertorec, int tipo, InetAddress ipem, int puertoem) throws /*excepcionEnviarMensaje,*/ IOException {
+    public synchronized void enviarMensaje(StringWriter mensaje, InetAddress iprec, int puertorec, int tipo, InetAddress ipem, int puertoem) throws IOException {
             socket = new Socket(iprec, puertorec);
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
             dIn = new DataInputStream(socket.getInputStream());

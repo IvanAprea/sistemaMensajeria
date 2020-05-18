@@ -7,7 +7,7 @@ import base.ComunicacionReceptor;
 import exceptions.excepcionEnviarMensaje;
 
 import interfaces.ICargaConfig;
-import interfaces.IEnviarMensaje;
+import interfaces.IEnviarMensajeEm;
 
 import java.util.Map;
 
@@ -41,10 +41,10 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import presentacion.VentanaEmisor;
+import presentacion.VentanaEmisorOld;
 import presentacion.VentanaEmisor2;
 
-public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensaje,ICargaConfig{
+public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     private IVentanaEmisor vista;

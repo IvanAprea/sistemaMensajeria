@@ -7,6 +7,13 @@ import base.PersistenciaMensajeria;
 
 import interfaces.IBackUp;
 
+import interfaces.IBackUpMensajeria;
+
+import interfaces.IEjecutarComando;
+import interfaces.IEnviarMensajeMens;
+
+import interfaces.IEnviarPendientes;
+
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -24,7 +31,7 @@ import java.util.Map;
 
 
 import javax.xml.bind.JAXBException;
-public class Mensajeria implements IBackUp{
+public class Mensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
 
     
     private static final String fileNoEnviados="noEnviados.txt",fileNoEnviadosCAviso="noEnviadosCAviso.txt",fileAvisosPendientes="avisosPendientes.txt";
@@ -135,7 +142,7 @@ public class Mensajeria implements IBackUp{
         }
     }
     
-    private void enviarAvisosPendientes(String idEmisor) {
+    public void enviarAvisosPendientes(String idEmisor) {
         Iterator it;
         StringWriter sw = new StringWriter();
         while(this.avisosPendientesOcup==true)
@@ -178,7 +185,7 @@ public class Mensajeria implements IBackUp{
         notifyAll();
     }
     
-    private synchronized void intentarEnviarMensaje() {
+    public synchronized void intentarEnviarMensaje() {
         MensajeEmisor mensajeEm = null;
         String msj = null;
         try {
@@ -360,7 +367,7 @@ public class Mensajeria implements IBackUp{
                 try{
                     while(true)
                     {
-                        Thread.sleep(15000);
+                        Thread.sleep(3000);
                         while(Mensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup()== true ||
                         Mensajeria.getInstancia().isMensajesNoEnviadosOcup() ||
                         Mensajeria.getInstancia().isAvisosPendientesOcup())

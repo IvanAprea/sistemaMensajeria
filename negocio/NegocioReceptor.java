@@ -23,7 +23,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import presentacion.VentanaReceptor;
 import presentacion.IVentanaReceptor;
 
 import java.io.File;
