@@ -115,9 +115,6 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         jLabel4 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         btn_exit = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel_usrname = new javax.swing.JLabel();
@@ -135,7 +132,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         labelDestinatario.setForeground(new java.awt.Color(255, 255, 255));
         labelDestinatario.setText("De: Ivan Aprea");
 
-        labelFecha1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labelFecha1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
         labelFecha1.setForeground(new java.awt.Color(255, 255, 255));
         labelFecha1.setText("Fecha");
 
@@ -170,12 +167,13 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
 
         jPanel11.setBackground(new java.awt.Color(0, 0, 51));
 
-        labelAsunto.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        labelAsunto.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         labelAsunto.setForeground(new java.awt.Color(255, 255, 255));
         labelAsunto.setText("Asunto");
 
         textoMsjRecibido.setEditable(false);
         textoMsjRecibido.setColumns(20);
+        textoMsjRecibido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         textoMsjRecibido.setRows(5);
         jScrollPane3.setViewportView(textoMsjRecibido);
 
@@ -241,7 +239,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
                         .addGap(42, 42, 42)
                         .addComponent(jLabel9))
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
+                        .addGap(26, 26, 26)
                         .addComponent(jlabelmsjent)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
@@ -278,9 +276,9 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
                         .addGap(65, 65, 65)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(botonPararAlerta, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                        .addGap(31, 31, 31)
+                        .addComponent(botonPararAlerta, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -429,7 +427,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
 
         side_pane.add(btn_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 120, -1));
 
-        getContentPane().add(side_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 120, 590));
+        getContentPane().add(side_pane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 590));
 
         jPanel2.setBackground(new java.awt.Color(71, 120, 197));
         jPanel2.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
@@ -460,37 +458,6 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         jPanel4.setBackground(new java.awt.Color(120, 168, 252));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel5.setBackground(new java.awt.Color(84, 127, 206));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8_Contacts_25px.png"))); // NOI18N
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
-                        .addComponent(jLabel1)
-                        .addGap(0, 168, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jSeparator1)))
-                .addGap(40, 40, 40))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 51, Short.MAX_VALUE))
-        );
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 85, -1, 130));
-
         btn_exit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icons8_Exit_25px.png"))); // NOI18N
         btn_exit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -502,7 +469,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/imge_1.png"))); // NOI18N
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 86, 80));
 
-        jLabel_usrname.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel_usrname.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel_usrname.setForeground(new java.awt.Color(255, 255, 255));
         jLabel_usrname.setText("Default_usr");
         jPanel4.add(jLabel_usrname, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, -1, 30));
@@ -517,7 +484,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(325, Short.MAX_VALUE))
+                .addContainerGap(460, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 300, 540));
@@ -570,12 +537,6 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         pack();
     }//GEN-END:initComponents
 
-    private void btn_1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_1MousePressed
-        // TODO add your handling code here:
-        setColor(btn_1); 
-        ind_1.setOpaque(true);
-    }//GEN-LAST:event_btn_1MousePressed
-
     int xx,xy;
     private void btn_exitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_exitMousePressed
         // TODO add your handling code here:
@@ -610,6 +571,12 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
     private void botonAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAbrirActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botonAbrirActionPerformed
+
+    private void btn_1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_1MousePressed
+        // TODO add your handling code here:
+        setColor(btn_1);
+        ind_1.setOpaque(true);
+    }//GEN-LAST:event_btn_1MousePressed
 
 /*
 
@@ -695,8 +662,10 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
     }
     
     public void lanzarAlerta(String emisor) {
-        this.jlabelmsjent.setText("Mensaje entrante de: "+emisor);
+        this.jlabelmsjent.setText("De: "+emisor);
         this.jdiagAlertaSonora.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.jdiagAlertaSonora.setSize(185,230);
+        this.jdiagAlertaSonora.setResizable(false);
         this.jdiagAlertaSonora.setVisible(true);
         this.clip.start();
         this.repaint();
@@ -725,7 +694,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
     {
         this.labelFecha1.setText(fecha);
         this.labelDestinatario.setText("De: "+emisorAct);
-        this.labelAsunto.setText(asuntoAct);
+        this.labelAsunto.setText("Asunto: "+asuntoAct);
         this.textoMsjRecibido.setText(textoAct);
     }
 
@@ -760,7 +729,6 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
     private javax.swing.JPanel ind_1;
     private javax.swing.JDialog jDiagSesionRecep;
     private javax.swing.JDialog jDialog1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -779,7 +747,6 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
@@ -787,7 +754,6 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JDialog jdiagAlertaSonora;
     private javax.swing.JLabel jlabelmsjent;
     private javax.swing.JLabel labelAsunto;

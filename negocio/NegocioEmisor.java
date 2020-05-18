@@ -42,6 +42,7 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 import presentacion.VentanaEmisor;
+import presentacion.VentanaEmisor2;
 
 public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig{
     
@@ -146,7 +147,7 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         ComunicacionEmisor.getInstancia().escucharPuerto(super.getPuerto());
     }
     
-    public void setVista(VentanaEmisor vista) {
+    public void setVista(VentanaEmisor2 vista) {
         this.vista = vista;
         KeyListener kl1 = new KeyListener(){
         
