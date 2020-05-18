@@ -41,7 +41,7 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import presentacion.VentanaEmisor;
+import presentacion.VentanaEmisorOld;
 import presentacion.VentanaEmisor2;
 
 public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig{

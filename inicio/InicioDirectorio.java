@@ -5,7 +5,7 @@ import base.ComunicacionDirectorio;
 import negocio.NegocioDirectorio;
 import negocio.NegocioEmisor;
 
-import presentacion.VentanaEmisor;
+import presentacion.VentanaEmisorOld;
 
 public class InicioDirectorio {
     public InicioDirectorio() {
