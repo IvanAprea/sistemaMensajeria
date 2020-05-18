@@ -64,7 +64,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         this.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
-                NegocioReceptor.getInstancia().notificarDesconexionDirectorio();
+                        NegocioReceptor.getInstancia().notificarDesconexionDirectorio();
                         System.exit(0);
                     }
         });
@@ -539,8 +539,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
 
     int xx,xy;
     private void btn_exitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_exitMousePressed
-        // TODO add your handling code here:
-        
+        NegocioReceptor.getInstancia().notificarDesconexionDirectorio();
         System.exit(0);
     }//GEN-LAST:event_btn_exitMousePressed
 
