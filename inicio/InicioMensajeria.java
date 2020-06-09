@@ -2,7 +2,7 @@ package inicio;
 
 import base.ComunicacionMensajeria;
 
-import negocio.Mensajeria;
+import negocio.LogicaMensajeria;
 
 public class InicioMensajeria {
     public InicioMensajeria() {
@@ -10,8 +10,8 @@ public class InicioMensajeria {
     }
     
     public static void main(String[] args) {
-        Mensajeria.getInstancia().recuperarDatos();
+        LogicaMensajeria.getInstancia().recuperarDatos();
         ComunicacionMensajeria.getInstancia().escucharPuerto("71");
-        Mensajeria.getInstancia().backUp();
+        LogicaMensajeria.getInstancia().backUp();
     }
 }

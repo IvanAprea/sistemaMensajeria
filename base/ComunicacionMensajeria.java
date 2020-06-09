@@ -22,10 +22,10 @@ import java.net.SocketTimeoutException;
 
 import java.net.UnknownHostException;
 
-import negocio.Mensajeria;
-import negocio.NegocioDirectorio;
-import negocio.NegocioEmisor;
-import negocio.NegocioReceptor;
+import negocio.LogicaMensajeria;
+import negocio.LogicaDirectorio;
+import negocio.LogicaEmisor;
+import negocio.LogicaReceptor;
 
 public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
     
@@ -55,7 +55,7 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
                         socket = sepd.accept();
                         out = new PrintWriter(socket.getOutputStream(), true);
                         dIn = new DataInputStream(socket.getInputStream());
-                        Mensajeria.getInstancia().ejecutarComando(dIn.readUTF());
+                        LogicaMensajeria.getInstancia().ejecutarComando(dIn.readUTF());
                         socket.close();
                     }
                 } catch (BindException e) {

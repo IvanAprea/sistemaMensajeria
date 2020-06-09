@@ -36,10 +36,10 @@ import java.net.Socket;
 
 import java.time.format.DateTimeFormatter;
 
-public class NegocioReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
+public class LogicaReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
         private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
-	private static NegocioReceptor _instancia = null;
+	private static LogicaReceptor _instancia = null;
 	private IVentanaReceptor ventanaReceptor;
         private boolean RMocupado=false;
         private final String regex=", *";
@@ -47,7 +47,7 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
         private final String decoder="UTF8";
         private final int cantDatos=2;
 	
-    private NegocioReceptor() {
+    private LogicaReceptor() {
     	super();
     }
 
@@ -64,10 +64,10 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
      * Thread-protected Singleton
      * @return
      */
-    public synchronized static NegocioReceptor getInstancia()
+    public synchronized static LogicaReceptor getInstancia()
     {
         if(_instancia == null)
-            _instancia = new NegocioReceptor();
+            _instancia = new LogicaReceptor();
         return _instancia;
     }
     

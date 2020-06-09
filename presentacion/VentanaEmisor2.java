@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 import javax.swing.table.DefaultTableModel;
 
-import negocio.NegocioEmisor;
+import negocio.LogicaEmisor;
 import negocio.UsuarioReceptor;
 
 
@@ -688,7 +688,7 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
             if(!this.getAsunto().trim().equals("")){
                 if(!this.getMensaje().trim().equals("")){
                     if(this.getTipo() != -1)
-                        NegocioEmisor.getInstancia().enviarMensaje(personas);
+                        LogicaEmisor.getInstancia().enviarMensaje(personas);
                     else
                         this.lanzarCartelError("ERROR: debe seleccionar el tipo de mensaje.");
                 }
@@ -715,11 +715,11 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
         String nombre = this.getNombreConfig().trim();
         if(!nombre.equals(""))
         {
-            NegocioEmisor.getInstancia().configAtributos(nombre);
+            LogicaEmisor.getInstancia().configAtributos(nombre);
             jLabel_usrname.setText(nombre);
             this.cerrarSesion();
             this.setVisible(true);
-            NegocioEmisor.getInstancia().pedirAvisosPendientes();
+            LogicaEmisor.getInstancia().pedirAvisosPendientes();
         }
         else 
         {
@@ -773,7 +773,7 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
         this.sesionEmisor.setSize(275, 305);
         this.sesionEmisor.setResizable(false);
         this.sesionEmisor.setVisible(true);
-        this.textNombreSesion.setText(NegocioEmisor.getInstancia().getNombre());
+        this.textNombreSesion.setText(LogicaEmisor.getInstancia().getNombre());
         this.repaint();
         
     }

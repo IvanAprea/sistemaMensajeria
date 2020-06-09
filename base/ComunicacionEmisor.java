@@ -25,8 +25,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
-import negocio.NegocioEmisor;
-import negocio.NegocioReceptor;
+import negocio.LogicaEmisor;
+import negocio.LogicaReceptor;
 
 public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscucharPuerto,IPendienteEmisor{
 
@@ -92,7 +92,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
                         s = sepe.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
                         tokens = dIn.readUTF().split("-");
-                        NegocioEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
+                        LogicaEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                         s.close();
                     }
                 }
@@ -120,7 +120,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
         try {
             return new Socket(ip, puerto);
         } catch (IOException e) {
-            NegocioEmisor.getInstancia().lanzarCartelError("ERROR al conectar con el directorio");
+            LogicaEmisor.getInstancia().lanzarCartelError("ERROR al conectar con el directorio");
             return null;
         }
     }
@@ -156,7 +156,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
             while(res.equalsIgnoreCase("TRUE"))
             {
                 tokens = dIn.readUTF().split("-");
-                NegocioEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
+                LogicaEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                 res = dIn.readUTF();
             }
             s.close();

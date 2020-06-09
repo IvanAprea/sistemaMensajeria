@@ -2,8 +2,8 @@ package inicio;
 
 import base.ComunicacionDirectorio;
 
-import negocio.NegocioDirectorio;
-import negocio.NegocioEmisor;
+import negocio.LogicaDirectorio;
+import negocio.LogicaEmisor;
 
 import presentacion.VentanaEmisorOld;
 
@@ -14,6 +14,6 @@ public class InicioDirectorio {
 
     public static void main(String[] args) {
         ComunicacionDirectorio.getInstancia().escucharPuerto("70");
-        NegocioDirectorio.getInstancia().comprobacionUsuariosOnline();
+        LogicaDirectorio.getInstancia().comprobacionUsuariosOnline();
     }
 }

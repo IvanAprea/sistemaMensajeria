@@ -45,12 +45,12 @@ import javax.swing.JOptionPane;
 import presentacion.VentanaEmisorOld;
 import presentacion.VentanaEmisor2;
 
-public class NegocioEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor{
+public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     private IVentanaEmisor vista;
     private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
-    private static NegocioEmisor instancia = null;
+    private static LogicaEmisor instancia = null;
     private final String regex=", *";
     private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
@@ -58,7 +58,7 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
     private Socket socketDirectorio;
     private UsuariosRecMap listaActualReceptores;
     
-    private NegocioEmisor() {
+    private LogicaEmisor() {
         super();
     }
     
@@ -66,9 +66,9 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
      * Thread-protected Singleton
      * @return
      */
-    public synchronized static NegocioEmisor getInstancia(){
+    public synchronized static LogicaEmisor getInstancia(){
         if(instancia==null){
-            instancia = new NegocioEmisor();
+            instancia = new LogicaEmisor();
         }
         return instancia;
     }
@@ -154,7 +154,7 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         
             public void keyTyped(KeyEvent e){
                 if (vista.getAsunto().length()== cantCarAsunto){
-                    NegocioEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
+                    LogicaEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
                     e.consume();
                 }
             }
@@ -167,7 +167,7 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
         
             public void keyTyped(KeyEvent e){
                 if (vista.getAsunto().length()== cantCarMensaje){
-                    NegocioEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
+                    LogicaEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
                     e.consume();
                 }
             }
@@ -266,8 +266,8 @@ public class NegocioEmisor extends Persona implements ActionListener,IEnviarMens
             }
         }
 
-    public static void setInstancia(NegocioEmisor instancia) {
-        NegocioEmisor.instancia = instancia;
+    public static void setInstancia(LogicaEmisor instancia) {
+        LogicaEmisor.instancia = instancia;
     }
 
 

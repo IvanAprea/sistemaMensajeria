@@ -13,10 +13,10 @@ import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 
-import negocio.NegocioEmisor;
+import negocio.LogicaEmisor;
 import negocio.Mensaje;
 import negocio.Persona;
-import negocio.NegocioReceptor;
+import negocio.LogicaReceptor;
 
 public class VentanaReceptorOld extends javax.swing.JFrame implements IVentanaReceptor {
 	
@@ -35,7 +35,7 @@ public class VentanaReceptorOld extends javax.swing.JFrame implements IVentanaRe
         this.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
-                NegocioReceptor.getInstancia().notificarDesconexionDirectorio();
+                LogicaReceptor.getInstancia().notificarDesconexionDirectorio();
                         System.exit(0);
                     }
         });
@@ -324,7 +324,7 @@ public class VentanaReceptorOld extends javax.swing.JFrame implements IVentanaRe
     public void iniciarSesion() {
         this.jDiagSesionRecep.setSize(400, 400);
         this.jDiagSesionRecep.setVisible(true);
-        this.nombreReceptor.setText(NegocioReceptor.getInstancia().getNombre());
+        this.nombreReceptor.setText(LogicaReceptor.getInstancia().getNombre());
         this.repaint();
     }
     
@@ -332,9 +332,9 @@ public class VentanaReceptorOld extends javax.swing.JFrame implements IVentanaRe
         String nombre = this.nombreReceptor.getText().trim();
         if(!nombre.equals(""))
                 {
-            NegocioReceptor.getInstancia().configAtributos(nombre);
+            LogicaReceptor.getInstancia().configAtributos(nombre);
                     this.jDiagSesionRecep.setVisible(false);
-            NegocioReceptor.getInstancia().iniciarSesion();
+            LogicaReceptor.getInstancia().iniciarSesion();
                 }
                 else {
                         this.lanzarCartelError("ERROR: debe completar todos los campos");

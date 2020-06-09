@@ -3,10 +3,10 @@ package presentacion;
 
 import interfaces.IEnviarMensajeEm;
 
-import negocio.NegocioEmisor;
+import negocio.LogicaEmisor;
 import negocio.Persona;
 
-import negocio.NegocioReceptor;
+import negocio.LogicaReceptor;
 
 
 import java.awt.event.ActionListener;
@@ -482,7 +482,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         if(personas.size() > 0){
             if(!this.getAsunto().trim().equals("")){
                 if(!this.getMensaje().trim().equals("")){
-                    NegocioEmisor.getInstancia().enviarMensaje(personas);
+                    LogicaEmisor.getInstancia().enviarMensaje(personas);
                 }
                 else{
                     this.lanzarCartelError("ERROR: debe añadir un mensaje.");
@@ -507,10 +507,10 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
         String nombre = this.getNombreConfig().trim();
         if(!nombre.equals(""))
         {
-            NegocioEmisor.getInstancia().configAtributos(nombre);
+            LogicaEmisor.getInstancia().configAtributos(nombre);
             this.cerrarSesion();
             this.setVisible(true);
-            NegocioEmisor.getInstancia().pedirAvisosPendientes();
+            LogicaEmisor.getInstancia().pedirAvisosPendientes();
         }
         else 
         {
@@ -556,7 +556,7 @@ public class VentanaEmisor extends javax.swing.JFrame implements IVentanaEmisor{
     public void abrirSesion() {
         this.sesionEmisor.setSize(400, 400);
         this.sesionEmisor.setVisible(true);
-        this.textNombreSesion.setText(NegocioEmisor.getInstancia().getNombre());
+        this.textNombreSesion.setText(LogicaEmisor.getInstancia().getNombre());
         this.repaint();
         
     }

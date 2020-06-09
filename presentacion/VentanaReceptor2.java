@@ -28,7 +28,7 @@ import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
 import negocio.Mensaje;
-import negocio.NegocioReceptor;
+import negocio.LogicaReceptor;
 import negocio.Persona;
 
 
@@ -65,7 +65,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         this.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
-                NegocioReceptor.getInstancia().notificarDesconexionDirectorio();
+                LogicaReceptor.getInstancia().notificarDesconexionDirectorio();
                         System.exit(0);
                     }
         });
@@ -615,7 +615,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
 
     int xx,xy;
     private void btn_exitMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_exitMousePressed
-        NegocioReceptor.getInstancia().notificarDesconexionDirectorio();
+        LogicaReceptor.getInstancia().notificarDesconexionDirectorio();
         System.exit(0);
     }//GEN-LAST:event_btn_exitMousePressed
 
@@ -711,7 +711,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         this.jDiagSesionRecep.setSize(275, 305);
         this.jDiagSesionRecep.setResizable(false);
         this.jDiagSesionRecep.setVisible(true);
-        this.nombreReceptor.setText(NegocioReceptor.getInstancia().getNombre());
+        this.nombreReceptor.setText(LogicaReceptor.getInstancia().getNombre());
         //this.jLabel_usrname.setText(NegocioReceptor.getInstancia().getNombre());
         this.repaint();
     }
@@ -720,10 +720,10 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
         String nombre = this.nombreReceptor.getText().trim();
         if(!nombre.equals(""))
         {
-            NegocioReceptor.getInstancia().configAtributos(nombre);
+            LogicaReceptor.getInstancia().configAtributos(nombre);
             this.jLabel_usrname.setText(nombre);
             this.jDiagSesionRecep.setVisible(false);
-            NegocioReceptor.getInstancia().iniciarSesion();
+            LogicaReceptor.getInstancia().iniciarSesion();
             this.setVisible(true);
         }
         else {

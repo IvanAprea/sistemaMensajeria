@@ -20,7 +20,7 @@ import java.net.SocketTimeoutException;
 
 import java.net.UnknownHostException;
 
-import negocio.NegocioReceptor;
+import negocio.LogicaReceptor;
 import negocio.UsuarioReceptor;
 
 public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPuerto,IPendientesReceptor{
@@ -55,7 +55,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
                         s = sv.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
                         dOutRecepcion = new DataOutputStream(s.getOutputStream());
-                        NegocioReceptor.getInstancia().recibirMensaje(dIn.readUTF());
+                        LogicaReceptor.getInstancia().recibirMensaje(dIn.readUTF());
                         s.close();
                     }
                 }
@@ -129,7 +129,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
             String st = dIn.readUTF();
             while(st.equalsIgnoreCase("TRUE"))
             {
-                NegocioReceptor.getInstancia().recibirMensaje(dIn.readUTF());
+                LogicaReceptor.getInstancia().recibirMensaje(dIn.readUTF());
                 st = dIn.readUTF();
             }
             s.close();
