@@ -2,6 +2,7 @@ package negocio;
 
 import base.ComunicacionDirectorio;
 
+import interfaces.IComando;
 import interfaces.IGestionUsuarios;
 
 import java.awt.event.ActionEvent;
@@ -23,7 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class NegocioDirectorio implements IGestionUsuarios{
+public class NegocioDirectorio implements IGestionUsuarios,IComando{
     
     private static NegocioDirectorio _instancia = null;
     private UsuariosRecMap listaDirectorio;

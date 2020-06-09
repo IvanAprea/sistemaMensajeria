@@ -88,7 +88,7 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
                 msjAux = ComunicacionMensajeria.getInstancia().recibirMsj();
                 socket.close();
                 socket = new Socket(ipem,puertoem);
-                ComunicacionMensajeria.getInstancia().notificarEmisorConLlegadaMsj(msjAux);
+                ComunicacionMensajeria.getInstancia().notificarEmisorLlegadaMsj(msjAux);
             } catch (Exception e)
             {
                 e.printStackTrace();
@@ -109,7 +109,7 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
             return msj;
     }
 
-    public synchronized void notificarEmisorConLlegadaMsj(String nombreRec) throws IOException {
+    public synchronized void notificarEmisorLlegadaMsj(String nombreRec) throws IOException {
         DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
         dOut.writeUTF(nombreRec);
         dOut.flush();

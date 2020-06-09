@@ -130,7 +130,7 @@ public class NegocioReceptor extends Persona implements ActionListener,IUsuario,
         this.ventanaReceptor = ventanaReceptor;
         this.ventanaReceptor.addActionListener(this);
     }
-	
+
     public void configAtributos(String nombre) {
         this.setNombre(nombre);
     }

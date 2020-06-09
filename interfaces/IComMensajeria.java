@@ -9,6 +9,7 @@ public interface IComMensajeria
 {
     void enviarPendientes(StringWriter mensaje) throws IOException;
     String recibirMsj() throws Exception;
-    void notificarEmisorConLlegadaMsj(String nombreRec) throws IOException;
+    void notificarEmisorLlegadaMsj(String nombreRec) throws IOException;
     void enviarConfirmacion(InetAddress ipem, int puertoem,String nReceptor) throws IOException;
+    void enviarMensaje(StringWriter mensaje, InetAddress iprec, int puertorec, int tipo, InetAddress ipem, int puertoem) throws IOException;
 }

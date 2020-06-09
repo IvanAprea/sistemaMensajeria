@@ -5,6 +5,8 @@ import base.ComunicacionMensajeria;
 
 import base.PersistenciaMensajeria;
 
+import base.PersistenciaXML;
+
 import interfaces.IBackUp;
 
 import interfaces.IBackUpMensajeria;
@@ -33,7 +35,6 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 public class Mensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
 
-    
     private static final String fileNoEnviados="noEnviados.txt",fileNoEnviadosCAviso="noEnviadosCAviso.txt",fileAvisosPendientes="avisosPendientes.txt";
     private static Mensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
@@ -377,9 +378,9 @@ public class Mensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarP
                         Mensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
                         Mensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
                         Mensajeria.getInstancia().setAvisosPendientesOcup(true);
-                        PersistenciaMensajeria.getInstancia().backUp(Mensajeria.getInstancia().getMensajesNoEnviados(),Mensajeria.fileNoEnviados);
-                        PersistenciaMensajeria.getInstancia().backUp(Mensajeria.getInstancia().getMensajesNoEnviadosCAviso(),Mensajeria.fileNoEnviadosCAviso);
-                        PersistenciaMensajeria.getInstancia().backUp(Mensajeria.getInstancia().getAvisosPendientes(),Mensajeria.fileAvisosPendientes);
+                        PersistenciaXML.getInstancia().backUp(Mensajeria.getInstancia().getMensajesNoEnviados(),Mensajeria.fileNoEnviados);
+                        PersistenciaXML.getInstancia().backUp(Mensajeria.getInstancia().getMensajesNoEnviadosCAviso(),Mensajeria.fileNoEnviadosCAviso);
+                        PersistenciaXML.getInstancia().backUp(Mensajeria.getInstancia().getAvisosPendientes(),Mensajeria.fileAvisosPendientes);
                         Mensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
                         Mensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
                         Mensajeria.getInstancia().setAvisosPendientesOcup(false);
@@ -390,6 +391,7 @@ public class Mensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarP
                 {
                     Mensajeria.getInstancia().informarConsola("ERROR al hacer back-up de Mensajeria");
                     e.printStackTrace();
+                    
                 }
             }
         };
@@ -413,9 +415,9 @@ public class Mensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarP
         Mensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
         Mensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
         Mensajeria.getInstancia().setAvisosPendientesOcup(true);
-        this.mensajesNoEnviados =  PersistenciaMensajeria.getInstancia().recuperarDatos(Mensajeria.fileNoEnviados);
-        this.mensajesNoEnviadosCAviso = PersistenciaMensajeria.getInstancia().recuperarDatos(Mensajeria.fileNoEnviadosCAviso);
-        this.avisosPendientes = PersistenciaMensajeria.getInstancia().recuperarDatos(Mensajeria.fileAvisosPendientes);
+        this.mensajesNoEnviados = PersistenciaXML.getInstancia().recuperarDatos(Mensajeria.fileNoEnviados);
+        this.mensajesNoEnviadosCAviso = PersistenciaXML.getInstancia().recuperarDatos(Mensajeria.fileNoEnviadosCAviso);
+        this.avisosPendientes = PersistenciaXML.getInstancia().recuperarDatos(Mensajeria.fileAvisosPendientes);
         Mensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
         Mensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
         Mensajeria.getInstancia().setAvisosPendientesOcup(false);
