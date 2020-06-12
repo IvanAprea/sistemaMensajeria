@@ -687,8 +687,13 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
         if(personas.size() > 0 && personas != null){
             if(!this.getAsunto().trim().equals("")){
                 if(!this.getMensaje().trim().equals("")){
-                    if(this.getTipo() != -1)
+                    if(this.getTipo() != -1){
                         LogicaEmisor.getInstancia().enviarMensaje(personas);
+                        this.textAsuntoEmisor.setText("");
+                        this.textMensajeEmisor.setText("");
+                        this.tipoMensaje.clearSelection();
+                        this.modDestinatariosConfirmados.clear();
+                    }
                     else
                         this.lanzarCartelError("ERROR: debe seleccionar el tipo de mensaje.");
                 }

@@ -14,6 +14,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
+import java.nio.charset.StandardCharsets;
+
 import javax.sound.sampled.Clip;
 
 import javax.swing.DefaultListModel;
@@ -757,7 +759,7 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
     
     public void actualizaListaMensajes(Mensaje mensaje)
     {
-        this.listaRecibidos.addRow(new Object[]{mensaje.getFecha(), mensaje.getEmisor().getNombre(), mensaje.getAsunto(), mensaje.getTexto(), ((mensaje.getTipo() == 1) ? "[!]" : "")});
+        this.listaRecibidos.addRow(new Object[]{mensaje.getFecha(), mensaje.getEmisor().getNombre(), new String(mensaje.getAsunto(),StandardCharsets.UTF_8), new String(mensaje.getTexto(),StandardCharsets.UTF_8), ((mensaje.getTipo() == 1) ? "[!]" : "")});
         this.repaint();
     }
     

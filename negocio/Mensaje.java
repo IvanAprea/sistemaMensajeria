@@ -8,8 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Mensaje {
-	private String asunto;
-	private String texto;
+	private byte[] texto,asunto;
 	private Persona emisor;
 	private int tipo;
         private String fecha;
@@ -18,7 +17,7 @@ public class Mensaje {
                 super();
         }
             
-	public Mensaje(String asunto, String texto, Persona emisor, int tipo) {
+	public Mensaje(byte[] asunto, byte[] texto, Persona emisor, int tipo) {
 		super();
 		this.asunto = asunto;
 		this.texto = texto;
@@ -32,19 +31,19 @@ public class Mensaje {
         return "["+this.fecha+"]    " + "De: " + emisor.toString() + " Asunto: " + asunto +((tipo == 1) ? "  [!] " : "     ");
     }
 
-    public void setAsunto(String asunto) {
+    public void setAsunto(byte[] asunto) {
         this.asunto = asunto;
     }
 
-    public String getAsunto() {
+    public byte[] getAsunto() {
         return asunto;
     }
 
-    public void setTexto(String texto) {
+    public void setTexto(byte[] texto) {
         this.texto = texto;
     }
 
-    public String getTexto() {
+    public byte[] getTexto() {
         return texto;
     }
     

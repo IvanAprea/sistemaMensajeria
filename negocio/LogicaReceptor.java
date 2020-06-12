@@ -115,11 +115,11 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
     	    javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
     	    StringReader reader = new StringReader(str);
     	    Mensaje mensaje = (MensajeEmisor) unmarshaller.unmarshal(reader);
+            asuntoDesencriptado = this.getDesencriptador().desencriptar(mensaje.getAsunto());
+            textoDesencriptado = this.getDesencriptador().desencriptar(mensaje.getTexto());
+            mensaje.setAsunto(asuntoDesencriptado);
+            mensaje.setTexto(textoDesencriptado);
             this.ventanaReceptor.actualizaListaMensajes(mensaje);
-            asuntoDesencriptado = this.getDesencriptador().desencriptar(mensaje.getAsunto().getBytes());
-            textoDesencriptado = this.getDesencriptador().desencriptar(mensaje.getTexto().getBytes());
-            mensaje.setAsunto(new String(asuntoDesencriptado, StandardCharsets.UTF_8));
-            mensaje.setTexto(new String(textoDesencriptado, StandardCharsets.UTF_8));
             if(mensaje.getTipo() == 1) {
             	this.setSound(IVentanaReceptor.ALERT_SOUND_URL);
             	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());

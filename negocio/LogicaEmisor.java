@@ -45,7 +45,6 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import presentacion.VentanaEmisorOld;
 import presentacion.VentanaEmisor2;
 
 public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor{
@@ -105,13 +104,14 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
         tipo=vista.getTipo();
-        mensaje = new MensajeEmisor(asunto,"",this,tipo,null);
+        mensaje = new MensajeEmisor(null,null,this,tipo,null);
         mensaje.setearFecha();
         while(it.hasNext()){
             personaAux=it.next();
             mensaje.setReceptor(personaAux);
             try{
-                mensaje.setTexto(new String(this.encriptador.encriptar(personaAux.getPublicKey(), texto.getBytes()),StandardCharsets.UTF_8));
+                mensaje.setAsunto(this.encriptador.encriptar(personaAux.getPublicKey(), asunto.getBytes()));
+                mensaje.setTexto(this.encriptador.encriptar(personaAux.getPublicKey(), texto.getBytes()));
                 javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
                 javax.xml.bind.Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);

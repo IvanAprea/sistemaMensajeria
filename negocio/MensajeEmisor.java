@@ -7,7 +7,7 @@ public class MensajeEmisor extends Mensaje
 {
     private UsuarioReceptor receptor;
     
-    public MensajeEmisor(String asunto, String texto, Persona persona, int tipo, UsuarioReceptor receptor)
+    public MensajeEmisor(byte[] asunto, byte[] texto, Persona persona, int tipo, UsuarioReceptor receptor)
     {
         super(asunto, texto, persona, tipo);
         this.receptor=receptor;
