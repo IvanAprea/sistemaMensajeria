@@ -155,15 +155,15 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
 	
     public void iniciarSesion(){
         UsuarioReceptor usuario = new UsuarioReceptor(this.getIP()+":"+this.getPuerto(), this.getNombre(), this.getIP(), this.getPuerto());
-        usuario.setPublicKey(this.getDesencriptador().getPublicKey());
         try{
+            desencriptador.setKeys();
+            usuario.setPublicKey(this.getDesencriptador().getPublicKey());
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
             marshaller.marshal(usuario, sw);
             try{
-                desencriptador.setKeys();
                 ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
                 this.ventanaReceptor.mostrarVentana();
                 this.pedirMensajesPendientes();
