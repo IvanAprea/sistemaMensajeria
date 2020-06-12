@@ -42,4 +42,8 @@ public class UsuarioReceptor extends Persona{
     {
         return publicKey;
     }
+
+    public void setPublicKey(byte[] publicKey) {
+        this.publicKey = publicKey;
+    }
 }
