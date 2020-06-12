@@ -8,6 +8,7 @@ import exceptions.excepcionEnviarMensaje;
 
 import interfaces.ICargaConfig;
 import interfaces.IConfirmacionEmisor;
+import interfaces.IEncriptar;
 import interfaces.IEnviarMensajeEm;
 
 import java.util.Map;
@@ -38,6 +39,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import java.nio.charset.StandardCharsets;
+
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -57,6 +60,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
     private final int cantDatos=2;
     private Socket socketDirectorio;
     private UsuariosRecMap listaActualReceptores;
+    private IEncriptar encriptador;
     
     private LogicaEmisor() {
         super();
@@ -101,12 +105,13 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         asunto=vista.getAsunto();
         texto=vista.getMensaje();
         tipo=vista.getTipo();
-        mensaje = new MensajeEmisor(asunto,texto,this,tipo,null);
+        mensaje = new MensajeEmisor(asunto,"",this,tipo,null);
         mensaje.setearFecha();
-        try{
-            while(it.hasNext()){
-                personaAux=it.next();
-                mensaje.setReceptor(personaAux);
+        while(it.hasNext()){
+            personaAux=it.next();
+            mensaje.setReceptor(personaAux);
+            try{
+                mensaje.setTexto(new String(this.encriptador.encriptar(personaAux.getPublicKey(), texto.getBytes()),StandardCharsets.UTF_8));
                 javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
                 javax.xml.bind.Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -121,9 +126,10 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 } catch (Exception e){
                     this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" no puede recibir el mensaje");
                 }
+            }catch(Exception e)
+            {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
     
@@ -270,5 +276,9 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         LogicaEmisor.instancia = instancia;
     }
 
+    public void setEncriptador(IEncriptar encriptador)
+    {
+        this.encriptador = encriptador;
+    }
 
 }

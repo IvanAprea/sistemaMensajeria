@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class UsuarioReceptor extends Persona{
     
     private String ID, estado;
+    private byte[] publicKey;
     
     public UsuarioReceptor(String ID, String nombre, String ip, String puerto) {
         super(nombre,ip,puerto);
@@ -37,4 +38,8 @@ public class UsuarioReceptor extends Persona{
         return super.toString()+"   "+this.getEstado();
     }
 
+    public byte[] getPublicKey()
+    {
+        return publicKey;
+    }
 }

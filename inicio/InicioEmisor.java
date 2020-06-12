@@ -2,6 +2,8 @@ package inicio;
 
 import base.ComunicacionEmisor;
 
+import base.Encriptadora;
+
 import negocio.LogicaEmisor;
 
 import presentacion.IVentanaEmisor;
@@ -18,6 +20,7 @@ public class InicioEmisor {
         LogicaEmisor.getInstancia().setearIp();
         LogicaEmisor.getInstancia().setVista(vista);
         LogicaEmisor.getInstancia().escucharPuerto();
+        LogicaEmisor.getInstancia().setEncriptador(new Encriptadora());
         vista.abrirSesion();
     }
 }
