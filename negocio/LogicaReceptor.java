@@ -4,7 +4,10 @@ import base.ComunicacionDirectorio;
 import base.ComunicacionEmisor;
 import base.ComunicacionReceptor;
 
+import base.Desencriptadora;
+
 import interfaces.ICargaConfig;
+import interfaces.IDesencriptar;
 import interfaces.IRecibirMensaje;
 import interfaces.IUsuario;
 
@@ -34,23 +37,34 @@ import java.io.UnsupportedEncodingException;
 
 import java.net.Socket;
 
+import java.nio.charset.StandardCharsets;
+
 import java.time.format.DateTimeFormatter;
 
 public class LogicaReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
-        private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
-	private static LogicaReceptor _instancia = null;
-	private IVentanaReceptor ventanaReceptor;
-        private boolean RMocupado=false;
-        private final String regex=", *";
-        private final String nombreConfigDirectorio="config.txt";
-        private final String decoder="UTF8";
-        private final int cantDatos=2;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private static LogicaReceptor _instancia = null;
+    private IVentanaReceptor ventanaReceptor;
+    private boolean RMocupado=false;
+    private final String regex=", *";
+    private final String nombreConfigDirectorio="config.txt";
+    private final String decoder="UTF8";
+    private final int cantDatos=2;
+    private IDesencriptar desencriptador;
+        
 	
     private LogicaReceptor() {
     	super();
     }
 
+    public void setDesencriptador(IDesencriptar desencriptador) {
+        this.desencriptador = desencriptador;
+    }
+
+    public IDesencriptar getDesencriptador() {
+        return desencriptador;
+    }
 
     public String getIPDirectorio() {
         return IPDirectorio;
@@ -96,12 +110,16 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
         }
         RMocupado=true;
     	try {
+            byte[] asuntoDesencriptado, textoDesencriptado;
     	    javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
     	    javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
     	    StringReader reader = new StringReader(str);
     	    Mensaje mensaje = (MensajeEmisor) unmarshaller.unmarshal(reader);
             this.ventanaReceptor.actualizaListaMensajes(mensaje);
-            
+            asuntoDesencriptado = this.getDesencriptador().desencriptar(mensaje.getAsunto().getBytes());
+            textoDesencriptado = this.getDesencriptador().desencriptar(mensaje.getTexto().getBytes());
+            mensaje.setAsunto(new String(asuntoDesencriptado, StandardCharsets.UTF_8));
+            mensaje.setTexto(new String(textoDesencriptado, StandardCharsets.UTF_8));
             if(mensaje.getTipo() == 1) {
             	this.setSound(IVentanaReceptor.ALERT_SOUND_URL);
             	this.ventanaReceptor.lanzarAlerta(mensaje.getEmisor().getNombre());
@@ -136,7 +154,6 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
     }
 	
     public void iniciarSesion(){
-        
         UsuarioReceptor usuario = new UsuarioReceptor(this.getIP()+":"+this.getPuerto(), this.getNombre(), this.getIP(), this.getPuerto());
         try{
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
@@ -145,6 +162,7 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
             StringWriter sw = new StringWriter();
             marshaller.marshal(usuario, sw);
             try{
+                desencriptador.setKeys();
                 ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
                 this.ventanaReceptor.mostrarVentana();
                 this.pedirMensajesPendientes();

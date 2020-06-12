@@ -1,5 +1,7 @@
 package inicio;
 
+import base.Desencriptadora;
+
 import presentacion.VentanaReceptor2;
 import negocio.LogicaReceptor;
 import negocio.Mensaje;
@@ -17,6 +19,7 @@ public class inicioReceptor {
         LogicaReceptor.getInstancia().setearIp();
         LogicaReceptor.getInstancia().setVentanaReceptor(ventana);
         LogicaReceptor.getInstancia().cargarDatosConfig();
+        LogicaReceptor.getInstancia().setDesencriptador(new Desencriptadora());
         ventana.pack();
         ventana.iniciarSesion();
     }
