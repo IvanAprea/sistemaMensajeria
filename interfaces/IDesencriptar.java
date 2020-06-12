@@ -1,8 +1,10 @@
 package interfaces;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+
 public interface IDesencriptar {
-    void setKeys();
+    void setKeys() throws NoSuchAlgorithmException, NoSuchProviderException;
     byte[] getPublicKey();
-    byte[] getPrivateKey();
-    byte[] desencriptar(byte[] privateKey, byte[] inputData);
+    byte[] desencriptar(byte[] inputData) throws Exception;
 }
