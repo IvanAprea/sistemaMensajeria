@@ -5,6 +5,9 @@ import base.ComunicacionEmisor;
 import base.ComunicacionReceptor;
 
 
+import base.PersistenciaMensajeria;
+import base.PersistenciaXML;
+
 import interfaces.ICargaConfig;
 import interfaces.IConfirmacionEmisor;
 import interfaces.IEncriptar;
@@ -145,7 +148,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                     if(isEnviandoNoEnviados() == false)
                     {
                         enviarMensajesPendientes();
-                        //persistirNoEnviados();
+                        persistirNoEnviados();
                         setEnviandoNoEnviados(true);
                     }
                     this.lanzarCartelError(personaAux.getNombre()+" no puede recibir el mensaje en este momento, se enviara luego.");
@@ -224,7 +227,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                         setNoEnviadosOcupado(true);
                         if(!noEnviados.isEmpty())
                         {
-                            
+                            PersistenciaXML.getInstancia().backUp(LogicaEmisor.getInstancia().getNoEnviados(), "noEnviadosEmisor.txt");
                         }
                         setNoEnviadosOcupado(false);
                         notifyAll();
@@ -237,6 +240,30 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
             }
         };
         tr.start();
+    }
+    
+    public synchronized void recuperarNoEnviados()
+    {
+        try
+        {
+            while(isNoEnviadosOcupado())
+            {
+                wait();
+            }
+            setNoEnviadosOcupado(true);
+            this.noEnviados = (HashMap<UsuarioReceptor,ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos("noEnviadosEmisor.txt");
+            setNoEnviadosOcupado(false);
+            if(!this.noEnviados.isEmpty())
+            {
+                enviarMensajesPendientes();
+                persistirNoEnviados();
+                setEnviandoNoEnviados(true);
+            }
+            notifyAll();
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
     }
     
     public synchronized void recibirConfirmacion(String receptor, String fecha){

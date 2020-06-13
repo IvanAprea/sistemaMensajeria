@@ -1,7 +1,5 @@
 package base;
 
-import exceptions.excepcionEnviarMensaje;
-
 import interfaces.IComMensajeria;
 import interfaces.IEscucharPuerto;
 

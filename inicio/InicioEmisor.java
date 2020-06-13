@@ -21,6 +21,7 @@ public class InicioEmisor {
         LogicaEmisor.getInstancia().setVista(vista);
         LogicaEmisor.getInstancia().escucharPuerto();
         LogicaEmisor.getInstancia().setEncriptador(new Encriptadora());
+        LogicaEmisor.getInstancia().recuperarNoEnviados();
         vista.abrirSesion();
     }
 }

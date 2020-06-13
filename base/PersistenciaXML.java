@@ -35,14 +35,14 @@ public class PersistenciaXML extends PersistenciaMensajeria
         return _instancia;
     }
     
-    public void backUp(HashMap<String, ArrayList<String>> mensajesNoEnviados,String fileName)
+    public void backUp(Object objeto,String fileName)
     {
         try
         {
             fileoutput = new FileOutputStream(fileName);
             objectoutput = new ObjectOutputStream(fileoutput);
             if(objectoutput != null){
-                objectoutput.writeObject(mensajesNoEnviados);
+                objectoutput.writeObject(objeto);
                 objectoutput.close();
             }
             
@@ -55,16 +55,16 @@ public class PersistenciaXML extends PersistenciaMensajeria
         }
     }
     
-    public HashMap<String, ArrayList<String>> recuperarDatos(String fileName)
+    public Object recuperarDatos(String fileName)
     {
-        HashMap<String, ArrayList<String>> hm = new HashMap<String, ArrayList<String>>();
+        Object objeto = null;
         try
         {
             fileinput = new FileInputStream(fileName);
             objectinput = new ObjectInputStream(fileinput);
             if(objectinput != null)
             {
-                    hm = (HashMap<String, ArrayList<String>>) objectinput.readObject();
+                    objeto = objectinput.readObject();
                     objectinput.close();
             }
         } 
@@ -83,6 +83,6 @@ public class PersistenciaXML extends PersistenciaMensajeria
         {
             e.printStackTrace();
         }
-        return hm;
+        return objeto;
     }
 }

@@ -5,6 +5,6 @@ import java.util.HashMap;
 
 public interface IBackUp
 {
-    void backUp(HashMap<String, ArrayList<String>> mensajesNoEnviados,String fileName);
-    HashMap<String, ArrayList<String>> recuperarDatos(String fileName);
+    void backUp(Object mensajesNoEnviados,String fileName);
+    Object recuperarDatos(String fileName);
 }

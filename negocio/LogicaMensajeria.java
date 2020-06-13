@@ -35,7 +35,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
 
-    private static final String fileNoEnviados="noEnviados.txt",fileNoEnviadosCAviso="noEnviadosCAviso.txt",fileAvisosPendientes="avisosPendientes.txt";
+    private static final String fileNoEnviados="noEnviadosMensajeria.txt",fileNoEnviadosCAviso="noEnviadosCAvisoMensajeria.txt",fileAvisosPendientes="avisosPendientesMensajeria.txt";
     private static LogicaMensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
     private HashMap<String, ArrayList<String>> mensajesNoEnviadosCAviso;
@@ -418,9 +418,9 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
         LogicaMensajeria.getInstancia().setAvisosPendientesOcup(true);
-        this.mensajesNoEnviados = PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileNoEnviados);
-        this.mensajesNoEnviadosCAviso = PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileNoEnviadosCAviso);
-        this.avisosPendientes = PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileAvisosPendientes);
+        this.mensajesNoEnviados = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileNoEnviados);
+        this.mensajesNoEnviadosCAviso = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileNoEnviadosCAviso);
+        this.avisosPendientes = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileAvisosPendientes);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
         LogicaMensajeria.getInstancia().setAvisosPendientesOcup(false);
