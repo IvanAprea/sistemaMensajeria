@@ -229,7 +229,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                         setNoEnviadosOcupado(true);
                         if(!noEnviados.isEmpty())
                         {
-                            PersistenciaXML.getInstancia().backUp(LogicaEmisor.getInstancia().getNoEnviados(), "noEnviadosEmisor.txt");
+                            PersistenciaXML.getInstancia().persistir(LogicaEmisor.getInstancia().getNoEnviados(), "noEnviadosEmisor.txt");
                         }
                         setNoEnviadosOcupado(false);
                         notifyAll();
@@ -253,7 +253,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 wait();
             }
             setNoEnviadosOcupado(true);
-            this.noEnviados = (HashMap<UsuarioReceptor,ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos("noEnviadosEmisor.txt");
+            this.noEnviados = (HashMap<UsuarioReceptor,ArrayList<String>>)PersistenciaXML.getInstancia().recuperar("noEnviadosEmisor.txt");
             setNoEnviadosOcupado(false);
             if(!this.noEnviados.isEmpty())
             {

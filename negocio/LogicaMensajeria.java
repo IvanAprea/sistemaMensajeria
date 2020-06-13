@@ -378,11 +378,11 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
                         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
                         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
                         LogicaMensajeria.getInstancia().setAvisosPendientesOcup(true);
-                        PersistenciaXML.getInstancia().backUp(LogicaMensajeria.getInstancia().getMensajesNoEnviados(),
+                        PersistenciaXML.getInstancia().persistir(LogicaMensajeria.getInstancia().getMensajesNoEnviados(),
                                     LogicaMensajeria.fileNoEnviados);
-                        PersistenciaXML.getInstancia().backUp(LogicaMensajeria.getInstancia().getMensajesNoEnviadosCAviso(),
+                        PersistenciaXML.getInstancia().persistir(LogicaMensajeria.getInstancia().getMensajesNoEnviadosCAviso(),
                                     LogicaMensajeria.fileNoEnviadosCAviso);
-                        PersistenciaXML.getInstancia().backUp(LogicaMensajeria.getInstancia().getAvisosPendientes(),
+                        PersistenciaXML.getInstancia().persistir(LogicaMensajeria.getInstancia().getAvisosPendientes(),
                                     LogicaMensajeria.fileAvisosPendientes);
                         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
                         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
@@ -418,9 +418,9 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
         LogicaMensajeria.getInstancia().setAvisosPendientesOcup(true);
-        this.mensajesNoEnviados = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileNoEnviados);
-        this.mensajesNoEnviadosCAviso = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileNoEnviadosCAviso);
-        this.avisosPendientes = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperarDatos(LogicaMensajeria.fileAvisosPendientes);
+        this.mensajesNoEnviados = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviados);
+        this.mensajesNoEnviadosCAviso = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviadosCAviso);
+        this.avisosPendientes = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileAvisosPendientes);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
         LogicaMensajeria.getInstancia().setAvisosPendientesOcup(false);
