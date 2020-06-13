@@ -5,13 +5,15 @@ import base.ComunicacionEmisor;
 import base.ComunicacionReceptor;
 
 
-import base.PersistenciaMensajeria;
+import base.Persistencia;
 import base.PersistenciaXML;
 
 import interfaces.ICargaConfig;
 import interfaces.IConfirmacionEmisor;
 import interfaces.IEncriptar;
 import interfaces.IEnviarMensajeEm;
+
+import interfaces.IPersistenciaEmisor;
 
 import java.util.Map;
 
@@ -50,7 +52,7 @@ import javax.swing.JOptionPane;
 
 import presentacion.VentanaEmisor2;
 
-public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor{
+public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor,IPersistenciaEmisor{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     private IVentanaEmisor vista;

@@ -3,7 +3,7 @@ package negocio;
 import base.ComunicacionDirectorio;
 import base.ComunicacionMensajeria;
 
-import base.PersistenciaMensajeria;
+import base.Persistencia;
 
 import base.PersistenciaXML;
 

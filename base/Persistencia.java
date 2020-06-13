@@ -5,7 +5,7 @@ import interfaces.IBackUp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class PersistenciaMensajeria implements IBackUp{
+public abstract class Persistencia implements IBackUp{
     
     /**
      * Thread-protected Singleton
@@ -13,7 +13,7 @@ public abstract class PersistenciaMensajeria implements IBackUp{
      */
     
     
-    public PersistenciaMensajeria()
+    public Persistencia()
     {
         super();
     }

@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PersistenciaXML extends PersistenciaMensajeria
+public class PersistenciaXML extends Persistencia
 {
     
     private static PersistenciaXML _instancia = null;
