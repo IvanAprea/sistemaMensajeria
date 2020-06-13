@@ -135,7 +135,7 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
             s.close();
         } catch (IOException e)
         {
-            e.printStackTrace();
+            LogicaReceptor.getInstancia().lanzarCartelError("El servicio de mensajes esta offline momentaneamente.");
         }
     }
     

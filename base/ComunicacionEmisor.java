@@ -1,6 +1,5 @@
 package base;
 
-import exceptions.excepcionEnviarMensaje;
 
 import interfaces.IDirectorio;
 
@@ -24,6 +23,10 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+
+import java.util.ArrayList;
+
+import java.util.Iterator;
 
 import negocio.LogicaEmisor;
 import negocio.LogicaReceptor;
@@ -49,37 +52,49 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
     }
 
 
-    public void enviarMensaje(StringWriter mensaje, InetAddress ip, int puerto,int tipo) throws excepcionEnviarMensaje {
+    public synchronized void enviarMensaje(String mensaje, InetAddress ip, int puerto) throws IOException{
         try {
             s = new Socket(ip, puerto);
             DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
             dOut.writeUTF("MSJ_NUEVOMSJ");
-            dOut.writeUTF(mensaje.toString());
+            dOut.writeUTF(mensaje);
             dOut.flush();
-            /*if(tipo == 2){
-                DataInputStream dIn = new DataInputStream(s.getInputStream());
-                String resultado = dIn.readUTF();
-                if(resultado.equalsIgnoreCase("DISCCONECTED"))
-                {
-                    s.close();
-                    throw new excepcionEnviarMensaje();
-                }
-                else
-                    NegocioEmisor.getInstancia().recibirConfirmacion(resultado);
-            }*/
-            s.close();
-
-        } catch (IOException e) {
-            try {
+        }finally
+        {
+            try
+            {
                 if(s!=null)
                     s.close();
-            } catch (IOException f) {
-                f.printStackTrace();
+            } catch (IOException e)
+            {
+                e.printStackTrace();
             }
-
         }
     }
     
+    public synchronized void enviarMensajes(ArrayList<String> mensajes, InetAddress ip, int puerto) throws IOException{
+        try {
+            s = new Socket(ip, puerto);
+            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
+            Iterator<String> it = mensajes.iterator();
+            while(it.hasNext()){
+                dOut.writeUTF("MSJ_NUEVOMSJ");
+                dOut.writeUTF(it.next());
+                dOut.flush();
+                it.remove();
+            }
+        }finally
+        {
+            try
+            {
+                if(s!=null)
+                    s.close();
+            } catch (IOException e)
+            {
+                System.out.println("La mensajeria esta off");
+            }
+        }
+    }
     
     public synchronized void escucharPuerto(String puerto) {
         Thread tr = new Thread() {
@@ -116,13 +131,10 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
         tr.start();
     }
 
-    public Socket abrirConexionDirectorio(InetAddress ip, int puerto) {
-        try {
+    public Socket abrirConexionDirectorio(InetAddress ip, int puerto) throws IOException {
+        
             return new Socket(ip, puerto);
-        } catch (IOException e) {
-            LogicaEmisor.getInstancia().lanzarCartelError("ERROR al conectar con el directorio");
-            return null;
-        }
+        
     }
     
     public String pedirListaADirectorio(Socket socket){
@@ -162,7 +174,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
             s.close();
         } catch (IOException e)
         {
-            e.printStackTrace();
+            LogicaEmisor.getInstancia().lanzarCartelError("El servicio de mensajes esta offline momentaneamente.");
         }
     }
 }

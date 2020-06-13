@@ -18,15 +18,16 @@ public abstract class PersistenciaMensajeria implements IBackUp{
         super();
     }
     
-    public void persistir(HashMap<String, ArrayList<String>> mensajesNoEnviados,String fileName)
+    public final void persistir(HashMap<String, ArrayList<String>> mensajesNoEnviados,String fileName)
     {
         this.backUp(mensajesNoEnviados,fileName);
     }
     
-    public HashMap<String, ArrayList<String>> recuperar(String fileName)
+    public final HashMap<String, ArrayList<String>> recuperar(String fileName)
     {
         return this.recuperarDatos(fileName);
     }
+    
     
     public abstract void backUp(HashMap<String, ArrayList<String>> mensajesNoEnviados,String fileName);
     

@@ -4,7 +4,6 @@ import base.ComunicacionEmisor;
 
 import base.ComunicacionReceptor;
 
-import exceptions.excepcionEnviarMensaje;
 
 import interfaces.ICargaConfig;
 import interfaces.IConfirmacionEmisor;
@@ -41,6 +40,7 @@ import java.net.UnknownHostException;
 
 import java.nio.charset.StandardCharsets;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -60,6 +60,8 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
     private Socket socketDirectorio;
     private UsuariosRecMap listaActualReceptores;
     private IEncriptar encriptador;
+    private HashMap<UsuarioReceptor,ArrayList<String>> noEnviados = new HashMap<UsuarioReceptor,ArrayList<String>>();
+    private boolean noEnviadosOcupado=false,enviandoNoEnviados = false;
     
     private LogicaEmisor() {
         super();
@@ -118,13 +120,35 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 StringWriter sw = new StringWriter();
                 marshaller.marshal(mensaje, sw);
                 try{
-                    ComunicacionEmisor.getInstancia().enviarMensaje(sw, InetAddress.getByName(this.IPMensajeria), Integer.parseInt(this.puertoMensajeria),mensaje.getTipo());
-                } catch(excepcionEnviarMensaje e){
-                    this.confirmacionPendiente(personaAux.getNombre());
+                    ComunicacionEmisor.getInstancia().enviarMensaje(sw.toString(), InetAddress.getByName(this.IPMensajeria), Integer.parseInt(this.puertoMensajeria));
                 }catch (UnknownHostException e) {
                     this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
                 } catch (Exception e){
-                    this.lanzarCartelError("El destinatario "+personaAux.getNombre()+" no puede recibir el mensaje");
+                    ArrayList<String> arr;
+                    while(this.isNoEnviadosOcupado())
+                    {
+                        wait();
+                    }
+                    this.setNoEnviadosOcupado(true);
+                    if(this.getNoEnviados().containsKey(personaAux))
+                    {
+                        arr = this.getNoEnviados().get(personaAux);
+                        arr.add(sw.toString());
+                    } else
+                    {
+                        arr = new ArrayList<String>();
+                        arr.add(sw.toString());
+                        this.getNoEnviados().put(personaAux, arr);
+                    }
+                    this.setNoEnviadosOcupado(false);
+                    notifyAll();
+                    if(isEnviandoNoEnviados() == false)
+                    {
+                        enviarMensajesPendientes();
+                        //persistirNoEnviados();
+                        setEnviandoNoEnviados(true);
+                    }
+                    this.lanzarCartelError(personaAux.getNombre()+" no puede recibir el mensaje en este momento, se enviara luego.");
                 }
             }catch(Exception e)
             {
@@ -133,12 +157,90 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         }
     }
     
-    public synchronized void recibirConfirmacion(String receptor, String fecha){
-        this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje enviado el "+fecha+".");
+    public synchronized void enviarMensajesPendientes()
+    {
+        Thread tr = new Thread() {
+            public synchronized void run() {
+                while(true)
+                {
+                    try
+                    {
+                        Thread.sleep(3000);
+                        while(isNoEnviadosOcupado())
+                        {
+                            wait();
+                        }
+                        setNoEnviadosOcupado(true);
+                        if(!noEnviados.isEmpty())
+                        {
+                            ArrayList<String> arr = null;
+                            Map.Entry me;
+                            UsuarioReceptor user;
+                            Iterator it = noEnviados.entrySet().iterator();
+                            while(it.hasNext())
+                            {
+                                me = (Map.Entry) it.next();
+                                user = (UsuarioReceptor) me.getKey();
+                                arr = (ArrayList<String>) me.getValue();
+                                try
+                                {
+                                    ComunicacionEmisor.getInstancia().enviarMensajes(arr, InetAddress.getByName(IPMensajeria),Integer.parseInt(puertoMensajeria));
+                                } catch (IOException e)
+                                {
+                                    e.printStackTrace();
+                                }
+                                if(arr.isEmpty())
+                                {
+                                    it.remove();
+                                }
+                            }
+                        }
+                        setNoEnviadosOcupado(false);
+                        notifyAll();
+                    } catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    
+                }
+            }
+        };
+        tr.start();
     }
     
-    public synchronized void confirmacionPendiente(String receptor){
-        this.vista.lanzarCartelError(receptor + " no esta conectado, se avisara cuando reciba el mensaje.");
+    public synchronized void persistirNoEnviados()
+    {
+        Thread tr = new Thread() {
+            public void run() {
+                while(true)
+                {
+                    try
+                    {
+                        Thread.sleep(3000);
+                        while(isNoEnviadosOcupado())
+                        {
+                            wait();
+                        }
+                        setNoEnviadosOcupado(true);
+                        if(!noEnviados.isEmpty())
+                        {
+                            
+                        }
+                        setNoEnviadosOcupado(false);
+                        notifyAll();
+                    } catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    
+                }
+            }
+        };
+        tr.start();
+    }
+    
+    public synchronized void recibirConfirmacion(String receptor, String fecha){
+        this.vista.lanzarCartelError(receptor + " ha recibido correctamente el mensaje enviado el "+fecha+".");
     }
     
     public void configAtributos(String nombre) {
@@ -214,7 +316,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         }
     }
     
-    public void abrirConexionDirectorio() throws UnknownHostException {
+    public void abrirConexionDirectorio() throws UnknownHostException,IOException {
             this.setSocketDirectorio(ComunicacionEmisor.getInstancia().abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),Integer.valueOf(puertoDirectorio)));
 
     }
@@ -232,14 +334,8 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 this.listaActualReceptores = (UsuariosRecMap)unmarshaller.unmarshal(reader);
             }
         } 
-        catch (UnknownHostException e) {
-            throw new Exception("ERROR al conectar con el directorio");
-        } 
-        catch (IOException e) {
-            throw new Exception("ERROR al cerrar la conexion con el directorio");
-        }
-        catch(Exception e){
-            e.printStackTrace();
+        catch (Exception e) {
+            throw new Exception("ERROR en la conexion con el directorio");
         }
     }
     
@@ -281,4 +377,28 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         this.encriptador = encriptador;
     }
 
+    public void setNoEnviadosOcupado(boolean listaNoDispOcupado)
+    {
+        this.noEnviadosOcupado = listaNoDispOcupado;
+    }
+
+    public boolean isNoEnviadosOcupado()
+    {
+        return noEnviadosOcupado;
+    }
+
+    public HashMap<UsuarioReceptor, ArrayList<String>> getNoEnviados()
+    {
+        return noEnviados;
+    }
+
+    public void setEnviandoNoEnviados(boolean enviandoNoEnviados)
+    {
+        this.enviandoNoEnviados = enviandoNoEnviados;
+    }
+
+    public boolean isEnviandoNoEnviados()
+    {
+        return enviandoNoEnviados;
+    }
 }
