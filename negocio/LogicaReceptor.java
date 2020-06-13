@@ -39,6 +39,9 @@ import java.net.Socket;
 
 import java.nio.charset.StandardCharsets;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+
 import java.time.format.DateTimeFormatter;
 
 public class LogicaReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
@@ -156,8 +159,8 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
     public void iniciarSesion(){
         UsuarioReceptor usuario = new UsuarioReceptor(this.getIP()+":"+this.getPuerto(), this.getNombre(), this.getIP(), this.getPuerto());
         try{
-            desencriptador.setKeys();
-            usuario.setPublicKey(this.getDesencriptador().getPublicKey());
+            this.cargarKeys();
+            usuario.setPublicKey(this.getDesencriptador().getPublicKey()); 
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
             javax.xml.bind.Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -242,5 +245,15 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
     public void setearPuerto(String p)
     {
         super.setPuerto(p);
+    }
+
+    private void cargarKeys() throws NoSuchAlgorithmException, NoSuchProviderException {
+        if(this.getDesencriptador().isYaExistenKeys(this.getNombre())){
+            this.getDesencriptador().recuperarKeys(this.getNombre());   
+        }
+        else{
+            this.getDesencriptador().setNewKeys();
+            this.getDesencriptador().persistirKeys(this.getNombre());
+        }
     }
 }

@@ -24,7 +24,7 @@ public class Desencriptadora implements IDesencriptar {
     }
 
     @Override
-    public void setKeys() throws NoSuchAlgorithmException, NoSuchProviderException {
+    public void setNewKeys() throws NoSuchAlgorithmException, NoSuchProviderException {
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance(ALGORITHM);
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
         // 512 is keysize
@@ -52,4 +52,29 @@ public class Desencriptadora implements IDesencriptar {
         return decryptedBytes;
     }
 
+    public void setPublicKey(byte[] publicKey) {
+        this.publicKey = publicKey;
+    }
+
+    public void setPrivateKey(byte[] privateKey) {
+        this.privateKey = privateKey;
+    }
+
+    @Override
+    public void persistirKeys(String nombre) {
+        PersistenciaXML.getInstancia().persistir(this.getPublicKey(), "/keys/"+nombre+"public.txt");
+        PersistenciaXML.getInstancia().persistir(this.getPrivateKey(), "/keys/"+nombre+"private.txt");
+    }
+
+    @Override
+    public void recuperarKeys(String nombre) {
+        this.setPublicKey((byte[]) PersistenciaXML.getInstancia().recuperar("/keys/"+nombre+"public.txt"));
+        this.setPrivateKey((byte[]) PersistenciaXML.getInstancia().recuperar("/keys/"+nombre+"private.txt"));
+    }
+    
+    @Override
+    public boolean isYaExistenKeys(String nombre){
+        return (PersistenciaXML.getInstancia().isFileExist("/keys/"+nombre+"public.txt") 
+                && PersistenciaXML.getInstancia().isFileExist("/keys/"+nombre+"private.txt"));
+    }
 }

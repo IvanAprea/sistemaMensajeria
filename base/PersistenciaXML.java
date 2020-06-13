@@ -1,6 +1,7 @@
 package base;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -84,5 +85,10 @@ public class PersistenciaXML extends Persistencia
             e.printStackTrace();
         }
         return objeto;
+    }
+    
+    public boolean isFileExist(String ruta){
+        File tmpDir = new File(ruta);
+        return tmpDir.exists();
     }
 }
