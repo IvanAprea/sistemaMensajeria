@@ -403,6 +403,8 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
     
     public synchronized void recuperarDatos()
     {
+        HashMap<String, ArrayList<String>> hsAux;
+        
         while(LogicaMensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup() ||
                LogicaMensajeria.getInstancia().isMensajesNoEnviadosOcup() ||
                LogicaMensajeria.getInstancia().isAvisosPendientesOcup())
@@ -418,9 +420,15 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
         LogicaMensajeria.getInstancia().setAvisosPendientesOcup(true);
-        this.mensajesNoEnviados = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviados);
-        this.mensajesNoEnviadosCAviso = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviadosCAviso);
-        this.avisosPendientes = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileAvisosPendientes);
+        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviados);
+        if(hsAux!=null)
+            this.mensajesNoEnviados = hsAux;
+        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviadosCAviso);
+        if(hsAux!=null)
+            this.mensajesNoEnviadosCAviso = hsAux;
+        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileAvisosPendientes);
+        if(hsAux!=null)
+            this.avisosPendientes = hsAux;
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
         LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
         LogicaMensajeria.getInstancia().setAvisosPendientesOcup(false);

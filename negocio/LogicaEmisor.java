@@ -216,7 +216,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
     public synchronized void persistirNoEnviados()
     {
         Thread tr = new Thread() {
-            public void run() {
+            public synchronized void run() {
                 while(true)
                 {
                     try
@@ -246,6 +246,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
     
     public synchronized void recuperarNoEnviados()
     {
+        HashMap<UsuarioReceptor,ArrayList<String>> hs;
         try
         {
             while(isNoEnviadosOcupado())
@@ -253,9 +254,11 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 wait();
             }
             setNoEnviadosOcupado(true);
-            this.noEnviados = (HashMap<UsuarioReceptor,ArrayList<String>>)PersistenciaXML.getInstancia().recuperar("noEnviadosEmisor.txt");
+            hs = (HashMap<UsuarioReceptor,ArrayList<String>>)PersistenciaXML.getInstancia().recuperar("noEnviadosEmisor.txt");
+            if (hs!=null)
+                this.noEnviados = hs;
             setNoEnviadosOcupado(false);
-            if(!this.noEnviados.isEmpty())
+            if(this.noEnviados!= null)
             {
                 enviarMensajesPendientes();
                 persistirNoEnviados();

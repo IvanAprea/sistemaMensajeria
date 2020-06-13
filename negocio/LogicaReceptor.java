@@ -249,7 +249,7 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
 
     private void cargarKeys() throws NoSuchAlgorithmException, NoSuchProviderException {
         if(this.getDesencriptador().isYaExistenKeys(this.getNombre())){
-            this.getDesencriptador().recuperarKeys(this.getNombre());   
+            this.getDesencriptador().recuperarKeys(this.getNombre());
         }
         else{
             this.getDesencriptador().setNewKeys();

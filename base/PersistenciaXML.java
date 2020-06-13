@@ -88,7 +88,7 @@ public class PersistenciaXML extends Persistencia
     }
     
     public boolean isFileExist(String ruta){
-        File tmpDir = new File(ruta);
+        File tmpDir = new File(ruta).getAbsoluteFile();
         return tmpDir.exists();
     }
 }
