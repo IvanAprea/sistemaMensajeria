@@ -51,7 +51,6 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
     private IVentanaReceptor ventanaReceptor;
     private boolean RMocupado=false;
     private final String regex=", *";
-    private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
     private final int cantDatos=2;
     private IDesencriptar desencriptador;
@@ -193,12 +192,12 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
         }
     }
     
-    public void cargarDatosConfig(){
+    public void cargarDatosConfig(String s){
         BufferedReader br;
         String[] datos;
 
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
             String linea = br.readLine();
             while(linea!=null){
                 datos=linea.split(regex);

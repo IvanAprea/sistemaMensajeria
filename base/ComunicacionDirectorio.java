@@ -2,6 +2,7 @@ package base;
 
 import interfaces.IEscucharPuerto;
 
+import interfaces.IRedundanciaDir;
 import interfaces.IRegistro;
 
 import java.io.DataInputStream;
@@ -9,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 
 import java.net.BindException;
@@ -18,34 +20,27 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.xml.bind.JAXBException;
 
 import negocio.LogicaDirectorio;
 import negocio.LogicaEmisor;
 import negocio.UsuarioReceptor;
+import negocio.UsuariosRecMap;
 
-public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
+public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistro,IRedundanciaDir{
 
     private static ComunicacionDirectorio _instancia = null;
     private ServerSocket sepd; //sepe=socketEscucharPuertoDirectorio
-    private Socket socket;
+    private Socket socketPD;
     private DataInputStream dIn;
     private DataOutputStream dOut;
     private PrintWriter out;
     
-    private ComunicacionDirectorio() {
+    public ComunicacionDirectorio() {
         super();
-    }
-    
-    /**
-     * Thread-protected Singleton
-     * @return
-     */
-    public synchronized static ComunicacionDirectorio getInstancia()
-    {
-        if(_instancia == null)
-            _instancia = new ComunicacionDirectorio();
-        return _instancia;
     }
     
     public synchronized void nuevoUsuario(){
@@ -54,7 +49,7 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                socket.close();
+                socketPD.close();
             } catch (IOException f) {
                 f.printStackTrace();
             }
@@ -62,11 +57,11 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
     }
     
     public void setSocket(Socket socket) {
-        this.socket = socket;
+        this.socketPD = socket;
     }
 
     public Socket getSocket() {
-        return socket;
+        return socketPD;
     }
 
     public synchronized void escucharPuerto(String puerto) {
@@ -76,11 +71,11 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
                     
                     sepd = new ServerSocket(Integer.parseInt(puerto));
                     while (true) {
-                        socket = sepd.accept();
-                        out = new PrintWriter(socket.getOutputStream(), true);
-                        dIn = new DataInputStream(socket.getInputStream());
+                        socketPD = sepd.accept();
+                        out = new PrintWriter(socketPD.getOutputStream(), true);
+                        dIn = new DataInputStream(socketPD.getInputStream());
                         LogicaDirectorio.getInstancia().ejecutarComando(dIn.readUTF());
-                        socket.close();
+                        socketPD.close();
                     }
                     //ver donde cerrar el socket
                 } catch (BindException e) {
@@ -100,10 +95,17 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
         }.start();
     }
     
+    public abstract void conectarDirectorio();
+    public abstract void escucharDirectorio(String puerto);
+    public abstract void cargarDatosDir();
+    public abstract String recibirDatos();
+    public abstract void setIpDir(String s);
+    public abstract void setPuertoDir(String s);
+    
     public void darLista(StringWriter hashmapMarshalizado){
         try 
         {
-            dOut = new DataOutputStream(socket.getOutputStream());
+            dOut = new DataOutputStream(socketPD.getOutputStream());
             dOut.writeUTF(hashmapMarshalizado.toString());
             dOut.flush();
         } 
@@ -118,7 +120,7 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                socket.close();
+                socketPD.close();
             } catch (IOException f) {
                 f.printStackTrace();
             }
@@ -131,11 +133,11 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                socket.close();
+                socketPD.close();
             } catch (IOException f) {
                 f.printStackTrace();
             }
         }
     }
-
+    
 }

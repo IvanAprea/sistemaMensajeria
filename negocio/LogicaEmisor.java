@@ -59,7 +59,6 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
     private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
     private static LogicaEmisor instancia = null;
     private final String regex=", *";
-    private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
     private final int cantDatos=2;
     private Socket socketDirectorio;
@@ -324,11 +323,11 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         return vista;
     }
     
-    public void cargarDatosConfig(){
+    public void cargarDatosConfig(String s){
         BufferedReader br;
         String[] datos;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
             String linea = br.readLine();
             while(linea!=null){
                 datos=linea.split(regex);

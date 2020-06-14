@@ -10,13 +10,19 @@ import presentacion.IVentanaEmisor;
 import presentacion.VentanaEmisor2;
 
 public class InicioEmisor {
+    
+    
+    
     public InicioEmisor() {
         super();
     }
 
     public static void main(String[] args) {
+        
+        final String nombreConfigDirectorio="config.txt";
+                
         VentanaEmisor2 vista = new VentanaEmisor2();
-        LogicaEmisor.getInstancia().cargarDatosConfig();
+        LogicaEmisor.getInstancia().cargarDatosConfig(nombreConfigDirectorio);
         LogicaEmisor.getInstancia().setearIp();
         LogicaEmisor.getInstancia().setVista(vista);
         LogicaEmisor.getInstancia().escucharPuerto();

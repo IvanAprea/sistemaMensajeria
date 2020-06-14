@@ -2,16 +2,23 @@ package negocio;
 
 import base.ComunicacionDirectorio;
 
+import interfaces.ICargaConfig;
 import interfaces.IComando;
 import interfaces.IGestionUsuarios;
 
 import java.awt.event.ActionEvent;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import java.io.StringWriter;
+
+import java.io.UnsupportedEncodingException;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -24,13 +31,18 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class LogicaDirectorio implements IGestionUsuarios,IComando{
+import javax.xml.bind.JAXBException;
+
+public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
     
     private static LogicaDirectorio _instancia = null;
     private UsuariosRecMap listaDirectorio;
     private boolean listaDirOcupado=false;
     private boolean usrOnlineOcupado=false;
     private ArrayList<String> usuariosOnlineActuales;
+    private ComunicacionDirectorio comDir;
+    private final String regex=", *";
+    private final String decoder="UTF8";
     
     private LogicaDirectorio() {
         super();
@@ -156,7 +168,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando{
             marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
             StringWriter sw = new StringWriter();
             marshaller.marshal(this.getListaDirectorio(), sw);
-            ComunicacionDirectorio.getInstancia().darLista(sw);
+            comDir.darLista(sw);
             this.informarConsola("Lista de receptores enviada con exito");
             this.listaDirOcupado=false;
             notifyAll();
@@ -193,7 +205,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando{
     
     public synchronized void ejecutarComando(String comando) {
         if(comando.equalsIgnoreCase("DIR_AGREGAR_REC")){
-            ComunicacionDirectorio.getInstancia().nuevoUsuario();
+            comDir.nuevoUsuario();
         }
         else if(comando.equalsIgnoreCase("DIR_GETLISTA")){
             this.darLista();
@@ -207,13 +219,18 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando{
                 }
             }
             this.listaDirOcupado=true;
-            ComunicacionDirectorio.getInstancia().setearUsuarioDesconectado();
+            comDir.setearUsuarioDesconectado();
             this.informarConsola("Usuario intentando desconectarse...");
             this.listaDirOcupado=false;
             notifyAll();
         }
         else if(comando.equalsIgnoreCase("DIR_DAR_ALIVE")){
-            ComunicacionDirectorio.getInstancia().recibirAlive();
+            comDir.recibirAlive();
+        }
+        else if(comando.equalsIgnoreCase("BACKUP"))
+        {
+            this.actualizarUsuariosRec(comDir.recibirDatos());
+            this.actualizarUsuariosOnline(comDir.recibirDatos());
         }
     }
 
@@ -232,5 +249,91 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando{
 
     public boolean isUsrOnlineOcupado() {
         return usrOnlineOcupado;
+    }
+
+    public void setComDir(ComunicacionDirectorio comDir)
+    {
+        this.comDir = comDir;
+    }
+
+    public ComunicacionDirectorio getComDir()
+    {
+        return comDir;
+    }
+
+    public void setListaDirectorio(UsuariosRecMap listaDirectorio)
+    {
+        this.listaDirectorio = listaDirectorio;
+    }
+
+    public void setUsuariosOnlineActuales(ArrayList<String> usuariosOnlineActuales)
+    {
+        this.usuariosOnlineActuales = usuariosOnlineActuales;
+    }
+    
+    public void actualizarUsuariosRec(String s)
+    {
+        this.setListaDirectorio(reconvertirUsuariosRec(s));
+    }
+    
+    public UsuariosRecMap reconvertirUsuariosRec(String s)
+    {
+        javax.xml.bind.JAXBContext context;
+        try
+        {
+            context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
+            javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+            StringReader reader = new StringReader(s);
+            return (UsuariosRecMap) unmarshaller.unmarshal(reader);
+        } catch (JAXBException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public void actualizarUsuariosOnline(String s)
+    {
+        this.setUsuariosOnlineActuales(reconvertirAL(s));
+    }
+    
+    public ArrayList<String> reconvertirAL(String s)
+    {
+        javax.xml.bind.JAXBContext context;
+        try
+        {
+            context = javax.xml.bind.JAXBContext.newInstance(ArrayList.class);
+            javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
+            StringReader reader = new StringReader(s);
+            return (ArrayList<String>) unmarshaller.unmarshal(reader);
+        } catch (JAXBException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void cargarDatosConfig(String s)
+    {
+        BufferedReader br;
+        String[] datos;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
+            String linea = br.readLine();
+            while(linea!=null){
+                datos=linea.split(regex);
+                comDir.setIpDir(datos[0]);
+                comDir.setPuertoDir(datos[1]);
+                linea = br.readLine();
+            }
+            br.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
