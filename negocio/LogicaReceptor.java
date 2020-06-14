@@ -46,7 +46,7 @@ import java.time.format.DateTimeFormatter;
 
 public class LogicaReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
-    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria,IPDirectorioAux,puertoDirectorioAux;
     private static LogicaReceptor _instancia = null;
     private IVentanaReceptor ventanaReceptor;
     private boolean RMocupado=false;
@@ -205,6 +205,8 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
                 this.puertoDirectorio=datos[1];
                 this.IPMensajeria=datos[2];
                 this.puertoMensajeria=datos[3];
+                this.IPDirectorioAux=datos[4];
+                this.puertoDirectorioAux=datos[5];
                 linea = br.readLine();
             }
             br.close();

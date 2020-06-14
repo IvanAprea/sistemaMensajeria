@@ -34,6 +34,7 @@ import negocio.LogicaReceptor;
 public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscucharPuerto,IPendienteEmisor{
 
     private static ComunicacionEmisor _instancia = null;
+    private Socket socketDirectorio;
     private ServerSocket sepe; //sepe=socketEscucharPuertoEmisor
     private Socket s; //sem=socketEnviarMensaje
 
@@ -130,29 +131,19 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
         };
         tr.start();
     }
-
-    public Socket abrirConexionDirectorio(InetAddress ip, int puerto) throws IOException {
-        
-            return new Socket(ip, puerto);
-        
-    }
     
-    public String pedirListaADirectorio(Socket socket){
+    public String pedirListaADirectorio(InetAddress ip, int puerto) throws IOException
+    {
         String hm;
-        try 
-        {
-            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+
+            socketDirectorio = new Socket(ip,puerto);
+            DataOutputStream dOut = new DataOutputStream(socketDirectorio.getOutputStream());
             String s = "DIR_GETLISTA";
             dOut.writeUTF(s);
             dOut.flush();         
-            DataInputStream dIn = new DataInputStream(socket.getInputStream());
+            DataInputStream dIn = new DataInputStream(socketDirectorio.getInputStream());
             return dIn.readUTF();
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-            return null;
-        }
+        
     }
 
     public void pedirAvisosPendientes(String IPMensajeria, String puertoMensajeria, String idEmisor) {
@@ -176,5 +167,13 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
         {
             LogicaEmisor.getInstancia().lanzarCartelError("El servicio de mensajes esta offline momentaneamente.");
         }
+    }
+    
+    public void setSocketDirectorio(Socket socketDirectorio) {
+        this.socketDirectorio = socketDirectorio;
+    }
+
+    public Socket getSocketDirectorio() {
+        return socketDirectorio;
     }
 }

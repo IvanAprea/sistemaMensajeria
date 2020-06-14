@@ -56,12 +56,11 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     private IVentanaEmisor vista;
-    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria,IPDirectorioAux,puertoDirectorioAux;
     private static LogicaEmisor instancia = null;
     private final String regex=", *";
     private final String decoder="UTF8";
     private final int cantDatos=2;
-    private Socket socketDirectorio;
     private UsuariosRecMap listaActualReceptores;
     private IEncriptar encriptador;
     private HashMap<UsuarioReceptor,ArrayList<String>> noEnviados = new HashMap<UsuarioReceptor,ArrayList<String>>();
@@ -80,14 +79,6 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
             instancia = new LogicaEmisor();
         }
         return instancia;
-    }
-
-    public void setSocketDirectorio(Socket socketDirectorio) {
-        this.socketDirectorio = socketDirectorio;
-    }
-
-    public Socket getSocketDirectorio() {
-        return socketDirectorio;
     }
 
     public void setListaActualReceptores(UsuariosRecMap listaActualReceptores) {
@@ -335,6 +326,8 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 this.puertoDirectorio=datos[1];
                 this.IPMensajeria=datos[2];
                 this.puertoMensajeria=datos[3];
+                this.IPDirectorioAux=datos[4];
+                this.puertoDirectorioAux=datos[5];
                 linea = br.readLine();
             }
             br.close();
@@ -347,17 +340,24 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         }
     }
     
-    public void abrirConexionDirectorio() throws UnknownHostException,IOException {
-            this.setSocketDirectorio(ComunicacionEmisor.getInstancia().abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),Integer.valueOf(puertoDirectorio)));
-
-    }
-    
-    public void obtenerListaReceptores() throws Exception {
+    public void obtenerListaReceptores() throws Exception{
+        String hm;
+        
+        try
+        {
+            hm =ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(this.IPDirectorio),Integer.parseInt(this.puertoDirectorio));
+        } catch (IOException e)
+        {
+            try
+            {
+                hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(IPDirectorioAux),Integer.parseInt(puertoDirectorioAux));
+            } catch (IOException f)
+            {
+                throw new Exception("ERROR en la conexion con el directorio");
+            }
+        }
         try 
         {
-            this.abrirConexionDirectorio();
-            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
-            this.getSocketDirectorio().close();
             if(hm!=null){
                 javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
                 javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -366,7 +366,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
             }
         } 
         catch (Exception e) {
-            throw new Exception("ERROR en la conexion con el directorio");
+            e.printStackTrace();
         }
     }
     
