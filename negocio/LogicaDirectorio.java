@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import java.util.Observable;
+
 import javax.xml.bind.JAXBException;
 
 public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
@@ -39,7 +41,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
     private UsuariosRecMap listaDirectorio;
     private boolean listaDirOcupado=false;
     private boolean usrOnlineOcupado=false;
-    private ArrayList<String> usuariosOnlineActuales;
+    private ListaUsuariosOnline usuariosOnlineActuales;
     private ComunicacionDirectorio comDir;
     private final String regex=", *";
     private final String decoder="UTF8";
@@ -47,7 +49,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
     private LogicaDirectorio() {
         super();
         listaDirectorio = new UsuariosRecMap();
-        usuariosOnlineActuales = new ArrayList<String>();
+        usuariosOnlineActuales = new ListaUsuariosOnline();
     }
     
     /**
@@ -62,7 +64,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
     }
 
     public ArrayList<String> getUsuariosOnlineActuales() {
-        return usuariosOnlineActuales;
+        return this.usuariosOnlineActuales.getAl();
     }
 
     public UsuariosRecMap getListaDirectorio() {
@@ -78,7 +80,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
                     UsuarioReceptor usrACambiar;
                     while(true){
                         Thread.sleep(7500);
-                        while(LogicaDirectorio.getInstancia().isListaDirOcupado()==true || //no seria or?
+                        while(LogicaDirectorio.getInstancia().isListaDirOcupado()==true ||
                                LogicaDirectorio.getInstancia().isUsrOnlineOcupado()==true){
                             wait();
                         }
@@ -96,6 +98,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
                             }
                         }
                         LogicaDirectorio.getInstancia().limpiarUsuariosOnline();
+                        comDir.enviarActualizacion();
                         LogicaDirectorio.getInstancia().setListaDirOcupado(false);
                         LogicaDirectorio.getInstancia().setUsrOnlineOcupado(false);
                         notifyAll();
@@ -110,7 +113,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
     }
     
     public void limpiarUsuariosOnline(){
-        this.usuariosOnlineActuales.clear();
+        this.usuariosOnlineActuales.getAl().clear();
     }
     
     //Puede venir un usuario nuevo o no, por lo que se contemplan las dos situaciones
@@ -133,12 +136,17 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
             this.listaDirectorio.getUsuariosRecMap().put(receptor.getID(), receptor);
             //Lo pongo en la lista de usuarios activos
             this.getUsuariosOnlineActuales().add(receptor.getID());
+            this.comDir.enviarActualizacion();
             this.listaDirOcupado=false;
             this.usrOnlineOcupado=false;
             notifyAll();
         }
         catch (Exception e){
             e.printStackTrace();
+        }
+        finally
+        {
+            
         }
     }
     
@@ -192,6 +200,16 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
         this.informarConsola("Alive recibido de "+id);
         if(!this.getUsuariosOnlineActuales().contains(id)){
             this.getUsuariosOnlineActuales().add(id);
+            while(this.listaDirOcupado==true){
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            this.listaDirOcupado = true;
+            this.comDir.enviarActualizacion();
+            this.listaDirOcupado = false;
         }
         this.usrOnlineOcupado=false;
         notifyAll();
@@ -232,6 +250,22 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
             this.actualizarUsuariosRec(comDir.recibirDatos());
             this.actualizarUsuariosOnline(comDir.recibirDatos());
         }
+        else if(comando.equalsIgnoreCase("ACTUALIZAR_DATOS"))
+        {
+            while(this.listaDirOcupado==true || this.usrOnlineOcupado==true){
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            this.listaDirOcupado=true;
+            this.usrOnlineOcupado=true;
+            this.comDir.enviarActualizacion();
+            this.listaDirOcupado=false;
+            this.usrOnlineOcupado=false;
+            notifyAll();
+        }
     }
 
 
@@ -266,14 +300,25 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
         this.listaDirectorio = listaDirectorio;
     }
 
-    public void setUsuariosOnlineActuales(ArrayList<String> usuariosOnlineActuales)
+    public void setUsuariosOnlineActuales(ListaUsuariosOnline usuariosOnlineActuales)
     {
         this.usuariosOnlineActuales = usuariosOnlineActuales;
     }
     
-    public void actualizarUsuariosRec(String s)
+    public synchronized void actualizarUsuariosRec(String s)
     {
+        while(this.isListaDirOcupado())
+        {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.listaDirOcupado = true;
         this.setListaDirectorio(reconvertirUsuariosRec(s));
+        this.listaDirOcupado = false;
+        notifyAll();
     }
     
     public UsuariosRecMap reconvertirUsuariosRec(String s)
@@ -292,25 +337,72 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
         return null;
     }
     
-    public void actualizarUsuariosOnline(String s)
-    {
-        this.setUsuariosOnlineActuales(reconvertirAL(s));
-    }
-    
-    public ArrayList<String> reconvertirAL(String s)
+    public synchronized String convertirUsuariosRec()
     {
         javax.xml.bind.JAXBContext context;
         try
         {
-            context = javax.xml.bind.JAXBContext.newInstance(ArrayList.class);
+            context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
+            javax.xml.bind.Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter sw = new StringWriter();
+            marshaller.marshal(listaDirectorio, sw);
+            return sw.toString();
+        } catch (JAXBException e)
+        {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    
+    public synchronized void actualizarUsuariosOnline(String s)
+    {
+        while(this.isUsrOnlineOcupado())
+        {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.usrOnlineOcupado=true;
+        this.setUsuariosOnlineActuales(reconvertirUserOnline(s));
+        this.usrOnlineOcupado=false;
+        notifyAll();
+    }
+    
+    public ListaUsuariosOnline reconvertirUserOnline(String s)
+    {
+        javax.xml.bind.JAXBContext context;
+        try
+        {
+            context = javax.xml.bind.JAXBContext.newInstance(ListaUsuariosOnline.class);
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
             StringReader reader = new StringReader(s);
-            return (ArrayList<String>) unmarshaller.unmarshal(reader);
+            return (ListaUsuariosOnline) unmarshaller.unmarshal(reader);
         } catch (JAXBException e)
         {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    public synchronized String convertirUserOnline()
+    {
+        javax.xml.bind.JAXBContext context;
+        try
+        {
+            context = javax.xml.bind.JAXBContext.newInstance(ListaUsuariosOnline.class);
+            javax.xml.bind.Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            StringWriter sw = new StringWriter();
+            marshaller.marshal(usuariosOnlineActuales, sw);
+            return sw.toString();
+        } catch (JAXBException e)
+        {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     @Override

@@ -79,7 +79,7 @@ public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistr
                     }
                     //ver donde cerrar el socket
                 } catch (BindException e) {
-                    LogicaEmisor.getInstancia().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
+                    e.printStackTrace();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                  } catch (SocketException e) {
@@ -95,12 +95,12 @@ public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistr
         }.start();
     }
     
-    public abstract void conectarDirectorio();
+    public abstract boolean conectarDirectorio();
     public abstract void escucharDirectorio(String puerto);
-    public abstract void cargarDatosDir();
     public abstract String recibirDatos();
     public abstract void setIpDir(String s);
     public abstract void setPuertoDir(String s);
+    public abstract void enviarActualizacion();
     
     public void darLista(StringWriter hashmapMarshalizado){
         try 

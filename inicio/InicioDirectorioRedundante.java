@@ -18,6 +18,7 @@ public class InicioDirectorioRedundante
         LogicaDirectorio.getInstancia().setComDir(new ComunicacionDirRedundante());
         LogicaDirectorio.getInstancia().cargarDatosConfig("configDirRedundante.txt");
         LogicaDirectorio.getInstancia().getComDir().escucharPuerto("71");
-        LogicaDirectorio.getInstancia().getComDir().conectarDirectorio();
+        if(!LogicaDirectorio.getInstancia().getComDir().conectarDirectorio())
+            LogicaDirectorio.getInstancia().getComDir().escucharDirectorio("73");
     }
 }

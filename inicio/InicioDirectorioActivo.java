@@ -15,10 +15,10 @@ public class InicioDirectorioActivo {
         LogicaDirectorio.getInstancia().setComDir(new ComunicacionDirActivo());
         LogicaDirectorio.getInstancia().cargarDatosConfig("configDirActivo.txt");
         //levantar los datos del directorio y donde escuchar
-        LogicaDirectorio.getInstancia().getComDir().escucharPuerto("70");
         //conectar al otro directorio
-        LogicaDirectorio.getInstancia().getComDir().conectarDirectorio();
-        LogicaDirectorio.getInstancia().getComDir().escucharDirectorio("72");
+        if(!LogicaDirectorio.getInstancia().getComDir().conectarDirectorio())
+            LogicaDirectorio.getInstancia().getComDir().escucharDirectorio("72");
+        LogicaDirectorio.getInstancia().getComDir().escucharPuerto("70");
         LogicaDirectorio.getInstancia().comprobacionUsuariosOnline();
     }
 }

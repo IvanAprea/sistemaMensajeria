@@ -11,7 +11,7 @@ public class InicioMensajeria {
     
     public static void main(String[] args) {
         LogicaMensajeria.getInstancia().recuperarDatos();
-        ComunicacionMensajeria.getInstancia().escucharPuerto("71");
+        ComunicacionMensajeria.getInstancia().escucharPuerto("75");
         LogicaMensajeria.getInstancia().backUp();
     }
 }

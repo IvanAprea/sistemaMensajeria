@@ -24,7 +24,7 @@ public class ComunicacionDirRedundante extends ComunicacionDirectorio
     }
 
     @Override
-    public void conectarDirectorio()
+    public boolean conectarDirectorio()
     {
         try
         {
@@ -40,11 +40,11 @@ public class ComunicacionDirRedundante extends ComunicacionDirectorio
             while(true)
             {
                 LogicaDirectorio.getInstancia().ejecutarComando(dIn.readUTF());
-                
             }
         } catch (IOException e)
         {
-            escucharDirectorio("73"); // entra aca si se cae el activo? SI ENTRA
+             // entra aca si se cae el activo? SI ENTRA
+            return false;
         }
     }
 
@@ -53,24 +53,35 @@ public class ComunicacionDirRedundante extends ComunicacionDirectorio
     {
         new Thread() {
             public void run() {
-                try
-                {
-                    while(true){
+                while(true){
+                    try
+                    {
                         seda = new ServerSocket(Integer.parseInt(puerto)); //el activo va a conectarse aca
                         sda = seda.accept(); //se conectan.
+                        while(true)
+                        {
+                            LogicaDirectorio.getInstancia().ejecutarComando(dIn.readUTF());
+                        }
+                    } catch (IOException e)
+                    {
+                        e.printStackTrace();
                     }
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
                 }
             }
         }.start();
     }
 
-    @Override
-    public void cargarDatosDir()
+    public void enviarActualizacion()
     {
-        // TODO Implement this method
+        try
+        {
+            if(sda.isConnected())
+                dOut.writeUTF(LogicaDirectorio.getInstancia().convertirUsuariosRec());
+                dOut.writeUTF(LogicaDirectorio.getInstancia().convertirUserOnline());
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -97,4 +108,6 @@ public class ComunicacionDirRedundante extends ComunicacionDirectorio
     {
         this.puertoDirActivo = s;
     }
+
+
 }

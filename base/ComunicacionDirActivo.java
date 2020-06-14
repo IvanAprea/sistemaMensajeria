@@ -19,6 +19,9 @@ import java.net.UnknownHostException;
 
 import java.util.ArrayList;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import javax.xml.bind.JAXBException;
 
 import negocio.LogicaDirectorio;
@@ -48,6 +51,8 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
                 {
                     sedr = new ServerSocket(Integer.parseInt(puerto)); //el redundante va a establecer conexion aca.
                     sdr = sedr.accept(); //se conectan.
+                    dOut = new DataOutputStream(sdr.getOutputStream());
+                    dIn = new DataInputStream(sdr.getInputStream());
                 } catch (IOException e)
                 {
                     e.printStackTrace();
@@ -57,11 +62,10 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
     }
 
     @Override
-    public void conectarDirectorio()
+    public boolean conectarDirectorio()
     {
                 try
                 {
-                    System.out.println("lala");
                     sdr = new Socket(InetAddress.getByName(IPDirRedundante), Integer.parseInt(puertoDirRedundante));
                     //pido los datos actuales al redundante
                     dOut = new DataOutputStream(sdr.getOutputStream());
@@ -69,18 +73,29 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
                     dOut.writeUTF("ACTUALIZAR_DATOS");
                     LogicaDirectorio.getInstancia().actualizarUsuariosRec(dIn.readUTF()); //recibo los datos que debo actualizar 1° UsuariosRecMap listaDirectorio
                     LogicaDirectorio.getInstancia().actualizarUsuariosOnline(dIn.readUTF()); // 2° ArrayList<String> usuariosOnlineActuales
+                    return true;
                 } catch (IOException e)
                 {
                     System.out.println("Nadie esta escuchando para DirActivo, primer ejecución o redundante tambien caido.");
+                    return false;
                     //si entra aca es porque nadie esta escuchando, osea que el activo se esta ejecutando por primera vez
                 }
     }
+    
 
-
-    @Override
-    public void cargarDatosDir()
+    public void enviarActualizacion()
     {
-        // TODO Implement this method
+        try
+        {
+            if(sdr!=null && sdr.isConnected()){
+                dOut.writeUTF("BACKUP");
+                dOut.writeUTF(LogicaDirectorio.getInstancia().convertirUsuariosRec());
+                dOut.writeUTF(LogicaDirectorio.getInstancia().convertirUserOnline());
+            }
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -107,4 +122,6 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
     {
         this.puertoDirRedundante = s;
     }
+
+
 }
