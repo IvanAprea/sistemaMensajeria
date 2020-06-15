@@ -25,7 +25,7 @@ public class InicioEmisor {
         LogicaEmisor.getInstancia().cargarDatosConfig(nombreConfigDirectorio);
         LogicaEmisor.getInstancia().setearIp();
         LogicaEmisor.getInstancia().setVista(vista);
-        LogicaEmisor.getInstancia().escucharPuerto();
+        ComunicacionEmisor.getInstancia().escucharPuerto(LogicaEmisor.getInstancia().getPuerto());
         LogicaEmisor.getInstancia().setEncriptador(new Encriptadora());
         LogicaEmisor.getInstancia().recuperarNoEnviados();
         vista.abrirSesion();

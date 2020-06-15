@@ -273,11 +273,6 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         this.vista.lanzarCartelError(err);
     }
     
-    public void escucharPuerto()
-    {
-        ComunicacionEmisor.getInstancia().escucharPuerto(super.getPuerto());
-    }
-    
     public void setVista(VentanaEmisor2 vista) {
         this.vista = vista;
         KeyListener kl1 = new KeyListener(){
