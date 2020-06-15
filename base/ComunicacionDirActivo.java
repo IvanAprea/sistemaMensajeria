@@ -11,6 +11,7 @@ import java.io.StringReader;
 
 import java.net.BindException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -46,14 +47,31 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
     public void escucharDirectorio(String puerto)
     {
         new Thread() {
-            public void run() {
+            public synchronized void run() {
                 try
                 {
-                    sedr = new ServerSocket(Integer.parseInt(puerto)); //el redundante va a establecer conexion aca.
-                    sdr = sedr.accept(); //se conectan.
-                    dOut = new DataOutputStream(sdr.getOutputStream());
-                    dIn = new DataInputStream(sdr.getInputStream());
-                } catch (IOException e)
+                    while(true){
+                        try{
+                            sedr = new ServerSocket(Integer.parseInt(puerto)); //el redundante va a establecer conexion aca.
+                            sdr = sedr.accept(); //se conectan.
+                            dOut = new DataOutputStream(sdr.getOutputStream());
+                            dIn = new DataInputStream(sdr.getInputStream());
+                            dIn.readUTF();
+                        } catch (IOException e)
+                        {try{
+                            if(sedr!=null)
+                                sedr.close();
+                            if(sdr!=null)
+                                sdr.close();
+                             sdr = null;
+                             sedr = null;
+                         }catch(IOException f)
+                         {
+                             f.printStackTrace();
+                         }
+                        } 
+                    }
+                }catch(Exception e)
                 {
                     e.printStackTrace();
                 }
@@ -62,11 +80,12 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
     }
 
     @Override
-    public boolean conectarDirectorio()
+    public synchronized boolean conectarDirectorio()
     {
                 try
                 {
-                    sdr = new Socket(InetAddress.getByName(IPDirRedundante), Integer.parseInt(puertoDirRedundante));
+                    sdr = new Socket();
+                    sdr.connect(new InetSocketAddress(InetAddress.getByName(IPDirRedundante), Integer.parseInt(puertoDirRedundante)),500);
                     //pido los datos actuales al redundante
                     dOut = new DataOutputStream(sdr.getOutputStream());
                     dIn = new DataInputStream(sdr.getInputStream());
@@ -76,6 +95,7 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
                     return true;
                 } catch (IOException e)
                 {
+                    sdr = null;
                     System.out.println("Nadie esta escuchando para DirActivo, primer ejecución o redundante tambien caido.");
                     return false;
                     //si entra aca es porque nadie esta escuchando, osea que el activo se esta ejecutando por primera vez
@@ -83,23 +103,29 @@ public class ComunicacionDirActivo extends ComunicacionDirectorio
     }
     
 
-    public void enviarActualizacion()
+    public synchronized void enviarActualizacion()
     {
         try
         {
             if(sdr!=null && sdr.isConnected()){
+                System.out.println("Realizando BACKUP");
                 dOut.writeUTF("BACKUP");
                 dOut.writeUTF(LogicaDirectorio.getInstancia().convertirUsuariosRec());
                 dOut.writeUTF(LogicaDirectorio.getInstancia().convertirUserOnline());
-            }
+                }else
+                {
+                    notifyAll();
+                }
         } catch (IOException e)
         {
-            e.printStackTrace();
+            sdr=null;
+            System.out.println("Se perdio la conexion");
+            escucharDirectorio("72");
         }
     }
 
     @Override
-    public String recibirDatos()
+    public synchronized String recibirDatos()
     {
         try
         {

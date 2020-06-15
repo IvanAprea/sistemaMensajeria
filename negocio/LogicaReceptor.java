@@ -166,12 +166,21 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
             StringWriter sw = new StringWriter();
             marshaller.marshal(usuario, sw);
             try{
-                ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
+                try{
+                    ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
+                }catch(IOException e)
+                {
+                    ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(IPDirectorioAux), Integer.parseInt(puertoDirectorioAux));
+                }
                 this.ventanaReceptor.mostrarVentana();
                 this.pedirMensajesPendientes();
                 ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
-                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getIP()+":"+this.getPuerto());
-            } catch (Exception e){
+                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(IPDirectorio), Integer.parseInt(puertoDirectorio),InetAddress.getByName(IPDirectorioAux), Integer.parseInt(puertoDirectorioAux),this.getIP()+":"+this.getPuerto());
+            }catch(IOException e)
+            {
+                this.lanzarCartelError("El directorio no esta disponible");
+                this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
+            }catch (Exception e){
                 this.lanzarCartelError("No se pudo iniciar la sesión");
                 this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
             }
@@ -181,14 +190,22 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
         
     }
     
-    public void notificarDesconexionDirectorio() {
+    public synchronized void notificarDesconexionDirectorio() {
         try {
             ComunicacionReceptor.getInstancia()
                 .notificarDesconexionDirectorio(this.getIP() + ":" + this.getPuerto(),
                                                 InetAddress.getByName(this.getIPDirectorio()),
                                                 Integer.parseInt(this.getPuertoDirectorio()));
-        } catch (Exception e) {
-            this.lanzarCartelError("ERROR al notificar al Directorio la desconexion");
+        } catch (IOException e) {
+            try
+            {
+                ComunicacionReceptor.getInstancia()
+                    .notificarDesconexionDirectorio(this.getIP() + ":" + this.getPuerto(),
+                                                    InetAddress.getByName(IPDirectorioAux),
+                                                    Integer.parseInt(puertoDirectorioAux));
+            }catch (IOException f){
+                this.lanzarCartelError("ERROR al notificar al Directorio la desconexion");
+            }
         }
     }
     

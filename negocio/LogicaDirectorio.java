@@ -45,6 +45,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
     private ComunicacionDirectorio comDir;
     private final String regex=", *";
     private final String decoder="UTF8";
+    private boolean desconectado = true;
     
     private LogicaDirectorio() {
         super();
@@ -78,7 +79,7 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
                     HashMap<String, UsuarioReceptor> listaNueva;
                     String IDAux;
                     UsuarioReceptor usrACambiar;
-                    while(true){
+                    while(desconectado){
                         Thread.sleep(7500);
                         while(LogicaDirectorio.getInstancia().isListaDirOcupado()==true ||
                                LogicaDirectorio.getInstancia().isUsrOnlineOcupado()==true){
@@ -98,13 +99,17 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
                             }
                         }
                         LogicaDirectorio.getInstancia().limpiarUsuariosOnline();
-                        comDir.enviarActualizacion();
+                        if(desconectado)
+                            comDir.enviarActualizacion();
                         LogicaDirectorio.getInstancia().setListaDirOcupado(false);
                         LogicaDirectorio.getInstancia().setUsrOnlineOcupado(false);
                         notifyAll();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    LogicaDirectorio.getInstancia().setListaDirOcupado(false);
+                    LogicaDirectorio.getInstancia().setUsrOnlineOcupado(false);
+                    notifyAll();
                     //Lanzar error
                 }
             }
@@ -428,4 +433,16 @@ public class LogicaDirectorio implements IGestionUsuarios,IComando,ICargaConfig{
             e.printStackTrace();
         }
     }
+
+    public void setDesconectado(boolean desconectado)
+    {
+        this.desconectado = desconectado;
+    }
+
+    public boolean isDesconectado()
+    {
+        return desconectado;
+    }
 }
+
+
