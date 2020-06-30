@@ -5,7 +5,6 @@ import base.ComunicacionDirectorio;
 import negocio.GestorUsuariosReceptores;
 import negocio.GestorEnvioMensajes;
 
-import presentacion.VentanaEmisorOld;
 
 public class InicioDirectorio {
     public InicioDirectorio() {

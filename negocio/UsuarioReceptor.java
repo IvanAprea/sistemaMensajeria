@@ -1,9 +1,11 @@
 package negocio;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class UsuarioReceptor extends Persona{
+public class UsuarioReceptor extends Persona implements Serializable{
     
     private String estado;
     private byte[] publicKey;

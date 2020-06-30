@@ -2,16 +2,24 @@ package negocio;
 
 import base.ComunicacionDirectorio;
 
+import base.Sincronizadora;
+
 import interfaces.IComando;
 import interfaces.IGestionUsuarios;
 
 import java.awt.event.ActionEvent;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import java.io.StringWriter;
+
+import java.io.UnsupportedEncodingException;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -31,6 +39,8 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
     private boolean listaDirOcupado=false;
     private boolean usrOnlineOcupado=false;
     private ArrayList<String> usuariosOnlineActuales;
+    private final String regex=", *";
+    private final String decoder="UTF8";
     
     private GestorUsuariosReceptores() {
         super();
@@ -234,7 +244,32 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
     public void setUsrOnlineOcupado(boolean usrOnlineOcupado) {
         this.usrOnlineOcupado = usrOnlineOcupado;
     }
-
+    
+    public void cargarDatosConfig(String s)
+        {
+            BufferedReader br;
+            String[] datos;
+            try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
+                String linea = br.readLine();
+                while(linea!=null){
+                    datos=linea.split(regex);
+                    for (int i=0; i<datos.length; i++){
+                        Sincronizadora.getInstancia().getDireccionesDirectorios().add(datos[i]);
+                    }
+                    linea = br.readLine();
+                }
+                br.close();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+        }
+    
     public boolean isUsrOnlineOcupado() {
         return usrOnlineOcupado;
     }
