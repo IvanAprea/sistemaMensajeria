@@ -357,7 +357,7 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
         try 
         {
             this.abrirConexionDirectorio();
-            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
+            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(this.IPDirectorio),Integer.parseInt(this.puertoDirectorio));
             this.getSocketDirectorio().close();
             if(hm!=null){
                 javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
@@ -433,4 +433,5 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
     {
         return enviandoNoEnviados;
     }
+
 }

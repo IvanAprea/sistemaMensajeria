@@ -117,14 +117,14 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         }
     }
     
-    public synchronized void pedirMensajesPendientes(String nombre, String IPMensajeria, String PuertoMensajeria)//UPDATE
+    public synchronized void pedirMensajesPendientes(String nombre, String IPMensajeria, String PuertoMensajeria)
     {
         try
         {
             s = new Socket(InetAddress.getByName(IPMensajeria), Integer.parseInt(PuertoMensajeria));
             dOutRecepcion = new DataOutputStream(s.getOutputStream());
             dOutRecepcion.writeUTF("MSJ_PEDIDOMSJREC");
-            dOutRecepcion.writeUTF(nombre); //UPDATE
+            dOutRecepcion.writeUTF(nombre);
             DataInputStream dIn = new DataInputStream(s.getInputStream());
             String st = dIn.readUTF();
             while(st.equalsIgnoreCase("TRUE"))
