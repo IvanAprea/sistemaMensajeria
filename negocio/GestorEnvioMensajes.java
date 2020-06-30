@@ -52,21 +52,23 @@ import javax.swing.JOptionPane;
 
 import presentacion.VentanaEmisor2;
 
-public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor,IPersistenciaEmisor{
+public class GestorEnvioMensajes extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor,IPersistenciaEmisor{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     private IVentanaEmisor vista;
-    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria,IPDirectorioAux,puertoDirectorioAux;
-    private static LogicaEmisor instancia = null;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private static GestorEnvioMensajes instancia = null;
     private final String regex=", *";
+    private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
     private final int cantDatos=2;
+    private Socket socketDirectorio;
     private UsuariosRecMap listaActualReceptores;
     private IEncriptar encriptador;
     private HashMap<UsuarioReceptor,ArrayList<String>> noEnviados = new HashMap<UsuarioReceptor,ArrayList<String>>();
     private boolean noEnviadosOcupado=false,enviandoNoEnviados = false;
     
-    private LogicaEmisor() {
+    private GestorEnvioMensajes() {
         super();
     }
     
@@ -74,11 +76,19 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
      * Thread-protected Singleton
      * @return
      */
-    public synchronized static LogicaEmisor getInstancia(){
+    public synchronized static GestorEnvioMensajes getInstancia(){
         if(instancia==null){
-            instancia = new LogicaEmisor();
+            instancia = new GestorEnvioMensajes();
         }
         return instancia;
+    }
+
+    public void setSocketDirectorio(Socket socketDirectorio) {
+        this.socketDirectorio = socketDirectorio;
+    }
+
+    public Socket getSocketDirectorio() {
+        return socketDirectorio;
     }
 
     public void setListaActualReceptores(UsuariosRecMap listaActualReceptores) {
@@ -117,7 +127,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 try{
                     ComunicacionEmisor.getInstancia().enviarMensaje(sw.toString(), InetAddress.getByName(this.IPMensajeria), Integer.parseInt(this.puertoMensajeria));
                 }catch (UnknownHostException e) {
-                    this.lanzarCartelError("No se pudo conectar con "+personaAux.getNombre());
+                    this.lanzarCartelError("No se pudo conectar con el servidor de mensajes");
                 } catch (Exception e){
                     ArrayList<String> arr;
                     while(this.isNoEnviadosOcupado())
@@ -219,7 +229,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                         setNoEnviadosOcupado(true);
                         if(!noEnviados.isEmpty())
                         {
-                            PersistenciaXML.getInstancia().persistir(LogicaEmisor.getInstancia().getNoEnviados(), "noEnviadosEmisor.txt");
+                            PersistenciaXML.getInstancia().persistir(GestorEnvioMensajes.getInstancia().getNoEnviados(), "noEnviadosEmisor.txt");
                         }
                         setNoEnviadosOcupado(false);
                         notifyAll();
@@ -273,13 +283,18 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         this.vista.lanzarCartelError(err);
     }
     
+    public void escucharPuerto()
+    {
+        ComunicacionEmisor.getInstancia().escucharPuerto(super.getPuerto());
+    }
+    
     public void setVista(VentanaEmisor2 vista) {
         this.vista = vista;
         KeyListener kl1 = new KeyListener(){
         
             public void keyTyped(KeyEvent e){
                 if (vista.getAsunto().length()== cantCarAsunto){
-                    LogicaEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
+                    GestorEnvioMensajes.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarAsunto+" caracteres en el asunto.");
                     e.consume();
                 }
             }
@@ -292,7 +307,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         
             public void keyTyped(KeyEvent e){
                 if (vista.getAsunto().length()== cantCarMensaje){
-                    LogicaEmisor.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
+                    GestorEnvioMensajes.getInstancia().getVista().lanzarCartelError("No puede ingresar mas de "+cantCarMensaje+" caracteres en el mensaje.");
                     e.consume();
                 }
             }
@@ -309,11 +324,11 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         return vista;
     }
     
-    public void cargarDatosConfig(String s){
+    public void cargarDatosConfig(){
         BufferedReader br;
         String[] datos;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
             String linea = br.readLine();
             while(linea!=null){
                 datos=linea.split(regex);
@@ -321,8 +336,6 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
                 this.puertoDirectorio=datos[1];
                 this.IPMensajeria=datos[2];
                 this.puertoMensajeria=datos[3];
-                this.IPDirectorioAux=datos[4];
-                this.puertoDirectorioAux=datos[5];
                 linea = br.readLine();
             }
             br.close();
@@ -335,24 +348,17 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
         }
     }
     
-    public void obtenerListaReceptores() throws Exception{
-        String hm;
-        
-        try
-        {
-            hm =ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(this.IPDirectorio),Integer.parseInt(this.puertoDirectorio));
-        } catch (IOException e)
-        {
-            try
-            {
-                hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(IPDirectorioAux),Integer.parseInt(puertoDirectorioAux));
-            } catch (IOException f)
-            {
-                throw new Exception("ERROR en la conexion con el directorio");
-            }
-        }
+    public void abrirConexionDirectorio() throws UnknownHostException,IOException {
+            this.setSocketDirectorio(ComunicacionEmisor.getInstancia().abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),Integer.valueOf(puertoDirectorio)));
+
+    }
+    
+    public void obtenerListaReceptores() throws Exception {
         try 
         {
+            this.abrirConexionDirectorio();
+            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(this.getSocketDirectorio());
+            this.getSocketDirectorio().close();
             if(hm!=null){
                 javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
                 javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -361,7 +367,7 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
             }
         } 
         catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("ERROR en la conexion con el directorio");
         }
     }
     
@@ -394,8 +400,8 @@ public class LogicaEmisor extends Persona implements ActionListener,IEnviarMensa
             }
         }
 
-    public static void setInstancia(LogicaEmisor instancia) {
-        LogicaEmisor.instancia = instancia;
+    public static void setInstancia(GestorEnvioMensajes instancia) {
+        GestorEnvioMensajes.instancia = instancia;
     }
 
     public void setEncriptador(IEncriptar encriptador)

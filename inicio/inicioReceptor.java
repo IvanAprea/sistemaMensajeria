@@ -3,7 +3,7 @@ package inicio;
 import base.Desencriptadora;
 
 import presentacion.VentanaReceptor2;
-import negocio.LogicaReceptor;
+import negocio.GestorRecepcionMensajes;
 import negocio.Mensaje;
 import negocio.Persona;
 
@@ -14,15 +14,12 @@ public class inicioReceptor {
     }
     
     public static void main(String[] args) {
-
-        final String nombreConfigDirectorio="config.txt";
-                
         VentanaReceptor2 ventana = new VentanaReceptor2();
-        LogicaReceptor.getInstancia().setearPuerto("81");
-        LogicaReceptor.getInstancia().setearIp();
-        LogicaReceptor.getInstancia().setVentanaReceptor(ventana);
-        LogicaReceptor.getInstancia().cargarDatosConfig(nombreConfigDirectorio);
-        LogicaReceptor.getInstancia().setDesencriptador(new Desencriptadora());
+        GestorRecepcionMensajes.getInstancia().setearPuerto("81");
+        GestorRecepcionMensajes.getInstancia().setearIp();
+        GestorRecepcionMensajes.getInstancia().setVentanaReceptor(ventana);
+        GestorRecepcionMensajes.getInstancia().cargarDatosConfig();
+        GestorRecepcionMensajes.getInstancia().setDesencriptador(new Desencriptadora());
         ventana.pack();
         ventana.iniciarSesion();
     }

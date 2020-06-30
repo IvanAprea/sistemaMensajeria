@@ -28,13 +28,12 @@ import java.util.ArrayList;
 
 import java.util.Iterator;
 
-import negocio.LogicaEmisor;
-import negocio.LogicaReceptor;
+import negocio.GestorEnvioMensajes;
+import negocio.GestorRecepcionMensajes;
 
 public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscucharPuerto,IPendienteEmisor{
 
     private static ComunicacionEmisor _instancia = null;
-    private Socket socketDirectorio;
     private ServerSocket sepe; //sepe=socketEscucharPuertoEmisor
     private Socket s; //sem=socketEnviarMensaje
 
@@ -108,7 +107,7 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
                         s = sepe.accept();
                         DataInputStream dIn = new DataInputStream(s.getInputStream());
                         tokens = dIn.readUTF().split("-");
-                        LogicaEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
+                        GestorEnvioMensajes.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                         s.close();
                     }
                 }
@@ -131,19 +130,29 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
         };
         tr.start();
     }
-    
-    public String pedirListaADirectorio(InetAddress ip, int puerto) throws IOException
-    {
-        String hm;
 
-            socketDirectorio = new Socket(ip,puerto);
-            DataOutputStream dOut = new DataOutputStream(socketDirectorio.getOutputStream());
+    public Socket abrirConexionDirectorio(InetAddress ip, int puerto) throws IOException {
+        
+            return new Socket(ip, puerto);
+        
+    }
+    
+    public String pedirListaADirectorio(Socket socket){
+        String hm;
+        try 
+        {
+            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
             String s = "DIR_GETLISTA";
             dOut.writeUTF(s);
             dOut.flush();         
-            DataInputStream dIn = new DataInputStream(socketDirectorio.getInputStream());
+            DataInputStream dIn = new DataInputStream(socket.getInputStream());
             return dIn.readUTF();
-        
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void pedirAvisosPendientes(String IPMensajeria, String puertoMensajeria, String idEmisor) {
@@ -159,21 +168,13 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
             while(res.equalsIgnoreCase("TRUE"))
             {
                 tokens = dIn.readUTF().split("-");
-                LogicaEmisor.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
+                GestorEnvioMensajes.getInstancia().recibirConfirmacion(tokens[0],tokens[1]);
                 res = dIn.readUTF();
             }
             s.close();
         } catch (IOException e)
         {
-            LogicaEmisor.getInstancia().lanzarCartelError("El servicio de mensajes esta offline momentaneamente.");
+            GestorEnvioMensajes.getInstancia().lanzarCartelError("El servicio de mensajes esta offline momentaneamente.");
         }
-    }
-    
-    public void setSocketDirectorio(Socket socketDirectorio) {
-        this.socketDirectorio = socketDirectorio;
-    }
-
-    public Socket getSocketDirectorio() {
-        return socketDirectorio;
     }
 }

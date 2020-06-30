@@ -33,29 +33,29 @@ import java.util.Map;
 
 
 import javax.xml.bind.JAXBException;
-public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
+public class GestorServidorMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
 
     private static final String fileNoEnviados="noEnviadosMensajeria.txt",fileNoEnviadosCAviso="noEnviadosCAvisoMensajeria.txt",fileAvisosPendientes="avisosPendientesMensajeria.txt";
-    private static LogicaMensajeria _instancia = null;
+    private static GestorServidorMensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
     private HashMap<String, ArrayList<String>> mensajesNoEnviadosCAviso;
     private HashMap<String, ArrayList<String>> avisosPendientes;
     private boolean mensajesNoEnviadosOcup=false,mensajesNoEnviadosCAvisoOcup=false,avisosPendientesOcup=false;
     
-    private LogicaMensajeria() {
+    private GestorServidorMensajeria() {
         super();
         this.mensajesNoEnviados = new HashMap<String, ArrayList<String>>();
         this.mensajesNoEnviadosCAviso = new HashMap<String, ArrayList<String>>();
         this.avisosPendientes = new HashMap<String, ArrayList<String>>();
     }
     
-    public synchronized static  LogicaMensajeria getInstancia(){
+    public synchronized static  GestorServidorMensajeria getInstancia(){
         if(_instancia == null)
-            _instancia = new LogicaMensajeria();
+            _instancia = new GestorServidorMensajeria();
         return _instancia;
     }
     
-    public synchronized void enviarMsjsPendientes(String id){
+    public synchronized void enviarMsjsPendientes(String nombre){ //update
         StringWriter sw = new StringWriter();
         ArrayList<String> arr;
         String idEmisor;
@@ -75,10 +75,10 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
             this.mensajesNoEnviadosCAvisoOcup = true;
             this.avisosPendientesOcup = true; 
             this.mensajesNoEnviadosOcup = true;
-            this.informarConsola(id+" solicita recibir sus mensajes pendientes");
-            if(LogicaMensajeria.getInstancia().getMensajesNoEnviados().containsKey(id)){
-                this.informarConsola(id+" tiene mensajes pendientes de tipo 0 y/o 1... enviando");
-                it = LogicaMensajeria.getInstancia().getMensajesNoEnviados().get(id).iterator();
+            this.informarConsola(nombre+" solicita recibir sus mensajes pendientes");
+            if(GestorServidorMensajeria.getInstancia().getMensajesNoEnviados().containsKey(nombre)){
+                this.informarConsola(nombre+" tiene mensajes pendientes de tipo 0 y/o 1... enviando");
+                it = GestorServidorMensajeria.getInstancia().getMensajesNoEnviados().get(nombre).iterator();
                 while(it.hasNext()){
                     String msj = (String) it.next();
                     sw.write("TRUE");
@@ -88,12 +88,12 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
                     ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
                     sw.getBuffer().setLength(0);
                     it.remove();
-                    this.informarConsola("Mensaje pendiente enviado a "+id);
+                    this.informarConsola("Mensaje pendiente enviado a "+nombre);
                 }
             }
-            if(LogicaMensajeria.getInstancia().getMensajesNoEnviadosCAviso().containsKey(id)){
-                this.informarConsola(id+" tiene mensajes pendientes de tipo 2... enviando");
-                it = LogicaMensajeria.getInstancia().getMensajesNoEnviadosCAviso().get(id).iterator();
+            if(GestorServidorMensajeria.getInstancia().getMensajesNoEnviadosCAviso().containsKey(nombre)){
+                this.informarConsola(nombre+" tiene mensajes pendientes de tipo 2... enviando");
+                it = GestorServidorMensajeria.getInstancia().getMensajesNoEnviadosCAviso().get(nombre).iterator();
                 sw.getBuffer().setLength(0);
                 while(it.hasNext()){
                     String msj = (String) it.next();
@@ -125,20 +125,20 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
                         }
                     }
                     p=null;
-                    this.informarConsola("Mensaje pendiente enviado a "+id);
+                    this.informarConsola("Mensaje pendiente enviado a "+nombre);
                 }
             }
             sw.write("FALSE");
             ComunicacionMensajeria.getInstancia().enviarPendientes(sw);
             sw.getBuffer().setLength(0);
-            this.informarConsola("Fin de envio de mensajes pendientes a "+id);
+            this.informarConsola("Fin de envio de mensajes pendientes a "+nombre);
             this.mensajesNoEnviadosCAvisoOcup = false;
             this.avisosPendientesOcup = false; 
             this.mensajesNoEnviadosOcup = false;
             notifyAll();
         }
         catch(Exception e){
-            this.informarConsola("ERROR en envio de mensajes pendientes a "+id);
+            this.informarConsola("ERROR en envio de mensajes pendientes a "+nombre);
             e.printStackTrace();
         }
     }
@@ -159,8 +159,8 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
         this.avisosPendientesOcup=true;
         try{
             this.informarConsola(idEmisor+" solicita recibir sus avisos de recepcion pendientes");
-            if(LogicaMensajeria.getInstancia().getAvisosPendientes().containsKey(idEmisor)){
-                it = LogicaMensajeria.getInstancia().getAvisosPendientes().get(idEmisor).iterator();
+            if(GestorServidorMensajeria.getInstancia().getAvisosPendientes().containsKey(idEmisor)){
+                it = GestorServidorMensajeria.getInstancia().getAvisosPendientes().get(idEmisor).iterator();
                 while(it.hasNext()){
                     String msj = (String) it.next();
                     sw.write("TRUE");
@@ -195,15 +195,13 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
             StringReader reader = new StringReader(msj);
             mensajeEm = (MensajeEmisor) unmarshaller.unmarshal(reader);
-            String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
-            this.informarConsola("Intentado enviar mensaje a "+id);
+            String idRecepetor = null;//pedir a directorio !!!!!!!!!!!!!!!!!!!!!!!!!
+            this.informarConsola("Intentado enviar mensaje a "+ mensajeEm.getReceptor().getNombre());
             StringWriter sw = new StringWriter();
             sw.write(msj);
             ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(mensajeEm.getReceptor().getIP()), Integer.parseInt(mensajeEm.getReceptor().getPuerto()),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
-            //avisar al emisor que se recibio: (Y SI NO ESTUVIERA CONECTADO?)
-            this.informarConsola("Mensaje enviado con exito a "+id);
+            this.informarConsola("Mensaje enviado con exito a "+ mensajeEm.getReceptor().getNombre());
         } catch (IOException e) {
-            String id = mensajeEm.getReceptor().getIP()+":"+mensajeEm.getReceptor().getPuerto();
             ArrayList<String> arr;
             int tipo = mensajeEm.getTipo();
             while(this.mensajesNoEnviadosCAvisoOcup == true || this.mensajesNoEnviadosOcup == true)
@@ -218,29 +216,29 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
             }
             this.mensajesNoEnviadosCAvisoOcup = true;
             this.mensajesNoEnviadosOcup = true;
-            if(this.getMensajesNoEnviados().containsKey(id) && tipo!=2){ //ya existe arrayList
-                arr = this.getMensajesNoEnviados().get(id);
+            if(this.getMensajesNoEnviados().containsKey(mensajeEm.getReceptor().getNombre()) && tipo!=2){ //ya existe arrayList
+                arr = this.getMensajesNoEnviados().get(mensajeEm.getReceptor().getNombre());
                 arr.add(msj);
             }
             else{
                 if(tipo != 2){
                     arr = new ArrayList<String>();
                     arr.add(msj);
-                    this.getMensajesNoEnviados().put(id, arr);
+                    this.getMensajesNoEnviados().put(mensajeEm.getReceptor().getNombre(), arr);
                 }
             }
-            if(this.getMensajesNoEnviadosCAviso().containsKey(id) && tipo==2){
-                arr = this.getMensajesNoEnviadosCAviso().get(id);
+            if(this.getMensajesNoEnviadosCAviso().containsKey(mensajeEm.getReceptor().getNombre()) && tipo==2){
+                arr = this.getMensajesNoEnviadosCAviso().get(mensajeEm.getReceptor().getNombre());
                 arr.add(msj);
             }
             else{
                 if(tipo == 2){
                     arr = new ArrayList<String>();
                     arr.add(msj);
-                    this.getMensajesNoEnviadosCAviso().put(id, arr);
+                    this.getMensajesNoEnviadosCAviso().put(mensajeEm.getReceptor().getNombre(), arr);
                 }
             }
-            this.informarConsola("No se ha podido enviar el mensaje a "+id+", guardandolo como pendiente (tipo="+tipo+")");
+            this.informarConsola("No se ha podido enviar el mensaje a "+mensajeEm.getReceptor().getNombre()+", guardandolo como pendiente (tipo="+tipo+")");
             this.mensajesNoEnviadosCAvisoOcup = false;
             this.mensajesNoEnviadosOcup = false;
             notifyAll();
@@ -369,30 +367,30 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
                     while(true)
                     {
                         Thread.sleep(3000);
-                        while(LogicaMensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup()== true ||
-                               LogicaMensajeria.getInstancia().isMensajesNoEnviadosOcup() ||
-                               LogicaMensajeria.getInstancia().isAvisosPendientesOcup())
+                        while(GestorServidorMensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup()== true ||
+                               GestorServidorMensajeria.getInstancia().isMensajesNoEnviadosOcup() ||
+                               GestorServidorMensajeria.getInstancia().isAvisosPendientesOcup())
                         {
                             wait();
                         }
-                        LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
-                        LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
-                        LogicaMensajeria.getInstancia().setAvisosPendientesOcup(true);
-                        PersistenciaXML.getInstancia().persistir(LogicaMensajeria.getInstancia().getMensajesNoEnviados(),
-                                    LogicaMensajeria.fileNoEnviados);
-                        PersistenciaXML.getInstancia().persistir(LogicaMensajeria.getInstancia().getMensajesNoEnviadosCAviso(),
-                                    LogicaMensajeria.fileNoEnviadosCAviso);
-                        PersistenciaXML.getInstancia().persistir(LogicaMensajeria.getInstancia().getAvisosPendientes(),
-                                    LogicaMensajeria.fileAvisosPendientes);
-                        LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
-                        LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
-                        LogicaMensajeria.getInstancia().setAvisosPendientesOcup(false);
+                        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
+                        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
+                        GestorServidorMensajeria.getInstancia().setAvisosPendientesOcup(true);
+                        PersistenciaXML.getInstancia().persistir(GestorServidorMensajeria.getInstancia().getMensajesNoEnviados(),
+                                       GestorServidorMensajeria.fileNoEnviados);
+                        PersistenciaXML.getInstancia().persistir(GestorServidorMensajeria.getInstancia().getMensajesNoEnviadosCAviso(),
+                                       GestorServidorMensajeria.fileNoEnviadosCAviso);
+                        PersistenciaXML.getInstancia().persistir(GestorServidorMensajeria.getInstancia().getAvisosPendientes(),
+                                       GestorServidorMensajeria.fileAvisosPendientes);
+                        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
+                        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
+                        GestorServidorMensajeria.getInstancia().setAvisosPendientesOcup(false);
                         notifyAll();
                     }
                 }
                 catch (Exception e)
                 {
-                    LogicaMensajeria.getInstancia().informarConsola("ERROR al hacer back-up de Mensajeria");
+                    GestorServidorMensajeria.getInstancia().informarConsola("ERROR al hacer back-up de Mensajeria");
                     e.printStackTrace();
                     
                 }
@@ -405,9 +403,9 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
     {
         HashMap<String, ArrayList<String>> hsAux;
         
-        while(LogicaMensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup() ||
-               LogicaMensajeria.getInstancia().isMensajesNoEnviadosOcup() ||
-               LogicaMensajeria.getInstancia().isAvisosPendientesOcup())
+        while(GestorServidorMensajeria.getInstancia().isMensajesNoEnviadosCAvisoOcup() ||
+               GestorServidorMensajeria.getInstancia().isMensajesNoEnviadosOcup() ||
+               GestorServidorMensajeria.getInstancia().isAvisosPendientesOcup())
                 {
             try
             {
@@ -417,21 +415,21 @@ public class LogicaMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IE
                 e.printStackTrace();
             }
         }
-        LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
-        LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
-        LogicaMensajeria.getInstancia().setAvisosPendientesOcup(true);
-        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviados);
+        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(true);
+        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosOcup(true);
+        GestorServidorMensajeria.getInstancia().setAvisosPendientesOcup(true);
+        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(GestorServidorMensajeria.fileNoEnviados);
         if(hsAux!=null)
             this.mensajesNoEnviados = hsAux;
-        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileNoEnviadosCAviso);
+        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(GestorServidorMensajeria.fileNoEnviadosCAviso);
         if(hsAux!=null)
             this.mensajesNoEnviadosCAviso = hsAux;
-        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(LogicaMensajeria.fileAvisosPendientes);
+        hsAux = (HashMap<String, ArrayList<String>>)PersistenciaXML.getInstancia().recuperar(GestorServidorMensajeria.fileAvisosPendientes);
         if(hsAux!=null)
             this.avisosPendientes = hsAux;
-        LogicaMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
-        LogicaMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
-        LogicaMensajeria.getInstancia().setAvisosPendientesOcup(false);
+        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosCAvisoOcup(false);
+        GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
+        GestorServidorMensajeria.getInstancia().setAvisosPendientesOcup(false);
         notifyAll();
     }
 }

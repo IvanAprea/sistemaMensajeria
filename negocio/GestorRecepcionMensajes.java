@@ -44,19 +44,20 @@ import java.security.NoSuchProviderException;
 
 import java.time.format.DateTimeFormatter;
 
-public class LogicaReceptor extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
+public class GestorRecepcionMensajes extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
-    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria,IPDirectorioAux,puertoDirectorioAux;
-    private static LogicaReceptor _instancia = null;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private static GestorRecepcionMensajes _instancia = null;
     private IVentanaReceptor ventanaReceptor;
     private boolean RMocupado=false;
     private final String regex=", *";
+    private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
     private final int cantDatos=2;
     private IDesencriptar desencriptador;
         
 	
-    private LogicaReceptor() {
+    private GestorRecepcionMensajes() {
     	super();
     }
 
@@ -80,10 +81,10 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
      * Thread-protected Singleton
      * @return
      */
-    public synchronized static LogicaReceptor getInstancia()
+    public synchronized static GestorRecepcionMensajes getInstancia()
     {
         if(_instancia == null)
-            _instancia = new LogicaReceptor();
+            _instancia = new GestorRecepcionMensajes();
         return _instancia;
     }
     
@@ -139,7 +140,7 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
     
     public void pedirMensajesPendientes()
     {
-        ComunicacionReceptor.getInstancia().pedirMensajesPendientes(this.getIPMensajeria(),this.getPuertoMensajeria(),this.getIP()+":"+this.getPuerto());
+        ComunicacionReceptor.getInstancia().pedirMensajesPendientes(this.getNombre(),this.getIPMensajeria(),this.getNombre()); //UPDATE
     }
     
     public void lanzarCartelError(String err) {
@@ -156,7 +157,7 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
     }
 	
     public void iniciarSesion(){
-        UsuarioReceptor usuario = new UsuarioReceptor(this.getIP()+":"+this.getPuerto(), this.getNombre(), this.getIP(), this.getPuerto());
+        UsuarioReceptor usuario = new UsuarioReceptor(this.getNombre(), this.getIP(), this.getPuerto()); //UPDATE
         try{
             this.cargarKeys();
             usuario.setPublicKey(this.getDesencriptador().getPublicKey()); 
@@ -166,21 +167,12 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
             StringWriter sw = new StringWriter();
             marshaller.marshal(usuario, sw);
             try{
-                try{
-                    ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
-                }catch(IOException e)
-                {
-                    ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(IPDirectorioAux), Integer.parseInt(puertoDirectorioAux));
-                }
+                ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
                 this.ventanaReceptor.mostrarVentana();
                 this.pedirMensajesPendientes();
                 ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
-                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(IPDirectorio), Integer.parseInt(puertoDirectorio),InetAddress.getByName(IPDirectorioAux), Integer.parseInt(puertoDirectorioAux),this.getIP()+":"+this.getPuerto());
-            }catch(IOException e)
-            {
-                this.lanzarCartelError("El directorio no esta disponible");
-                this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
-            }catch (Exception e){
+                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getIP()+":"+this.getPuerto());
+            } catch (Exception e){
                 this.lanzarCartelError("No se pudo iniciar la sesión");
                 this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
             }
@@ -190,31 +182,23 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
         
     }
     
-    public synchronized void notificarDesconexionDirectorio() {
+    public void notificarDesconexionDirectorio() {
         try {
             ComunicacionReceptor.getInstancia()
                 .notificarDesconexionDirectorio(this.getIP() + ":" + this.getPuerto(),
                                                 InetAddress.getByName(this.getIPDirectorio()),
                                                 Integer.parseInt(this.getPuertoDirectorio()));
-        } catch (IOException e) {
-            try
-            {
-                ComunicacionReceptor.getInstancia()
-                    .notificarDesconexionDirectorio(this.getIP() + ":" + this.getPuerto(),
-                                                    InetAddress.getByName(IPDirectorioAux),
-                                                    Integer.parseInt(puertoDirectorioAux));
-            }catch (IOException f){
-                this.lanzarCartelError("ERROR al notificar al Directorio la desconexion");
-            }
+        } catch (Exception e) {
+            this.lanzarCartelError("ERROR al notificar al Directorio la desconexion");
         }
     }
     
-    public void cargarDatosConfig(String s){
+    public void cargarDatosConfig(){
         BufferedReader br;
         String[] datos;
 
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
             String linea = br.readLine();
             while(linea!=null){
                 datos=linea.split(regex);
@@ -222,8 +206,6 @@ public class LogicaReceptor extends Persona implements ActionListener,IUsuario,I
                 this.puertoDirectorio=datos[1];
                 this.IPMensajeria=datos[2];
                 this.puertoMensajeria=datos[3];
-                this.IPDirectorioAux=datos[4];
-                this.puertoDirectorioAux=datos[5];
                 linea = br.readLine();
             }
             br.close();
