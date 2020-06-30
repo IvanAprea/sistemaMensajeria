@@ -192,7 +192,7 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
                                     ComunicacionEmisor.getInstancia().enviarMensajes(arr, InetAddress.getByName(IPMensajeria),Integer.parseInt(puertoMensajeria));
                                 } catch (IOException e)
                                 {
-                                    e.printStackTrace();
+                                    System.out.println("Se intento enviar un mensaje y el servidor de mensajeria esta offline.");
                                 }
                                 if(arr.isEmpty())
                                 {
@@ -255,10 +255,10 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
             }
             setNoEnviadosOcupado(true);
             hs = (HashMap<UsuarioReceptor,ArrayList<String>>)PersistenciaXML.getInstancia().recuperar("noEnviadosEmisor.txt");
-            if (hs!=null)
+            if (!hs.isEmpty())
                 this.noEnviados = hs;
             setNoEnviadosOcupado(false);
-            if(this.noEnviados!= null)
+            if(!hs.isEmpty())
             {
                 enviarMensajesPendientes();
                 persistirNoEnviados();
@@ -348,17 +348,10 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
         }
     }
     
-    public void abrirConexionDirectorio() throws UnknownHostException,IOException {
-            this.setSocketDirectorio(ComunicacionEmisor.getInstancia().abrirConexionDirectorio(InetAddress.getByName(IPDirectorio),Integer.valueOf(puertoDirectorio)));
-
-    }
-    
     public void obtenerListaReceptores() throws Exception {
         try 
         {
-            this.abrirConexionDirectorio();
             String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(this.IPDirectorio),Integer.parseInt(this.puertoDirectorio));
-            this.getSocketDirectorio().close();
             if(hm!=null){
                 javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
                 javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();

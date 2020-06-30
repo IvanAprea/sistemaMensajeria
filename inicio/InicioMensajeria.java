@@ -2,6 +2,7 @@ package inicio;
 
 import base.ComunicacionMensajeria;
 
+import negocio.GestorEnvioMensajes;
 import negocio.GestorServidorMensajeria;
 
 public class InicioMensajeria {
@@ -11,6 +12,7 @@ public class InicioMensajeria {
     
     public static void main(String[] args) {
         GestorServidorMensajeria.getInstancia().recuperarDatos();
+        GestorServidorMensajeria.getInstancia().cargarDatosConfig();
         ComunicacionMensajeria.getInstancia().escucharPuerto("71");
         GestorServidorMensajeria.getInstancia().backUp();
     }

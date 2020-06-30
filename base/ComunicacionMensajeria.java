@@ -121,21 +121,31 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
             this.socketEmisor.close();
     }
     
-    public String pedirIDADirectorio(String nombreRec){
-        String hm;
+    public String pedirIDADirectorio(String nombreRec,InetAddress ip, int puerto){
         try 
         {
+            String val;
+            
+            socket = new Socket(ip,puerto);
             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
             String s = "DIR_DAR_IDREC";
             dOut.writeUTF(s);
             s = nombreRec;
             dOut.writeUTF(s);
             DataInputStream dIn = new DataInputStream(socket.getInputStream());
-            return dIn.readUTF();
+            val = dIn.readUTF();
+            socket.close();
+            return val;
         } 
         catch (IOException e) 
         {
             e.printStackTrace();
+            try
+            {
+                socket.close();
+            } catch (IOException f)
+            {
+            }
             return null;
         }
     }

@@ -11,15 +11,22 @@ import interfaces.IBackUp;
 
 import interfaces.IBackUpMensajeria;
 
+import interfaces.ICargaConfig;
 import interfaces.IEjecutarComando;
 import interfaces.IEnviarMensajeMens;
 
 import interfaces.IEnviarPendientes;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import java.io.StringWriter;
+
+import java.io.UnsupportedEncodingException;
 
 import java.net.InetAddress;
 
@@ -33,9 +40,13 @@ import java.util.Map;
 
 
 import javax.xml.bind.JAXBException;
-public class GestorServidorMensajeria implements IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
+public class GestorServidorMensajeria implements ICargaConfig,IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
 
     private static final String fileNoEnviados="noEnviadosMensajeria.txt",fileNoEnviadosCAviso="noEnviadosCAvisoMensajeria.txt",fileAvisosPendientes="avisosPendientesMensajeria.txt";
+    private final String nombreConfigMensajeria="configMensajeria.txt";
+    private final String regex=", *";
+    private final String decoder="UTF8";
+    private String IPDirectorio, puertoDirectorio;
     private static GestorServidorMensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
     private HashMap<String, ArrayList<String>> mensajesNoEnviadosCAviso;
@@ -195,11 +206,11 @@ public class GestorServidorMensajeria implements IBackUpMensajeria,IEnviarMensaj
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
             StringReader reader = new StringReader(msj);
             mensajeEm = (MensajeEmisor) unmarshaller.unmarshal(reader);
-            String idRecepetor = null;//pedir a directorio !!!!!!!!!!!!!!!!!!!!!!!!!
+            String direcReceptor = ComunicacionMensajeria.getInstancia().pedirIDADirectorio(mensajeEm.getReceptor().getNombre(),InetAddress.getByName(IPDirectorio),Integer.parseInt(puertoDirectorio));
             this.informarConsola("Intentado enviar mensaje a "+ mensajeEm.getReceptor().getNombre());
             StringWriter sw = new StringWriter();
             sw.write(msj);
-            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(mensajeEm.getReceptor().getIP()), Integer.parseInt(mensajeEm.getReceptor().getPuerto()),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
+            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(this.getIPbyID(direcReceptor)), Integer.parseInt(this.getPuertoByID(direcReceptor)),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
             this.informarConsola("Mensaje enviado con exito a "+ mensajeEm.getReceptor().getNombre());
         } catch (IOException e) {
             ArrayList<String> arr;
@@ -431,5 +442,37 @@ public class GestorServidorMensajeria implements IBackUpMensajeria,IEnviarMensaj
         GestorServidorMensajeria.getInstancia().setMensajesNoEnviadosOcup(false);
         GestorServidorMensajeria.getInstancia().setAvisosPendientesOcup(false);
         notifyAll();
+    }
+    
+    private String getIPbyID(String idRecepetor) {
+        return idRecepetor.split(":")[0];
+    }
+
+    private String getPuertoByID(String idRecepetor) {
+        return idRecepetor.split(":")[1];
+    }
+
+    @Override
+    public void cargarDatosConfig()
+    {
+        BufferedReader br;
+        String[] datos;
+        try {
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigMensajeria), decoder));
+            String linea = br.readLine();
+            while(linea!=null){
+                datos=linea.split(regex);
+                this.IPDirectorio=datos[0];
+                this.puertoDirectorio=datos[1];
+                linea = br.readLine();
+            }
+            br.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

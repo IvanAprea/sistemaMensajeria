@@ -140,7 +140,7 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
     
     public void pedirMensajesPendientes()
     {
-        ComunicacionReceptor.getInstancia().pedirMensajesPendientes(this.getNombre(),this.getIPMensajeria(),this.getNombre()); //UPDATE
+        ComunicacionReceptor.getInstancia().pedirMensajesPendientes(this.getNombre(),this.getIPMensajeria(),this.getPuertoMensajeria()); //UPDATE
     }
     
     public void lanzarCartelError(String err) {
@@ -157,7 +157,7 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
     }
 	
     public void iniciarSesion(){
-        UsuarioReceptor usuario = new UsuarioReceptor(this.getNombre(), this.getIP(), this.getPuerto()); //UPDATE
+        UsuarioReceptor usuario = new UsuarioReceptor(this.getNombre(), this.getIP(), this.getPuerto());
         try{
             this.cargarKeys();
             usuario.setPublicKey(this.getDesencriptador().getPublicKey()); 
@@ -171,7 +171,7 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
                 this.ventanaReceptor.mostrarVentana();
                 this.pedirMensajesPendientes();
                 ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
-                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getIP()+":"+this.getPuerto());
+                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getNombre());
             } catch (Exception e){
                 this.lanzarCartelError("No se pudo iniciar la sesión");
                 this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
@@ -185,7 +185,7 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
     public void notificarDesconexionDirectorio() {
         try {
             ComunicacionReceptor.getInstancia()
-                .notificarDesconexionDirectorio(this.getIP() + ":" + this.getPuerto(),
+                .notificarDesconexionDirectorio(this.getNombre(),
                                                 InetAddress.getByName(this.getIPDirectorio()),
                                                 Integer.parseInt(this.getPuertoDirectorio()));
         } catch (Exception e) {
