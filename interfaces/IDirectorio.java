@@ -6,5 +6,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public interface IDirectorio {
-    String pedirListaADirectorio(InetAddress ip, int puerto) throws IOException;
+    String pedirListaADirectorio(Socket socket);
+    Socket abrirConexionDirectorio(InetAddress ip, int puerto) throws IOException;
 }

@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 
 import javax.swing.table.DefaultTableModel;
 
-import negocio.LogicaEmisor;
+import negocio.GestorEnvioMensajes;
 import negocio.UsuarioReceptor;
 
 
@@ -688,7 +688,7 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
             if(!this.getAsunto().trim().equals("")){
                 if(!this.getMensaje().trim().equals("")){
                     if(this.getTipo() != -1){
-                        LogicaEmisor.getInstancia().enviarMensaje(personas);
+                        GestorEnvioMensajes.getInstancia().enviarMensaje(personas);
                         this.textAsuntoEmisor.setText("");
                         this.textMensajeEmisor.setText("");
                         this.tipoMensaje.clearSelection();
@@ -698,11 +698,11 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
                         this.lanzarCartelError("ERROR: debe seleccionar el tipo de mensaje.");
                 }
                 else{
-                    this.lanzarCartelError("ERROR: debe aÃ±adir un mensaje.");
+                    this.lanzarCartelError("ERROR: debe añadir un mensaje.");
                 }
             }
             else{
-                this.lanzarCartelError("ERROR: debe aÃ±adir un asunto.");
+                this.lanzarCartelError("ERROR: debe añadir un asunto.");
             }
         }
         else{
@@ -720,11 +720,11 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
         String nombre = this.getNombreConfig().trim();
         if(!nombre.equals(""))
         {
-            LogicaEmisor.getInstancia().configAtributos(nombre);
+            GestorEnvioMensajes.getInstancia().configAtributos(nombre);
             jLabel_usrname.setText(nombre);
             this.cerrarSesion();
             this.setVisible(true);
-            LogicaEmisor.getInstancia().pedirAvisosPendientes();
+            GestorEnvioMensajes.getInstancia().pedirAvisosPendientes();
         }
         else 
         {
@@ -778,7 +778,7 @@ public class VentanaEmisor2 extends javax.swing.JFrame implements IVentanaEmisor
         this.sesionEmisor.setSize(275, 305);
         this.sesionEmisor.setResizable(false);
         this.sesionEmisor.setVisible(true);
-        this.textNombreSesion.setText(LogicaEmisor.getInstancia().getNombre());
+        this.textNombreSesion.setText(GestorEnvioMensajes.getInstancia().getNombre());
         this.repaint();
         
     }

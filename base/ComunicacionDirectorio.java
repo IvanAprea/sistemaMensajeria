@@ -2,7 +2,6 @@ package base;
 
 import interfaces.IEscucharPuerto;
 
-import interfaces.IRedundanciaDir;
 import interfaces.IRegistro;
 
 import java.io.DataInputStream;
@@ -10,7 +9,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import java.io.StringReader;
 import java.io.StringWriter;
 
 import java.net.BindException;
@@ -20,36 +18,43 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.xml.bind.JAXBException;
-
-import negocio.LogicaDirectorio;
-import negocio.LogicaEmisor;
+import negocio.GestorUsuariosReceptores;
+import negocio.GestorEnvioMensajes;
 import negocio.UsuarioReceptor;
-import negocio.UsuariosRecMap;
 
-public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistro,IRedundanciaDir{
+public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
 
     private static ComunicacionDirectorio _instancia = null;
     private ServerSocket sepd; //sepe=socketEscucharPuertoDirectorio
-    private Socket socketPD;
+    private Socket socket;
     private DataInputStream dIn;
     private DataOutputStream dOut;
     private PrintWriter out;
     
-    public ComunicacionDirectorio() {
+    private ComunicacionDirectorio() {
         super();
+    }
+    
+    /**
+     * Thread-protected Singleton
+     * @return
+     */
+    public synchronized static ComunicacionDirectorio getInstancia()
+    {
+        if(_instancia == null)
+            _instancia = new ComunicacionDirectorio();
+        return _instancia;
     }
     
     public synchronized void nuevoUsuario(){
         try {
-            LogicaDirectorio.getInstancia().nuevoUsuario(dIn.readUTF());
+            GestorUsuariosReceptores.getInstancia().nuevoUsuario(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                socketPD.close();
+                socket.close();
             } catch (IOException f) {
                 f.printStackTrace();
             }
@@ -57,11 +62,11 @@ public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistr
     }
     
     public void setSocket(Socket socket) {
-        this.socketPD = socket;
+        this.socket = socket;
     }
 
     public Socket getSocket() {
-        return socketPD;
+        return socket;
     }
 
     public synchronized void escucharPuerto(String puerto) {
@@ -71,15 +76,15 @@ public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistr
                     
                     sepd = new ServerSocket(Integer.parseInt(puerto));
                     while (true) {
-                        socketPD = sepd.accept();
-                        out = new PrintWriter(socketPD.getOutputStream(), true);
-                        dIn = new DataInputStream(socketPD.getInputStream());
-                        LogicaDirectorio.getInstancia().ejecutarComando(dIn.readUTF());
-                        socketPD.close();
+                        socket = sepd.accept();
+                        out = new PrintWriter(socket.getOutputStream(), true);
+                        dIn = new DataInputStream(socket.getInputStream());
+                        GestorUsuariosReceptores.getInstancia().ejecutarComando(dIn.readUTF());
+                        socket.close();
                     }
                     //ver donde cerrar el socket
                 } catch (BindException e) {
-                    e.printStackTrace();
+                    GestorEnvioMensajes.getInstancia().lanzarCartelError("ERROR: El puerto ya está siendo escuchado");
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                  } catch (SocketException e) {
@@ -95,17 +100,10 @@ public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistr
         }.start();
     }
     
-    public abstract boolean conectarDirectorio();
-    public abstract void escucharDirectorio(String puerto);
-    public abstract String recibirDatos();
-    public abstract void setIpDir(String s);
-    public abstract void setPuertoDir(String s);
-    public abstract void enviarActualizacion();
-    
     public void darLista(StringWriter hashmapMarshalizado){
         try 
         {
-            dOut = new DataOutputStream(socketPD.getOutputStream());
+            dOut = new DataOutputStream(socket.getOutputStream());
             dOut.writeUTF(hashmapMarshalizado.toString());
             dOut.flush();
         } 
@@ -116,11 +114,11 @@ public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistr
 
     public void setearUsuarioDesconectado() {
         try {
-            LogicaDirectorio.getInstancia().setearUsuarioDesconectado(dIn.readUTF());
+            GestorUsuariosReceptores.getInstancia().setearUsuarioDesconectado(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                socketPD.close();
+                socket.close();
             } catch (IOException f) {
                 f.printStackTrace();
             }
@@ -129,15 +127,39 @@ public abstract class ComunicacionDirectorio implements IEscucharPuerto,IRegistr
     
     public void recibirAlive(){
         try {
-            LogicaDirectorio.getInstancia().recibirAlive(dIn.readUTF());
+            GestorUsuariosReceptores.getInstancia().recibirAlive(dIn.readUTF());
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                socketPD.close();
+                socket.close();
+            } catch (IOException f) {
+                f.printStackTrace();
+            }
+        }
+    }
+
+    public void recibirNombreRec() {
+        try {
+            GestorUsuariosReceptores.getInstancia().mandarIDRec(dIn.readUTF());
+        } catch (IOException e) {
+            e.printStackTrace();
+            try {
+                socket.close();
             } catch (IOException f) {
                 f.printStackTrace();
             }
         }
     }
     
+    public void darIDRec(String ip, String puerto){
+        try{
+            dOut = new DataOutputStream(socket.getOutputStream());
+            dOut.writeUTF(ip+":"+puerto);
+            dOut.flush();    
+        }
+        catch (IOException e) {
+        
+        }
+
+    }
 }

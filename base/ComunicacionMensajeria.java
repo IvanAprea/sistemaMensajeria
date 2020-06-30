@@ -20,10 +20,10 @@ import java.net.SocketTimeoutException;
 
 import java.net.UnknownHostException;
 
-import negocio.LogicaMensajeria;
-import negocio.LogicaDirectorio;
-import negocio.LogicaEmisor;
-import negocio.LogicaReceptor;
+import negocio.GestorServidorMensajeria;
+import negocio.GestorUsuariosReceptores;
+import negocio.GestorEnvioMensajes;
+import negocio.GestorRecepcionMensajes;
 
 public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
     
@@ -53,7 +53,7 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
                         socket = sepd.accept();
                         out = new PrintWriter(socket.getOutputStream(), true);
                         dIn = new DataInputStream(socket.getInputStream());
-                        LogicaMensajeria.getInstancia().ejecutarComando(dIn.readUTF());
+                        GestorServidorMensajeria.getInstancia().ejecutarComando(dIn.readUTF());
                         socket.close();
                     }
                 } catch (BindException e) {
@@ -119,5 +119,24 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
             DataOutputStream dOut = new DataOutputStream(this.socketEmisor.getOutputStream());
             dOut.writeUTF(nReceptor);
             this.socketEmisor.close();
+    }
+    
+    public String pedirIDADirectorio(String nombreRec){
+        String hm;
+        try 
+        {
+            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+            String s = "DIR_DAR_IDREC";
+            dOut.writeUTF(s);
+            s = nombreRec;
+            dOut.writeUTF(s);
+            DataInputStream dIn = new DataInputStream(socket.getInputStream());
+            return dIn.readUTF();
+        } 
+        catch (IOException e) 
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
