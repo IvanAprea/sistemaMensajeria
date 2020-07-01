@@ -24,7 +24,7 @@ import negocio.GestorUsuariosReceptores;
 import negocio.GestorEnvioMensajes;
 import negocio.UsuarioReceptor;
 
-public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
+public class ComunicacionDirectorio implements IEscucharPuerto{
 
     private static ComunicacionDirectorio _instancia = null;
     private ServerSocket sepd; //sepe=socketEscucharPuertoDirectorio
@@ -48,19 +48,7 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
         return _instancia;
     }
     
-    public synchronized void nuevoUsuario(){
-        try {
-            GestorUsuariosReceptores.getInstancia().nuevoUsuario(dIn.readUTF());
-        } catch (IOException e) {
-            e.printStackTrace();
-            try {
-                socket.close();
-            } catch (IOException f) {
-                f.printStackTrace();
-            }
-        }
-    }
-    
+   
     public void setSocket(Socket socket) {
         this.socket = socket;
     }
@@ -112,41 +100,17 @@ public class ComunicacionDirectorio implements IEscucharPuerto,IRegistro{
         }
     }
 
-    public void setearUsuarioDesconectado() {
+    public String leerDIn() {
         try {
-            GestorUsuariosReceptores.getInstancia().setearUsuarioDesconectado(dIn.readUTF());
+            return dIn.readUTF();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();      
             try {
                 socket.close();
+                return null;
             } catch (IOException f) {
                 f.printStackTrace();
-            }
-        }
-    }
-    
-    public void recibirAlive(){
-        try {
-            GestorUsuariosReceptores.getInstancia().recibirAlive(dIn.readUTF());
-        } catch (IOException e) {
-            e.printStackTrace();
-            try {
-                socket.close();
-            } catch (IOException f) {
-                f.printStackTrace();
-            }
-        }
-    }
-
-    public void recibirNombreRec() {
-        try {
-            GestorUsuariosReceptores.getInstancia().mandarIDRec(dIn.readUTF());
-        } catch (IOException e) {
-            e.printStackTrace();
-            try {
-                socket.close();
-            } catch (IOException f) {
-                f.printStackTrace();
+                return null;
             }
         }
     }
