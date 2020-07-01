@@ -113,7 +113,11 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
     }
     
     //Puede venir un usuario nuevo o no, por lo que se contemplan las dos situaciones
-    public synchronized void nuevoUsuario(String str){
+    public synchronized void nuevoUsuario(boolean conSync){
+        String usr = ComunicacionDirectorio.getInstancia().leerDIn();
+        if(conSync){
+            Sincronizadora.getInstancia().nuevoUsuario(usr);
+        }
         while(this.listaDirOcupado==true && this.usrOnlineOcupado==true){
             try {
                 wait();
@@ -126,13 +130,13 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
         try {
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuarioReceptor.class);
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
-            StringReader reader = new StringReader(str);
+            StringReader reader = new StringReader(usr);
             UsuarioReceptor receptor = (UsuarioReceptor)unmarshaller.unmarshal(reader);
             receptor.setEstado("ONLINE");
             //actualizo ip y puerto en usuariosRecMap
-            this.listaDirectorio.getUsuariosRecMap().put(receptor.getNombre(), receptor); //UPDATE
+            this.listaDirectorio.getUsuariosRecMap().put(receptor.getNombre(), receptor);
             //Lo pongo en la lista de usuarios activos
-            this.getUsuariosOnlineActuales().add(receptor.getNombre()); //UPDATE
+            this.getUsuariosOnlineActuales().add(receptor.getNombre()); 
             this.listaDirOcupado=false;
             this.usrOnlineOcupado=false;
             notifyAll();
@@ -142,17 +146,24 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
         }
     }
     
-    public synchronized void setearUsuarioDesconectado(String nombre){ //UPDATE, NO FALTA CAMBIAR USUARIOS ONLINE?
-        try {
-            UsuarioReceptor receptor = this.getListaDirectorio().getUsuariosRecMap().get(nombre);
-            receptor.setEstado("OFFLINE");
-            this.listaDirectorio.getUsuariosRecMap().put(nombre, receptor);
-            this.informarConsola("Se ha desconectado al usuario "+nombre);
+    public synchronized void desconectarUsuario(boolean conSync){
+        String nombre = ComunicacionDirectorio.getInstancia().leerDIn();
+        if(conSync){
+            Sincronizadora.getInstancia().desconectarUsuario(nombre);
         }
-        catch (Exception e){
-            this.informarConsola("ERROR al desconectar usuario "+nombre);
-            e.printStackTrace();
+        while(this.listaDirOcupado==true){
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        this.listaDirOcupado=true;
+        this.setearUsuarioDesconectado(nombre);
+        this.informarConsola("Usuario intentando desconectarse...");
+        this.listaDirOcupado=false;
+        notifyAll();
+
     }
     
     public synchronized void darLista(){
@@ -180,7 +191,11 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
         } 
     }
     
-    public synchronized void recibirAlive(String nombre) { //habria que mandar id tambien?
+    public synchronized void recibirAlive(boolean conSync) { 
+        String nombre = ComunicacionDirectorio.getInstancia().leerDIn(); 
+        if(conSync){
+            Sincronizadora.getInstancia().recibirAlive(nombre);
+        }
         while(this.usrOnlineOcupado==true){
             try {
                 wait();
@@ -205,31 +220,33 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
     
     public synchronized void ejecutarComando(String comando) {
         if(comando.equalsIgnoreCase("DIR_AGREGAR_REC")){
-            ComunicacionDirectorio.getInstancia().nuevoUsuario();
+            this.nuevoUsuario(true);
         }
         else if(comando.equalsIgnoreCase("DIR_GETLISTA")){
             this.darLista();
         }
         else if(comando.equalsIgnoreCase("DIR_DESCONECTAR_REC")){
-            while(this.listaDirOcupado==true){
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            this.listaDirOcupado=true;
-            ComunicacionDirectorio.getInstancia().setearUsuarioDesconectado();
-            this.informarConsola("Usuario intentando desconectarse...");
-            this.listaDirOcupado=false;
-            notifyAll();
+            this.desconectarUsuario(true);
         }
         else if(comando.equalsIgnoreCase("DIR_DAR_ALIVE")){
-            ComunicacionDirectorio.getInstancia().recibirAlive();
+            this.recibirAlive(true);
         }
         else if(comando.equalsIgnoreCase("DIR_DAR_IDREC")){
-            ComunicacionDirectorio.getInstancia().recibirNombreRec();
+            this.mandarIDRec();
         }
+        else if(comando.equalsIgnoreCase("DIR_SYNC_AGREGAR")){
+            this.nuevoUsuario(false);
+        }
+        else if(comando.equalsIgnoreCase("DIR_SYNC_DESCONECTAR")){
+            this.desconectarUsuario(false);
+        }
+        else if(comando.equalsIgnoreCase("DIR_SYNC_ALIVE")){
+            this.recibirAlive(false);
+        }
+        else if(comando.equalsIgnoreCase("DIR_SYNC_BACKUP")){ // ACA PEDIRIA EL HASHMAP COMPLETO, EL TEMA ES A QUIEN
+            this.enviarBackUp();
+        }
+
     }
 
 
@@ -274,8 +291,28 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando{
         return usrOnlineOcupado;
     }
 
-    public void mandarIDRec(String nombre) {
+    public void mandarIDRec() {
+        String nombre = ComunicacionDirectorio.getInstancia().leerDIn();
         UsuarioReceptor rec = this.getListaDirectorio().getUsuariosRecMap().get(nombre);
         ComunicacionDirectorio.getInstancia().darIDRec(rec.getIP(), rec.getPuerto());
+    }
+
+    @Override
+    public void setearUsuarioDesconectado(String nombre) {
+        try {
+            UsuarioReceptor receptor = this.getListaDirectorio().getUsuariosRecMap().get(nombre);
+            receptor.setEstado("OFFLINE");
+            this.listaDirectorio.getUsuariosRecMap().put(nombre, receptor);
+            this.informarConsola("Se ha desconectado al usuario "+nombre);
+        }
+        catch (Exception e){
+            this.informarConsola("ERROR al desconectar usuario "+nombre);
+            e.printStackTrace();
+        }
+    }
+
+
+    private void enviarBackUp() {
+        //enviar copia del hashmap al que lo solicita
     }
 }
