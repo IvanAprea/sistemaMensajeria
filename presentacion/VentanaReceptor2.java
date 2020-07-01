@@ -725,8 +725,8 @@ public class VentanaReceptor2 extends javax.swing.JFrame implements IVentanaRece
             GestorRecepcionMensajes.getInstancia().configAtributos(nombre);
             this.jLabel_usrname.setText(nombre);
             this.jDiagSesionRecep.setVisible(false);
-            GestorRecepcionMensajes.getInstancia().iniciarSesion();
-            this.setVisible(true);
+            if(GestorRecepcionMensajes.getInstancia().iniciarSesion())
+                this.setVisible(true);
         }
         else {
                 this.lanzarCartelError("ERROR: debe completar todos los campos");

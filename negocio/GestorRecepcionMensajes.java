@@ -46,12 +46,11 @@ import java.time.format.DateTimeFormatter;
 
 public class GestorRecepcionMensajes extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
 	
-    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria,IPDirRedundante,PuertoDirRedundante;
     private static GestorRecepcionMensajes _instancia = null;
     private IVentanaReceptor ventanaReceptor;
     private boolean RMocupado=false;
     private final String regex=", *";
-    private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
     private final int cantDatos=2;
     private IDesencriptar desencriptador;
@@ -156,7 +155,7 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
         this.setNombre(nombre);
     }
 	
-    public void iniciarSesion(){
+    public boolean iniciarSesion(){
         UsuarioReceptor usuario = new UsuarioReceptor(this.getNombre(), this.getIP(), this.getPuerto());
         try{
             this.cargarKeys();
@@ -167,38 +166,55 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
             StringWriter sw = new StringWriter();
             marshaller.marshal(usuario, sw);
             try{
-                ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
+                try{
+                    ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirRedundante()), Integer.parseInt(this.getPuertoDirRedundante()));
+                }catch(IOException e){
+                    ComunicacionReceptor.getInstancia().iniciarSesion(sw, InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()));
+                }
                 this.ventanaReceptor.mostrarVentana();
                 this.pedirMensajesPendientes();
                 ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
-                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getNombre());
+                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirRedundante()), Integer.parseInt(this.getPuertoDirRedundante()),InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getNombre());
+                return true;
+            }catch(IOException e){
+                this.lanzarCartelError("El directorio no esta disponible");
+                this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
+                return false;
             } catch (Exception e){
                 this.lanzarCartelError("No se pudo iniciar la sesión");
                 this.ventanaReceptor.getJDiagSesionRecep().setVisible(true);
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        
     }
     
     public void notificarDesconexionDirectorio() {
         try {
             ComunicacionReceptor.getInstancia()
                 .notificarDesconexionDirectorio(this.getNombre(),
+                                                InetAddress.getByName(this.getIPDirRedundante()),
+                                                Integer.parseInt(this.getPuertoDirRedundante()));
+        } catch (IOException e) {
+            try {
+                ComunicacionReceptor.getInstancia()
+                .notificarDesconexionDirectorio(this.getNombre(), 
                                                 InetAddress.getByName(this.getIPDirectorio()),
                                                 Integer.parseInt(this.getPuertoDirectorio()));
-        } catch (Exception e) {
-            this.lanzarCartelError("ERROR al notificar al Directorio la desconexion");
+            } catch (IOException f) {
+                this.lanzarCartelError("ERROR al notificar al Directorio la desconexion");
+            }
         }
     }
     
-    public void cargarDatosConfig(){
+    public void cargarDatosConfig(String s){
         BufferedReader br;
         String[] datos;
 
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
             String linea = br.readLine();
             while(linea!=null){
                 datos=linea.split(regex);
@@ -206,6 +222,8 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
                 this.puertoDirectorio=datos[1];
                 this.IPMensajeria=datos[2];
                 this.puertoMensajeria=datos[3];
+                this.IPDirRedundante=datos[4];
+                this.PuertoDirRedundante=datos[5];
                 linea = br.readLine();
             }
             br.close();
@@ -255,5 +273,13 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
             this.getDesencriptador().setNewKeys();
             this.getDesencriptador().persistirKeys(this.getNombre());
         }
+    }
+
+    public String getIPDirRedundante() {
+        return IPDirRedundante;
+    }
+
+    public String getPuertoDirRedundante() {
+        return PuertoDirRedundante;
     }
 }

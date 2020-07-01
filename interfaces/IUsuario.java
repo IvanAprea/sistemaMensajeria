@@ -1,6 +1,6 @@
 package interfaces;
 
 public interface IUsuario {
-    void iniciarSesion();
+    boolean iniciarSesion();
     void notificarDesconexionDirectorio();
 }

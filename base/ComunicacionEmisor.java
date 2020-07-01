@@ -140,8 +140,6 @@ public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscuch
     
     public String pedirListaADirectorio(InetAddress ip, int puerto) throws IOException
     {
-        String hm;
-
             socketDirectorio = new Socket(ip,puerto);
             DataOutputStream dOut = new DataOutputStream(socketDirectorio.getOutputStream());
             String s = "DIR_GETLISTA";

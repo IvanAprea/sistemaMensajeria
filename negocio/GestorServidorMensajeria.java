@@ -43,10 +43,9 @@ import javax.xml.bind.JAXBException;
 public class GestorServidorMensajeria implements ICargaConfig,IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
 
     private static final String fileNoEnviados="noEnviadosMensajeria.txt",fileNoEnviadosCAviso="noEnviadosCAvisoMensajeria.txt",fileAvisosPendientes="avisosPendientesMensajeria.txt";
-    private final String nombreConfigMensajeria="configMensajeria.txt";
     private final String regex=", *";
     private final String decoder="UTF8";
-    private String IPDirectorio, puertoDirectorio;
+    private String IPDirectorio, puertoDirectorio,IPDirRedundante,PuertoDirRedundante;
     private static GestorServidorMensajeria _instancia = null;
     private HashMap<String, ArrayList<String>> mensajesNoEnviados;
     private HashMap<String, ArrayList<String>> mensajesNoEnviadosCAviso;
@@ -200,13 +199,18 @@ public class GestorServidorMensajeria implements ICargaConfig,IBackUpMensajeria,
     public synchronized void intentarEnviarMensaje() {
         MensajeEmisor mensajeEm = null;
         String msj = null;
+        String direcReceptor;
         try {
             msj = ComunicacionMensajeria.getInstancia().recibirMsj();
             javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(MensajeEmisor.class);
             javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();
             StringReader reader = new StringReader(msj);
             mensajeEm = (MensajeEmisor) unmarshaller.unmarshal(reader);
-            String direcReceptor = ComunicacionMensajeria.getInstancia().pedirIDADirectorio(mensajeEm.getReceptor().getNombre(),InetAddress.getByName(IPDirectorio),Integer.parseInt(puertoDirectorio));
+            try{
+                direcReceptor = ComunicacionMensajeria.getInstancia().pedirIDADirectorio(mensajeEm.getReceptor().getNombre(),InetAddress.getByName(IPDirectorio),Integer.parseInt(puertoDirectorio));
+            }catch(IOException e){
+                direcReceptor = ComunicacionMensajeria.getInstancia().pedirIDADirectorio(mensajeEm.getReceptor().getNombre(),InetAddress.getByName(this.IPDirRedundante),Integer.parseInt(this.PuertoDirRedundante));
+            }
             this.informarConsola("Intentado enviar mensaje a "+ mensajeEm.getReceptor().getNombre());
             StringWriter sw = new StringWriter();
             sw.write(msj);
@@ -453,17 +457,19 @@ public class GestorServidorMensajeria implements ICargaConfig,IBackUpMensajeria,
     }
 
     @Override
-    public void cargarDatosConfig()
+    public void cargarDatosConfig(String s)
     {
         BufferedReader br;
         String[] datos;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigMensajeria), decoder));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
             String linea = br.readLine();
             while(linea!=null){
                 datos=linea.split(regex);
                 this.IPDirectorio=datos[0];
                 this.puertoDirectorio=datos[1];
+                this.IPDirRedundante=datos[2];
+                this.PuertoDirRedundante=datos[3];
                 linea = br.readLine();
             }
             br.close();

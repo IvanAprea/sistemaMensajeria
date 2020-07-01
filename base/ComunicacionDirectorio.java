@@ -122,8 +122,19 @@ public class ComunicacionDirectorio implements IEscucharPuerto{
             dOut.flush();    
         }
         catch (IOException e) {
-        
+            e.printStackTrace();
         }
-
+    }
+    
+    public void enviarBackUp(String userOnline, String userRec){
+        try {
+            dOut = new DataOutputStream(socket.getOutputStream());
+            dOut.writeUTF(userOnline);
+            dOut.flush();
+            dOut.writeUTF(userRec);
+            dOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

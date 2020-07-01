@@ -56,10 +56,9 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     private IVentanaEmisor vista;
-    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria;
+    private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria,IPDirRedundante,PuertoDirRedundante;
     private static GestorEnvioMensajes instancia = null;
     private final String regex=", *";
-    private final String nombreConfigDirectorio="config.txt";
     private final String decoder="UTF8";
     private final int cantDatos=2;
     private Socket socketDirectorio;
@@ -324,11 +323,11 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
         return vista;
     }
     
-    public void cargarDatosConfig(){
+    public void cargarDatosConfig(String s){
         BufferedReader br;
         String[] datos;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(nombreConfigDirectorio), decoder));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(s), decoder));
             String linea = br.readLine();
             while(linea!=null){
                 datos=linea.split(regex);
@@ -336,6 +335,8 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
                 this.puertoDirectorio=datos[1];
                 this.IPMensajeria=datos[2];
                 this.puertoMensajeria=datos[3];
+                this.IPDirRedundante=datos[4];
+                this.PuertoDirRedundante=datos[5];
                 linea = br.readLine();
             }
             br.close();
@@ -349,9 +350,18 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
     }
     
     public void obtenerListaReceptores() throws Exception {
-        try 
-        {
-            String hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(this.IPDirectorio),Integer.parseInt(this.puertoDirectorio));
+        String hm;
+        
+        try{
+            hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(this.IPDirectorio),Integer.parseInt(this.puertoDirectorio));
+        }catch(IOException e){
+            try{
+                hm = ComunicacionEmisor.getInstancia().pedirListaADirectorio(InetAddress.getByName(this.IPDirRedundante),Integer.parseInt(this.PuertoDirRedundante));
+            } catch (IOException f){
+                throw new Exception("ERROR en la conexion con el directorio");
+            }
+        }
+        try {
             if(hm!=null){
                 javax.xml.bind.JAXBContext context = javax.xml.bind.JAXBContext.newInstance(UsuariosRecMap.class);
                 javax.xml.bind.Unmarshaller unmarshaller = context.createUnmarshaller();

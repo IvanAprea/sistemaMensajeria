@@ -12,7 +12,7 @@ public class InicioMensajeria {
     
     public static void main(String[] args) {
         GestorServidorMensajeria.getInstancia().recuperarDatos();
-        GestorServidorMensajeria.getInstancia().cargarDatosConfig();
+        GestorServidorMensajeria.getInstancia().cargarDatosConfig("configMensajeria.txt");
         ComunicacionMensajeria.getInstancia().escucharPuerto("71");
         GestorServidorMensajeria.getInstancia().backUp();
     }

@@ -18,7 +18,7 @@ public class inicioReceptor {
         GestorRecepcionMensajes.getInstancia().setearPuerto("81");
         GestorRecepcionMensajes.getInstancia().setearIp();
         GestorRecepcionMensajes.getInstancia().setVentanaReceptor(ventana);
-        GestorRecepcionMensajes.getInstancia().cargarDatosConfig();
+        GestorRecepcionMensajes.getInstancia().cargarDatosConfig("config.txt");
         GestorRecepcionMensajes.getInstancia().setDesencriptador(new Desencriptadora());
         ventana.pack();
         ventana.iniciarSesion();

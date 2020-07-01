@@ -79,14 +79,18 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         tr.start();
     }
     
-    public synchronized void heartbeat(InetAddress ipDirectorio,int puertoDirectorio,String id){
+    public synchronized void heartbeat(InetAddress ipDirectorio,int puertoDirectorio,InetAddress ipDirectorioAux,int puertoDirectorioAux,String id){
         Thread tr = new Thread(){
             DataOutputStream dOut;
             public void run(){
                 try {
                     while(true){
-                        Thread.sleep(5000);
-                        s = new Socket(ipDirectorio,puertoDirectorio);
+                        Thread.sleep(7000);
+                        try{
+                            s = new Socket(ipDirectorio,puertoDirectorio);
+                        }catch(IOException e){
+                            s = new Socket(ipDirectorioAux,puertoDirectorioAux);
+                        }
                         dOut = new DataOutputStream(s.getOutputStream());
                         dOut.writeUTF("DIR_DAR_ALIVE");
                         dOut.writeUTF(id);
@@ -102,7 +106,13 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
                         }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    if(s!=null)
+                        try {
+                            s.close();
+                        } catch (IOException f) {
+                            f.printStackTrace();
+                        }
+                    System.out.println("Error al conectar con el directorio HB");
                 }
             }
         };
@@ -139,54 +149,21 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         }
     }
     
-    public void iniciarSesion(StringWriter usuario,InetAddress ip,int puerto) throws Exception {
-        try {
-            s = new Socket(ip,puerto);
-            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
-            dOut.writeUTF("DIR_AGREGAR_REC");
-            dOut.writeUTF(usuario.toString());
-            dOut.flush();
-            s.close();
-            
-        } catch (IOException e) {
-            try {
-                if(s!=null){
-                    s.close();
-                }
-                throw new Exception("ERROR");
-            } catch (IOException f) {
-                f.printStackTrace();
-            }
-            
-        }
-        catch(Exception e){
-            System.out.println(e);
-            System.out.println(e.getMessage());
-        }
+    public void iniciarSesion(StringWriter usuario,InetAddress ip,int puerto) throws IOException {
+        s = new Socket(ip,puerto);
+        DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
+        dOut.writeUTF("DIR_AGREGAR_REC");
+        dOut.writeUTF(usuario.toString());
+        dOut.flush();
+        s.close();
     }
     
-    public void notificarDesconexionDirectorio(String nombre,InetAddress ip,int puerto) throws Exception { //UPDATE
-        try {
-            s = new Socket(ip,puerto);
-            DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
-            dOut.writeUTF("DIR_DESCONECTAR_REC");
-            dOut.writeUTF(nombre); //UPDATE
-            dOut.flush();
-            s.close();
-            
-        } catch (IOException e) {
-            try {
-                if(s!=null){
-                    s.close();
-                }
-                throw new Exception("ERROR");
-            } catch (IOException f) {
-                f.printStackTrace();
-            }     
-        }
-        catch(Exception e){
-            System.out.println(e);
-            System.out.println(e.getMessage());
-        }
+    public void notificarDesconexionDirectorio(String nombre,InetAddress ip,int puerto) throws IOException { //UPDATE
+        s = new Socket(ip,puerto);
+        DataOutputStream dOut = new DataOutputStream(s.getOutputStream());
+        dOut.writeUTF("DIR_DESCONECTAR_REC");
+        dOut.writeUTF(nombre); //UPDATE
+        dOut.flush();
+        s.close();
     }
 }

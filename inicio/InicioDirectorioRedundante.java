@@ -3,18 +3,16 @@ package inicio;
 import base.ComunicacionDirectorio;
 
 import negocio.GestorUsuariosReceptores;
-import negocio.GestorEnvioMensajes;
 
-
-public class InicioDirectorio {
-    public InicioDirectorio() {
+public class InicioDirectorioRedundante {
+    public InicioDirectorioRedundante() {
         super();
     }
 
     public static void main(String[] args) {
-        GestorUsuariosReceptores.getInstancia().cargarDatosConfig("configDirActivo.txt");
+        GestorUsuariosReceptores.getInstancia().cargarDatosConfig("configDirRedundante.txt");
         GestorUsuariosReceptores.getInstancia().solicitarBackUp();
-        ComunicacionDirectorio.getInstancia().escucharPuerto("70");
+        ComunicacionDirectorio.getInstancia().escucharPuerto("72");
         GestorUsuariosReceptores.getInstancia().comprobacionUsuariosOnline();
     }
 }

@@ -16,7 +16,7 @@ public class InicioEmisor {
 
     public static void main(String[] args) {
         VentanaEmisor2 vista = new VentanaEmisor2();
-        GestorEnvioMensajes.getInstancia().cargarDatosConfig();
+        GestorEnvioMensajes.getInstancia().cargarDatosConfig("config.txt");
         GestorEnvioMensajes.getInstancia().setearIp();
         GestorEnvioMensajes.getInstancia().setVista(vista);
         GestorEnvioMensajes.getInstancia().escucharPuerto();

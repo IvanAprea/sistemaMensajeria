@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface ICargaConfig {
-    void cargarDatosConfig();
+    void cargarDatosConfig(String s);
 }
