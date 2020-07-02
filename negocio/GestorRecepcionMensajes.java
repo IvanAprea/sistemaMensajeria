@@ -7,8 +7,8 @@ import base.ComunicacionReceptor;
 import base.Desencriptadora;
 
 import interfaces.ICargaConfig;
-import interfaces.IDesencriptar;
-import interfaces.IRecibirMensaje;
+import interfaces.IDesencriptacion;
+import interfaces.IRecepcionMensaje;
 import interfaces.IUsuario;
 
 import java.awt.event.ActionEvent;
@@ -44,7 +44,7 @@ import java.security.NoSuchProviderException;
 
 import java.time.format.DateTimeFormatter;
 
-public class GestorRecepcionMensajes extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecibirMensaje{
+public class GestorRecepcionMensajes extends Persona implements ActionListener,IUsuario,ICargaConfig,IRecepcionMensaje{
 	
     private String IPDirectorio, puertoDirectorio,IPMensajeria,puertoMensajeria,IPDirRedundante,PuertoDirRedundante;
     private static GestorRecepcionMensajes _instancia = null;
@@ -53,18 +53,18 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
     private final String regex=", *";
     private final String decoder="UTF8";
     private final int cantDatos=2;
-    private IDesencriptar desencriptador;
+    private IDesencriptacion desencriptador;
         
 	
     private GestorRecepcionMensajes() {
     	super();
     }
 
-    public void setDesencriptador(IDesencriptar desencriptador) {
+    public void setDesencriptador(IDesencriptacion desencriptador) {
         this.desencriptador = desencriptador;
     }
 
-    public IDesencriptar getDesencriptador() {
+    public IDesencriptacion getDesencriptador() {
         return desencriptador;
     }
 

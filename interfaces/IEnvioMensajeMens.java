@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface IEnviarMensajeMens
+public interface IEnvioMensajeMens
 {
     void intentarEnviarMensaje();
 }

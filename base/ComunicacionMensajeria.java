@@ -1,7 +1,7 @@
 package base;
 
 import interfaces.IComMensajeria;
-import interfaces.IEscucharPuerto;
+import interfaces.IEscuchaPuerto;
 
 import java.io.DataInputStream;
 
@@ -25,7 +25,7 @@ import negocio.GestorUsuariosReceptores;
 import negocio.GestorEnvioMensajes;
 import negocio.GestorRecepcionMensajes;
 
-public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
+public class ComunicacionMensajeria  implements IEscuchaPuerto,IComMensajeria{
     
     private static ComunicacionMensajeria _instancia = null;
     private ServerSocket sepd;

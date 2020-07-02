@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface IEscucharPuerto {
+public interface IEscuchaPuerto {
     void escucharPuerto(String puerto);
 }

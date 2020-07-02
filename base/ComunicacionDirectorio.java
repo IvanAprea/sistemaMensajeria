@@ -1,6 +1,6 @@
 package base;
 
-import interfaces.IEscucharPuerto;
+import interfaces.IEscuchaPuerto;
 
 import interfaces.IRegistro;
 
@@ -24,7 +24,7 @@ import negocio.GestorUsuariosReceptores;
 import negocio.GestorEnvioMensajes;
 import negocio.UsuarioReceptor;
 
-public class ComunicacionDirectorio implements IEscucharPuerto{
+public class ComunicacionDirectorio implements IEscuchaPuerto{
 
     private static ComunicacionDirectorio _instancia = null;
     private ServerSocket sepd; //sepe=socketEscucharPuertoDirectorio
