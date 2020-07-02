@@ -210,6 +210,13 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando,ICarg
         this.usrOnlineOcupado=true;
         this.informarConsola("Alive recibido de "+nombre);
         if(!this.getUsuariosOnlineActuales().getAl().contains(nombre)){
+            if(!this.listaDirectorio.getUsuariosRecMap().containsKey(nombre)){
+                ComunicacionDirectorio.getInstancia().escribirDIn("ERROR");
+                this.nuevoUsuario(true);
+            }else
+            {
+                ComunicacionDirectorio.getInstancia().escribirDIn("OK");
+            }
             this.getUsuariosOnlineActuales().getAl().add(nombre);
         }
         this.usrOnlineOcupado=false;
@@ -298,7 +305,10 @@ public class GestorUsuariosReceptores implements IGestionUsuarios,IComando,ICarg
     public void mandarIDRec() {
         String nombre = ComunicacionDirectorio.getInstancia().leerDIn();
         UsuarioReceptor rec = this.getListaDirectorio().getUsuariosRecMap().get(nombre);
-        ComunicacionDirectorio.getInstancia().darIDRec(rec.getIP(), rec.getPuerto());
+        if(rec != null)
+            ComunicacionDirectorio.getInstancia().darIDRec(rec.getIP(), rec.getPuerto());
+        else
+            ComunicacionDirectorio.getInstancia().darIDRec("0", "0");
     }
 
     @Override

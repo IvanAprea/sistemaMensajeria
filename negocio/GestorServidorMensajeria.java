@@ -211,11 +211,18 @@ public class GestorServidorMensajeria implements ICargaConfig,IBackUpMensajeria,
             }catch(IOException e){
                 direcReceptor = ComunicacionMensajeria.getInstancia().pedirIDADirectorio(mensajeEm.getReceptor().getNombre(),InetAddress.getByName(this.IPDirRedundante),Integer.parseInt(this.PuertoDirRedundante));
             }
-            this.informarConsola("Intentado enviar mensaje a "+ mensajeEm.getReceptor().getNombre());
-            StringWriter sw = new StringWriter();
-            sw.write(msj);
-            ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(this.getIPbyID(direcReceptor)), Integer.parseInt(this.getPuertoByID(direcReceptor)),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
-            this.informarConsola("Mensaje enviado con exito a "+ mensajeEm.getReceptor().getNombre());
+            if(!direcReceptor.equalsIgnoreCase("0:0")){
+                this.informarConsola("Intentado enviar mensaje a "+ mensajeEm.getReceptor().getNombre());
+                StringWriter sw = new StringWriter();
+                sw.write(msj);
+                ComunicacionMensajeria.getInstancia().enviarMensaje(sw, InetAddress.getByName(this.getIPbyID(direcReceptor)), Integer.parseInt(this.getPuertoByID(direcReceptor)),mensajeEm.getTipo(),InetAddress.getByName(mensajeEm.getEmisor().getIP()),Integer.parseInt(mensajeEm.getEmisor().getPuerto()));
+                this.informarConsola("Mensaje enviado con exito a "+ mensajeEm.getReceptor().getNombre());
+            }
+            else
+            {
+                this.informarConsola("El usuario no existe en el sistema.");
+                throw new IOException();
+            }
         } catch (IOException e) {
             ArrayList<String> arr;
             int tipo = mensajeEm.getTipo();

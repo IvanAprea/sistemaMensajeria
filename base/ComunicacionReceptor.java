@@ -79,40 +79,52 @@ public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPue
         tr.start();
     }
     
-    public synchronized void heartbeat(InetAddress ipDirectorio,int puertoDirectorio,InetAddress ipDirectorioAux,int puertoDirectorioAux,String id){
+    public synchronized void heartbeat(StringWriter usuario,InetAddress ipDirectorio,int puertoDirectorio,InetAddress ipDirectorioAux,int puertoDirectorioAux,String id){
         Thread tr = new Thread(){
             DataOutputStream dOut;
+            DataInputStream dIn;
+            String str;
             public void run(){
-                try {
-                    while(true){
-                        Thread.sleep(7000);
-                        try{
-                            s = new Socket(ipDirectorio,puertoDirectorio);
-                        }catch(IOException e){
-                            s = new Socket(ipDirectorioAux,puertoDirectorioAux);
-                        }
-                        dOut = new DataOutputStream(s.getOutputStream());
-                        dOut.writeUTF("DIR_DAR_ALIVE");
-                        dOut.writeUTF(id);
-                        dOut.flush();
-                        s.close();
+                while(true){
+                    try {
+                            Thread.sleep(7000);
+                            try{
+                                s = new Socket(ipDirectorio,puertoDirectorio);
+                            }catch(IOException e){
+                                s = new Socket(ipDirectorioAux,puertoDirectorioAux);
+                            }
+                            dOut = new DataOutputStream(s.getOutputStream());
+                            dIn = new DataInputStream(s.getInputStream());
+                            dOut.writeUTF("DIR_DAR_ALIVE");
+                            dOut.writeUTF(id);
+                            dOut.flush();
+                            str = dIn.readUTF();
+                            System.out.println(str);
+                            if(!str.equalsIgnoreCase("OK"))
+                            {
+                                dOut.writeUTF(usuario.toString());
+                                dOut.flush();
+                            }
+                            s.close();
+                        
+                    } catch (InterruptedException e) {
+                        if(s!=null)
+                            try {
+                                s.close();
+                            } catch (IOException f) {
+                                f.printStackTrace();
+                            }
+    
+                    } catch (IOException e) {
+                        if(s!=null)
+                            try {
+                                s.close();
+                            } catch (IOException f) {
+                                f.printStackTrace();
+                            }
+                        /*e.printStackTrace();
+                        System.out.println("Error al conectar con el directorio HB");*/
                     }
-                } catch (InterruptedException e) {
-                    if(s!=null)
-                        try {
-                            s.close();
-                        } catch (IOException f) {
-                            f.printStackTrace();
-                        }
-
-                } catch (IOException e) {
-                    if(s!=null)
-                        try {
-                            s.close();
-                        } catch (IOException f) {
-                            f.printStackTrace();
-                        }
-                    System.out.println("Error al conectar con el directorio HB");
                 }
             }
         };

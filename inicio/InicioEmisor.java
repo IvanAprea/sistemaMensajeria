@@ -18,10 +18,12 @@ public class InicioEmisor {
         VentanaEmisor2 vista = new VentanaEmisor2();
         GestorEnvioMensajes.getInstancia().cargarDatosConfig("config.txt");
         GestorEnvioMensajes.getInstancia().setearIp();
+        GestorEnvioMensajes.getInstancia().recuperarNoEnviados();
+        GestorEnvioMensajes.getInstancia().enviarMensajesPendientes();
+        GestorEnvioMensajes.getInstancia().persistirNoEnviados();
         GestorEnvioMensajes.getInstancia().setVista(vista);
         GestorEnvioMensajes.getInstancia().escucharPuerto();
         GestorEnvioMensajes.getInstancia().setEncriptador(new Encriptadora());
-        GestorEnvioMensajes.getInstancia().recuperarNoEnviados();
         vista.abrirSesion();
     }
 }

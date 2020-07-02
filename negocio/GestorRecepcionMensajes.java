@@ -174,7 +174,7 @@ public class GestorRecepcionMensajes extends Persona implements ActionListener,I
                 this.ventanaReceptor.mostrarVentana();
                 this.pedirMensajesPendientes();
                 ComunicacionReceptor.getInstancia().escucharPuerto(this.getPuerto());
-                ComunicacionReceptor.getInstancia().heartbeat(InetAddress.getByName(this.getIPDirRedundante()), Integer.parseInt(this.getPuertoDirRedundante()),InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getNombre());
+                ComunicacionReceptor.getInstancia().heartbeat(sw,InetAddress.getByName(this.getIPDirRedundante()), Integer.parseInt(this.getPuertoDirRedundante()),InetAddress.getByName(this.getIPDirectorio()), Integer.parseInt(this.getPuertoDirectorio()),this.getNombre());
                 return true;
             }catch(IOException e){
                 this.lanzarCartelError("El directorio no esta disponible");

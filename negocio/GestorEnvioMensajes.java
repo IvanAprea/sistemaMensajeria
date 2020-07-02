@@ -65,7 +65,7 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
     private UsuariosRecMap listaActualReceptores;
     private IEncriptar encriptador;
     private HashMap<UsuarioReceptor,ArrayList<String>> noEnviados = new HashMap<UsuarioReceptor,ArrayList<String>>();
-    private boolean noEnviadosOcupado=false,enviandoNoEnviados = false;
+    private boolean noEnviadosOcupado=false;
     
     private GestorEnvioMensajes() {
         super();
@@ -146,12 +146,6 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
                     }
                     this.setNoEnviadosOcupado(false);
                     notifyAll();
-                    if(isEnviandoNoEnviados() == false)
-                    {
-                        enviarMensajesPendientes();
-                        persistirNoEnviados();
-                        setEnviandoNoEnviados(true);
-                    }
                     this.lanzarCartelError(personaAux.getNombre()+" no puede recibir el mensaje en este momento, se enviara luego.");
                 }
             }catch(Exception e)
@@ -189,6 +183,7 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
                                 try
                                 {
                                     ComunicacionEmisor.getInstancia().enviarMensajes(arr, InetAddress.getByName(IPMensajeria),Integer.parseInt(puertoMensajeria));
+                                    
                                 } catch (IOException e)
                                 {
                                     System.out.println("Se intento enviar un mensaje y el servidor de mensajeria esta offline.");
@@ -220,18 +215,10 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
                 {
                     try
                     {
-                        Thread.sleep(3000);
-                        while(isNoEnviadosOcupado())
-                        {
-                            wait();
-                        }
-                        setNoEnviadosOcupado(true);
-                        if(!noEnviados.isEmpty())
-                        {
-                            PersistenciaXML.getInstancia().persistir(GestorEnvioMensajes.getInstancia().getNoEnviados(), "noEnviadosEmisor.txt");
-                        }
-                        setNoEnviadosOcupado(false);
-                        notifyAll();
+                        Thread.sleep(4000);
+
+                        System.out.println("Persistiendo no enviados.");
+                        PersistenciaXML.getInstancia().persistir(GestorEnvioMensajes.getInstancia().getNoEnviados(), "noEnviadosEmisor.txt");
                     } catch (InterruptedException e)
                     {
                         e.printStackTrace();
@@ -257,12 +244,6 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
             if (!hs.isEmpty())
                 this.noEnviados = hs;
             setNoEnviadosOcupado(false);
-            if(!hs.isEmpty())
-            {
-                enviarMensajesPendientes();
-                persistirNoEnviados();
-                setEnviandoNoEnviados(true);
-            }
             notifyAll();
         } catch (InterruptedException e)
         {
@@ -425,16 +406,6 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
     public HashMap<UsuarioReceptor, ArrayList<String>> getNoEnviados()
     {
         return noEnviados;
-    }
-
-    public void setEnviandoNoEnviados(boolean enviandoNoEnviados)
-    {
-        this.enviandoNoEnviados = enviandoNoEnviados;
-    }
-
-    public boolean isEnviandoNoEnviados()
-    {
-        return enviandoNoEnviados;
     }
 
 }

@@ -100,6 +100,20 @@ public class ComunicacionDirectorio implements IEscucharPuerto{
         }
     }
 
+    public void escribirDIn(String s)
+    {
+        
+        try
+        {
+            dOut = new DataOutputStream(socket.getOutputStream());
+            dOut.writeUTF(s);
+            dOut.flush();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
     public String leerDIn() {
         try {
             return dIn.readUTF();

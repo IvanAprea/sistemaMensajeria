@@ -2,6 +2,8 @@ package base;
 
 import interfaces.ICargaConfig;
 
+import interfaces.ISincronizacion;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -19,7 +21,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Sincronizadora{
+public class Sincronizadora implements ISincronizacion{
     private static Sincronizadora _instancia = null;
     private Socket s;
     private ArrayList<String> direccionesDirectorios = new ArrayList<String>(); // de otros directorios, la propia no está

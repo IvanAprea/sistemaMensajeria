@@ -121,9 +121,8 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
             this.socketEmisor.close();
     }
     
-    public String pedirIDADirectorio(String nombreRec,InetAddress ip, int puerto){
-        try 
-        {
+    public String pedirIDADirectorio(String nombreRec,InetAddress ip, int puerto) throws IOException{
+        
             String val;
             
             socket = new Socket(ip,puerto);
@@ -136,17 +135,6 @@ public class ComunicacionMensajeria  implements IEscucharPuerto,IComMensajeria{
             val = dIn.readUTF();
             socket.close();
             return val;
-        } 
-        catch (IOException e) 
-        {
-            e.printStackTrace();
-            try
-            {
-                socket.close();
-            } catch (IOException f)
-            {
-            }
-            return null;
-        }
+        
     }
 }
