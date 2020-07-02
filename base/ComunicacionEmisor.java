@@ -3,9 +3,9 @@ package base;
 
 import interfaces.IDirectorio;
 
-import interfaces.IEnviarMensajeCom;
+import interfaces.IEnvioMensajeCom;
 
-import interfaces.IEscucharPuerto;
+import interfaces.IEscuchaPuerto;
 
 import interfaces.IPendienteEmisor;
 
@@ -31,7 +31,7 @@ import java.util.Iterator;
 import negocio.GestorEnvioMensajes;
 import negocio.GestorRecepcionMensajes;
 
-public class ComunicacionEmisor implements IEnviarMensajeCom,IDirectorio,IEscucharPuerto,IPendienteEmisor{
+public class ComunicacionEmisor implements IEnvioMensajeCom,IDirectorio,IEscuchaPuerto,IPendienteEmisor{
 
     private static ComunicacionEmisor _instancia = null;
     private Socket socketDirectorio;

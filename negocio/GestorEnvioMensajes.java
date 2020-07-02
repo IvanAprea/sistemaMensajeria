@@ -10,8 +10,8 @@ import base.PersistenciaXML;
 
 import interfaces.ICargaConfig;
 import interfaces.IConfirmacionEmisor;
-import interfaces.IEncriptar;
-import interfaces.IEnviarMensajeEm;
+import interfaces.IEncriptacion;
+import interfaces.IEnvioMensajeEm;
 
 import interfaces.IPersistenciaEmisor;
 
@@ -52,7 +52,7 @@ import javax.swing.JOptionPane;
 
 import presentacion.VentanaEmisor2;
 
-public class GestorEnvioMensajes extends Persona implements ActionListener,IEnviarMensajeEm,ICargaConfig,IConfirmacionEmisor,IPersistenciaEmisor{
+public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvioMensajeEm,ICargaConfig,IConfirmacionEmisor,IPersistenciaEmisor{
     
     private final int cantCarAsunto=128,cantCarMensaje=2048;
     private IVentanaEmisor vista;
@@ -63,7 +63,7 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
     private final int cantDatos=2;
     private Socket socketDirectorio;
     private UsuariosRecMap listaActualReceptores;
-    private IEncriptar encriptador;
+    private IEncriptacion encriptador;
     private HashMap<UsuarioReceptor,ArrayList<String>> noEnviados = new HashMap<UsuarioReceptor,ArrayList<String>>();
     private boolean noEnviadosOcupado=false;
     
@@ -388,7 +388,7 @@ public class GestorEnvioMensajes extends Persona implements ActionListener,IEnvi
         GestorEnvioMensajes.instancia = instancia;
     }
 
-    public void setEncriptador(IEncriptar encriptador)
+    public void setEncriptador(IEncriptacion encriptador)
     {
         this.encriptador = encriptador;
     }

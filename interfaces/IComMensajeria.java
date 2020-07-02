@@ -12,4 +12,5 @@ public interface IComMensajeria
     void notificarEmisorLlegadaMsj(String nombreRec) throws IOException;
     void enviarConfirmacion(InetAddress ipem, int puertoem,String nReceptor) throws IOException;
     void enviarMensaje(StringWriter mensaje, InetAddress iprec, int puertorec, int tipo, InetAddress ipem, int puertoem) throws IOException;
+    String pedirIDADirectorio(String nombreRec,InetAddress ip, int puerto) throws IOException;
 }

@@ -1,6 +1,6 @@
 package base;
 
-import interfaces.IEscucharPuerto;
+import interfaces.IEscuchaPuerto;
 import interfaces.IPendientesReceptor;
 import interfaces.IRecepción;
 import interfaces.IUsuarioCom;
@@ -23,7 +23,7 @@ import java.net.UnknownHostException;
 import negocio.GestorRecepcionMensajes;
 import negocio.UsuarioReceptor;
 
-public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscucharPuerto,IPendientesReceptor{
+public class ComunicacionReceptor implements IUsuarioCom,IRecepción,IEscuchaPuerto,IPendientesReceptor{
 
     private static ComunicacionReceptor _instancia = null;
     private Socket s; //sem=socketEnviarMensaje

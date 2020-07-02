@@ -1,5 +1,5 @@
 package interfaces;
 
-public interface IEncriptar {
+public interface IEncriptacion {
     byte[] encriptar(byte[] publicKey, byte[] inputData) throws Exception;
 }

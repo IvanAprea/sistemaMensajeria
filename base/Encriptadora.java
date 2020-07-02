@@ -1,6 +1,6 @@
 package base;
 
-import interfaces.IEncriptar;
+import interfaces.IEncriptacion;
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -14,7 +14,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class Encriptadora implements IEncriptar {
+public class Encriptadora implements IEncriptacion {
     
     private static final String ALGORITHM = "RSA";
     

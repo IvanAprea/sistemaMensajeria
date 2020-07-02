@@ -1,6 +1,8 @@
 package base;
 
-import interfaces.IDesencriptar;
+import interfaces.IDesencriptacion;
+
+import interfaces.IGuardadoKeys;
 
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -13,7 +15,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
-public class Desencriptadora implements IDesencriptar {
+public class Desencriptadora implements IDesencriptacion, IGuardadoKeys {
     
     private static final String ALGORITHM = "RSA";
     private byte[] publicKey;

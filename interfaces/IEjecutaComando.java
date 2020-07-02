@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface IEjecutarComando
+public interface IEjecutaComando
 {
     void ejecutarComando(String comando);
 }

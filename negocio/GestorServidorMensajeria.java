@@ -12,10 +12,10 @@ import interfaces.IBackUp;
 import interfaces.IBackUpMensajeria;
 
 import interfaces.ICargaConfig;
-import interfaces.IEjecutarComando;
-import interfaces.IEnviarMensajeMens;
+import interfaces.IEjecutaComando;
+import interfaces.IEnvioMensajeMens;
 
-import interfaces.IEnviarPendientes;
+import interfaces.IEnvioPendientes;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -40,7 +40,7 @@ import java.util.Map;
 
 
 import javax.xml.bind.JAXBException;
-public class GestorServidorMensajeria implements ICargaConfig,IBackUpMensajeria,IEnviarMensajeMens,IEnviarPendientes,IEjecutarComando{
+public class GestorServidorMensajeria implements ICargaConfig,IBackUpMensajeria,IEnvioMensajeMens,IEnvioPendientes,IEjecutaComando{
 
     private static final String fileNoEnviados="noEnviadosMensajeria.txt",fileNoEnviadosCAviso="noEnviadosCAvisoMensajeria.txt",fileAvisosPendientes="avisosPendientesMensajeria.txt";
     private final String regex=", *";
